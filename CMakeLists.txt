@@ -30,6 +30,8 @@ set(SOURCE_FILES
         src/main/core/lfcObject.c
         src/main/data/lfcStringOps.c
         src/main/data/lfcStringOps.h
+        src/main/io/lfcIOOps.c
+        src/main/io/lfcIOOps.h
         src/main/ipc/lfcMessage.c
         src/main/ipc/lfcMessage.h
         src/main/ipc/lfcMQueueReceiver.c
@@ -57,6 +59,8 @@ set(SOURCE_FILES
         src/main/testing/lfcCriterionObject.h
         src/main/thread/lfcThreadMisc.h
         src/main/thread/lfcThreadMisc.c
+        src/main/thread/lfcThreadPool.c
+        src/main/thread/lfcThreadPool.h
         src/main/tools/lfcLogger.c
         src/main/tools/lfcLogger.h
         src/main/tools/lfcLogInstance.c
@@ -67,7 +71,7 @@ set(SOURCE_FILES
         src/main/tools/lfcOptParserCmd.h
         src/main/tools/lfcOptParserParam.c
         src/main/tools/lfcOptParserParam.h
-        src/main/io/lfcIOOps.c src/main/io/lfcIOOps.h)
+        )
 
 set(SOURCE_FILES_unitTests
         src/test/collection/lfcBitset/spec_lfcBitset_clear.c
