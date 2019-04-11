@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <sys/epoll.h>
-#include <thread/lfcThreadMisc.h>
+#include <threading/lfcThreadMisc.h>
 
 #include "lfcSocketJobAcceptConn.h"
 #include "lfcSocketJobReader.h"

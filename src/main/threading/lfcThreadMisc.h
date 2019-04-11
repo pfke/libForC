@@ -1,5 +1,5 @@
-#ifndef LIBFORC_THREAD_THREADMISC_H_
-#define LIBFORC_THREAD_THREADMISC_H_
+#ifndef LIBFORC_THREADING_THREADMISC_H_
+#define LIBFORC_THREADING_THREADMISC_H_
 
 #include <pthread.h>
 #include <stdarg.h>

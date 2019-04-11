@@ -57,10 +57,16 @@ set(SOURCE_FILES
         src/main/testing/lfcCriterionHelper.h
         src/main/testing/lfcCriterionHelper.c
         src/main/testing/lfcCriterionObject.h
-        src/main/thread/lfcThreadMisc.h
-        src/main/thread/lfcThreadMisc.c
-        src/main/thread/lfcThreadPool.c
-        src/main/thread/lfcThreadPool.h
+        src/main/threading/lfcActor.c
+        src/main/threading/lfcActor.h
+        src/main/threading/lfcActorMessage.c
+        src/main/threading/lfcActorMessage.h
+        src/main/threading/lfcActorSystem.c
+        src/main/threading/lfcActorSystem.h
+        src/main/threading/lfcThreadMisc.h
+        src/main/threading/lfcThreadMisc.c
+        src/main/threading/lfcThreadPool.c
+        src/main/threading/lfcThreadPool.h
         src/main/tools/lfcLogger.c
         src/main/tools/lfcLogger.h
         src/main/tools/lfcLogInstance.c
@@ -175,6 +181,8 @@ set(SOURCE_FILES_unitTests
         src/test/core/mocks/ClassA.h
         src/test/core/mocks/ClassA.c
 
+        src/test/data/lfcStringOps/spec_lfcStringOps_replace.c
+
         src/test/ipc/lfcMQueueReceiver/spec_lfcMQueueReceiver_ctorSimple.c
         src/test/ipc/lfcMQueueReceiver/spec_lfcMQueueReceiver_receive.c
 
@@ -209,10 +217,14 @@ set(SOURCE_FILES_unitTests
         src/test/net/lfcSocketJobReaderStream/spec_lfcSocketJobReaderStream_doWork.c
         src/test/net/lfcSocketJobWriter/spec_lfcSocketJobWriter_ctor.c
         src/test/net/lfcSocketJobWriter/spec_lfcSocketJobWriter_doWork.c
-        src/test/data/lfcStringOps/spec_lfcStringOps_replace.c)
+
+        src/test/threading/lfcActor/spec_lfcActor_ctor.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_ctor.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_create.c
+        )
 
 set(SOURCE_FILES_runner
-        src/test/runner.c src/main/io/lfcIOOps.c src/main/io/lfcIOOps.h)
+        src/test/runner.c)
 
 link_directories(
         src/test/__needed_libs__/32bit

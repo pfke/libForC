@@ -3,7 +3,8 @@
 #include <data/lfcStringOps.h>
 #include <malloc.h>
 #include <mem/lfcMemPool.h>
-#include <thread/lfcThreadPool.h>
+#include <threading/lfcThreadPool.h>
+#include <threading/lfcActorSystem.h>
 
 #define ALIGN(x)    (x + (__BIGGEST_ALIGNMENT__ - x % __BIGGEST_ALIGNMENT__))
 #define CALLOC_STATIC_MEM(name, size, value) \
@@ -18,6 +19,13 @@ void worker (
 
 void runner_fn () {
     lfcThreadPool_t *tp = lfcThreadPool_create(5, 10, 0);
+
+    lfcActorSystem_t *system = lfcActorSystem_ctor(
+        "klöklö"
+    );
+
+    delete(system);
+
 
     lfcThreadPool_addWorker(tp, worker, (void *) 1, 0);
     lfcThreadPool_addWorker(tp, worker, (void *) 2, 0);
