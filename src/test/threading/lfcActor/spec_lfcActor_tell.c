@@ -30,7 +30,10 @@ Test(
     const char *msg ="ping";
     lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
-    lfcCriterionHelper_waitUntil_varIsTrue(5 * 1000000, 10000, &read_wait_for);
+    should_be_true_wText(
+        lfcCriterionHelper_waitUntil_varIsTrue(1 * 1000000, 10000, &read_wait_for),
+        "keine 10 Msg angekommen innerhalb von 1s"
+    )
 
     delete(tto_system);
     delete(tto_actor_01);

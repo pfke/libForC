@@ -42,7 +42,7 @@ struct lfcActor_class { const struct lfcActorRef_class _;
 };
 
 struct lfcActor_methods {
-    const lfcActorSystem_t *(*getActorSystem)(lfcActor_t *self);
+    lfcActorSystem_t *(*getActorSystem)(lfcActor_t *self);
     const char *(*getName)(lfcActor_t *self);
     receive_fn_cb (*getReceiveFn)(lfcActor_t *self);
     lfcActorRef_t *(*getRef)(lfcActor_t *self);
@@ -63,7 +63,7 @@ lfcActor_t *lfcActor_ctor(
 /**
  * Returns the actor system
  */
-const lfcActorSystem_t *lfcActor_getActorSystem(lfcActor_t *self);
+lfcActorSystem_t *lfcActor_getActorSystem(lfcActor_t *self);
 
 /**
  * Returns the actor name

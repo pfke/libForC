@@ -235,6 +235,10 @@ set(SOURCE_FILES_unitTests
         src/test/threading/lfcActorSystem/spec_lfcActorSystem_ctor.c
         src/test/threading/lfcActorSystem/spec_lfcActorSystem_create.c
         src/test/threading/lfcActorSystem/spec_lfcActorSystem_getName.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_equals.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_equals_byActor.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_equals_byActorRef.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_tell.c
         )
 
 set(SOURCE_FILES_runner

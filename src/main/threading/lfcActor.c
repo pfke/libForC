@@ -71,7 +71,7 @@ static lfcActor_t *public_lfcActor_dtor(
 /**
  * Returns the actor system
  */
-static const lfcActorSystem_t *public_lfcActor_getActorSystem(
+static lfcActorSystem_t *public_lfcActor_getActorSystem(
     lfcActor_t *self
 ) {
     return self->actorSystem;
@@ -196,7 +196,7 @@ lfcActor_t *lfcActor_ctor(
     return (lfcActor_t *)new(lfcActor(), name, actorSystem, receive_fn);
 }
 
-IMPL_API__wRET__w_0PARAM(lfcActor, getActorSystem, const lfcActorSystem_t *)
+IMPL_API__wRET__w_0PARAM(lfcActor, getActorSystem, lfcActorSystem_t *)
 IMPL_API__wRET__w_0PARAM(lfcActor, getName, const char *)
 IMPL_API__wRET__w_0PARAM(lfcActor, getReceiveFn, receive_fn_cb)
 IMPL_API__wRET__w_0PARAM(lfcActor, getRef, lfcActorRef_t *)

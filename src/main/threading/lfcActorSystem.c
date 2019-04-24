@@ -48,12 +48,21 @@ static int private_lfcActorSystem_tell(
     if (!self) { return -EINVAL; }
     if (!msg) { return -EINVAL; }
 
-    lfcThreadPool_addWorker(
-        self->threadPool,
-        private_lfcActorSystem_dispatchMsg,
-        msg,
-        0
-    );
+    // todo: evtl ein remote -System?
+
+    if (!msg->sender || lfcActorSystem_equals_byActorRef(self, (lfcActorRef_t *)msg->recipient)) {
+        lfcThreadPool_addWorker(
+            self->threadPool,
+            private_lfcActorSystem_dispatchMsg,
+            msg,
+            0
+        );
+    } else {
+        lfcActorSystem_tell_byMsg(
+            lfcActor_getActorSystem(asInstanceOf(lfcActor(), msg->recipient)),
+            msg
+        );
+    }
 
     return 0;
 }
@@ -140,6 +149,30 @@ static const char *public_lfcActorSystem_getName(
     return self->name;
 }
 
+static bool public_lfcActorSystem_equals(
+    lfcActorSystem_t *self,
+    const lfcActorSystem_t *that
+) {
+    if (!that) { return false; }
+    if (!isInstanceOf(lfcActorSystem(), that)) { return false; }
+
+    return self == that;
+}
+
+static bool public_lfcActorSystem_equals_byActor(
+    lfcActorSystem_t *self,
+    lfcActor_t *that
+) {
+    return public_lfcActorSystem_equals(self, lfcActor_getActorSystem(that));
+}
+
+static bool public_lfcActorSystem_equals_byActorRef(
+    lfcActorSystem_t *self,
+    lfcActorRef_t *that
+) {
+    return public_lfcActorSystem_equals_byActor(self, asInstanceOf(lfcActor(), that));
+}
+
 /**
  * Send a message to an actor.
  */
@@ -151,6 +184,16 @@ static int public_lfcActorSystem_tell(
     size_t msg_len
 ) {
     return private_lfcActorSystem_tell(self, lfcActorMessage_ctor(sender, recipient, msg, msg_len));
+}
+
+/**
+ * Send a message to an actor.
+ */
+static int public_lfcActorSystem_tell_byMsg(
+    lfcActorSystem_t *self,
+    lfcActorMessage_t *msg
+) {
+    return private_lfcActorSystem_tell(self, msg);
 }
 
 static int public_lfcActorSystem_tell_noSender(
@@ -179,7 +222,13 @@ static int public_lfcActorSystem_tell_noSender(
 CLASS_CTOR__START(lfcActorSystem)
         OVERRIDE_METHOD(lfcActorSystem, create)
         OVERRIDE_METHOD(lfcActorSystem, getName)
+
+        OVERRIDE_METHOD(lfcActorSystem, equals)
+        OVERRIDE_METHOD(lfcActorSystem, equals_byActor)
+        OVERRIDE_METHOD(lfcActorSystem, equals_byActorRef)
+
         OVERRIDE_METHOD(lfcActorSystem, tell)
+        OVERRIDE_METHOD(lfcActorSystem, tell_byMsg)
         OVERRIDE_METHOD(lfcActorSystem, tell_noSender)
     CLASS_CTOR__INIT_SUPER(lfcActorSystem, lfcObject)
     CLASS_CTOR__INIT_IFACES()
@@ -210,7 +259,12 @@ const lfcActorSystem_t *lfcActorSystem() {
             lfcActorSystem_create, "create", public_lfcActorSystem_create,
             lfcActorSystem_getName, "getName", public_lfcActorSystem_getName,
 
+            lfcActorSystem_equals, "equals", public_lfcActorSystem_equals,
+            lfcActorSystem_equals_byActor, "equals_byActor", public_lfcActorSystem_equals_byActor,
+            lfcActorSystem_equals_byActorRef, "equals_byActorRef", public_lfcActorSystem_equals_byActorRef,
+
             lfcActorSystem_tell, "tell", public_lfcActorSystem_tell,
+            lfcActorSystem_tell_byMsg, "tell_byMsg", public_lfcActorSystem_tell_byMsg,
             lfcActorSystem_tell_noSender, "tell_noSender", public_lfcActorSystem_tell_noSender,
 
             (void *) 0)
@@ -236,7 +290,12 @@ lfcActorSystem_t *lfcActorSystem_ctor(
 
 IMPL_API__wRET__w_2PARAM(lfcActorSystem, create, lfcActorRef_t *, const char *, receive_fn_cb)
 IMPL_API__wRET__w_0PARAM(lfcActorSystem, getName, const char *)
+
+IMPL_API__wRET__w_1PARAM(lfcActorSystem, equals, bool, lfcActorSystem_t *);
+IMPL_API__wRET__w_1PARAM(lfcActorSystem, equals_byActor, bool, lfcActor_t *);
+IMPL_API__wRET__w_1PARAM(lfcActorSystem, equals_byActorRef, bool, lfcActorRef_t *);
 IMPL_API__wRET__w_4PARAM(lfcActorSystem, tell, int, const lfcActorRef_t *, const lfcActorRef_t *, const char *, size_t)
+IMPL_API__wRET__w_1PARAM(lfcActorSystem, tell_byMsg, int, lfcActorMessage_t *)
 IMPL_API__wRET__w_3PARAM(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, const char *, size_t)
 
 
