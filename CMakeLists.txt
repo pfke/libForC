@@ -59,6 +59,8 @@ set(SOURCE_FILES
         src/main/testing/lfcCriterionObject.h
         src/main/threading/lfcActor.c
         src/main/threading/lfcActor.h
+        src/main/threading/lfcActorRef.c
+        src/main/threading/lfcActorRef.h
         src/main/threading/lfcActorMessage.c
         src/main/threading/lfcActorMessage.h
         src/main/threading/lfcActorSystem.c
@@ -219,8 +221,20 @@ set(SOURCE_FILES_unitTests
         src/test/net/lfcSocketJobWriter/spec_lfcSocketJobWriter_doWork.c
 
         src/test/threading/lfcActor/spec_lfcActor_ctor.c
+        src/test/threading/lfcActor/spec_lfcActor_getActorSystem.c
+        src/test/threading/lfcActor/spec_lfcActor_getName.c
+        src/test/threading/lfcActor/spec_lfcActor_getReceiveFn.c
+        src/test/threading/lfcActor/spec_lfcActor_tell.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_ctor.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_ctor_noSender.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getMsg.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getMsgLen.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getRecipient.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getSender.c
+        src/test/threading/lfcActorMessage/spec_lfcActorMessage_hasSender.c
         src/test/threading/lfcActorSystem/spec_lfcActorSystem_ctor.c
         src/test/threading/lfcActorSystem/spec_lfcActorSystem_create.c
+        src/test/threading/lfcActorSystem/spec_lfcActorSystem_getName.c
         )
 
 set(SOURCE_FILES_runner

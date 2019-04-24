@@ -30,11 +30,17 @@ struct lfcActorSystem { const struct lfcObject _;
 struct lfcActorSystem_class { const struct lfcObject_class _;
     method_t create;
     method_t getName;
+
+    method_t tell;
+    method_t tell_noSender;
 };
 
 struct lfcActorSystem_methods {
-    lfcActor_t *(*create)(lfcActorSystem_t *self, const char *name, receive_fn_cb receive_fn);
+    lfcActorRef_t *(*create)(lfcActorSystem_t *self, const char *name, receive_fn_cb receive_fn);
     const char *(*getName)(lfcActorSystem_t *self);
+
+    int (*tell)(lfcActorSystem_t *self, const lfcActorRef_t *sender, const lfcActorRef_t *recipient, const char *msg, size_t msg_len);
+    int (*tell_noSender)(lfcActorSystem_t *self, const lfcActorRef_t *recipient, const char *msg, size_t msg_len);
 
     // super
     const lfcObject_methods_t *base;
@@ -50,13 +56,31 @@ lfcActorSystem_t *lfcActorSystem_ctor(
 /**
  * create an Actor.
  */
-lfcActor_t *lfcActorSystem_create(
+lfcActorRef_t *lfcActorSystem_create(
     lfcActorSystem_t *self,
     const char *name,
     receive_fn_cb receive_fn
 );
 
 const char *lfcActorSystem_getName(lfcActorSystem_t *self);
+
+/**
+ * Send a message to an actor.
+ */
+int lfcActorSystem_tell(
+    lfcActorSystem_t *self,
+    const lfcActorRef_t *sender,
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
+);
+
+int lfcActorSystem_tell_noSender(
+    lfcActorSystem_t *self,
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
+);
 
 
 #ifdef __cplusplus

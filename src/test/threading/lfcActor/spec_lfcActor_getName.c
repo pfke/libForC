@@ -2,48 +2,27 @@
 #include "threading/lfcActorSystem.h"
 #include "testing/lfcCriterionHelper.h"
 
-#define TEST_SUITE_NAME               lfcActor__lfcActor_ctor
+#define TEST_SUITE_NAME               lfcActor__lfcActor_getName
 
 Test(
     TEST_SUITE_NAME,
-    passing_1stArg_null
+    passing_null
 ) {
-    lfcActor_t *tto = lfcActor_ctor(NULL, NULL, NULL);
-
-    should_be_null(tto);
+    should_be_null(lfcActor_getName(NULL));
 }
 
 Test(
     TEST_SUITE_NAME,
-    passing_2ndArg_null
+    passing_valid
 ) {
-    lfcActor_t *tto = lfcActor_ctor("kljlkjl", NULL, NULL);
+    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
 
-    should_be_null(tto);
-}
+    lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
+    lfcActorRef_t *tto_ref = lfcActorSystem_create(system, "actor_01", my_receive_fn_cb);
+    lfcActor_t *tto = asInstanceOf(lfcActor(), tto_ref);
 
-Test(
-    TEST_SUITE_NAME,
-    passing_3rdArg_null
-) {
-    lfcActor_t *tto = lfcActor_ctor("kljlkjl", NULL, NULL);
+    should_be_same_str(lfcActor_getName(tto), "actor_01");
 
-    should_be_null(tto);
-}
-
-Test(
-    TEST_SUITE_NAME,
-    passing_valid__returnNotNull
-) {
-    void my_receive_fn_cb(lfcActorSystem_t *system, lfcActor_t *self, lfcActorMessage_t *msg) {}
-
-    lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActor_t *tto = lfcActor_ctor("sumsi", tto_system, my_receive_fn_cb);
-
-    should_not_be_null(tto);
-    should_be_same_ptr(tto->actorSystem, tto_system);
-    should_be_same_ptr(tto->receive_fn, my_receive_fn_cb);
-
+    delete(system);
     delete(tto);
-    delete(tto_system );
 }

@@ -54,8 +54,8 @@ Test(
         )
     );
 
-    lfcCriterionHelper_waitUntil_varIsTrue(1000 * 1000000, 100 * 10000, &read_wait_for);
-    lfcCriterionHelper_waitUntil_varIsTrue(1000 * 1000000, 100 * 10000, &write_wait_for);
+    should_be_true(lfcCriterionHelper_waitUntil_varIsTrue(5 * 1000000, 10000, &read_wait_for));
+    should_be_true(lfcCriterionHelper_waitUntil_varIsTrue(5 * 1000000, 10000, &write_wait_for));
 
 //    fprintf(stderr, "%d@%s\n", __LINE__, __func__);
 

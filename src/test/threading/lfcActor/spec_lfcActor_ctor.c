@@ -35,14 +35,29 @@ Test(
     TEST_SUITE_NAME,
     passing_valid__returnNotNull
 ) {
-    void my_receive_fn_cb(lfcActorSystem_t *system, lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActor_t *tto = lfcActor_ctor("sumsi", tto_system, my_receive_fn_cb);
 
     should_not_be_null(tto);
     should_be_same_ptr(tto->actorSystem, tto_system);
+    should_be_same_ptr(tto->receive_fn, my_receive_fn_cb);
 
     delete(tto);
-    delete(tto_system );
+    delete(tto_system);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    no_spaces_in_name
+) {
+    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+
+    lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
+    lfcActor_t *tto = lfcActor_ctor("su msi", tto_system, my_receive_fn_cb);
+
+    should_be_null(tto);
+
+    delete(tto_system);
 }

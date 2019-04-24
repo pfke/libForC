@@ -1,49 +1,81 @@
 #include "threading/lfcActor.h"
 #include "threading/lfcActorSystem.h"
 #include "testing/lfcCriterionHelper.h"
+#include <unistd.h>
 
-#define TEST_SUITE_NAME               lfcActor__lfcActor_ctor
-
-Test(
-    TEST_SUITE_NAME,
-    passing_1stArg_null
-) {
-    lfcActor_t *tto = lfcActor_ctor(NULL, NULL, NULL);
-
-    should_be_null(tto);
-}
+#define TEST_SUITE_NAME               lfcActor__lfcActor_tell
 
 Test(
     TEST_SUITE_NAME,
-    passing_2ndArg_null
+    playing_pingpong_w2Actors
 ) {
-    lfcActor_t *tto = lfcActor_ctor("kljlkjl", NULL, NULL);
+    bool read_wait_for = false;
 
-    should_be_null(tto);
-}
-
-Test(
-    TEST_SUITE_NAME,
-    passing_3rdArg_null
-) {
-    lfcActor_t *tto = lfcActor_ctor("kljlkjl", NULL, NULL);
-
-    should_be_null(tto);
-}
-
-Test(
-    TEST_SUITE_NAME,
-    passing_valid__returnNotNull
-) {
-    void my_receive_fn_cb(lfcActorSystem_t *system, lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb_actor01(lfcActor_t *self, lfcActorMessage_t *msg) {
+        read_wait_for = true;
+    }
+    void my_receive_fn_cb_actor02(lfcActor_t *self, lfcActorMessage_t *msg) {
+        lfcActorRef_tell(
+            lfcActor_getRef(self),
+            msg->sender,
+            "pong",
+            strlen("pong")
+        );
+    }
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActor_t *tto = lfcActor_ctor("sumsi", tto_system, my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb_actor01);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "actor_02", my_receive_fn_cb_actor02);
 
-    should_not_be_null(tto);
-    should_be_same_ptr(tto->actorSystem, tto_system);
-    should_be_same_ptr(tto->receive_fn, my_receive_fn_cb);
+    const char *msg ="ping";
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
-    delete(tto);
-    delete(tto_system );
+    lfcCriterionHelper_waitUntil_varIsTrue(5 * 1000000, 10000, &read_wait_for);
+
+    delete(tto_system);
+    delete(tto_actor_01);
+    delete(tto_actor_02);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    passing_more_msgs
+) {
+    bool read_wait_for = false;
+
+    void my_receive_fn_cb_actor01(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb_actor02(lfcActor_t *self, lfcActorMessage_t *msg) {
+        static int counter = 0;
+
+        counter++;
+
+        if (counter >= 10) {
+            read_wait_for = true;
+        }
+    }
+
+    lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb_actor01);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "actor_02", my_receive_fn_cb_actor02);
+
+    const char *msg ="ping";
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+    lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
+
+    should_be_true_wText(
+        lfcCriterionHelper_waitUntil_varIsTrue(1 * 1000000, 10000, &read_wait_for),
+        "keine 10 Msg angekommen innerhalb von 1s"
+    )
+
+    delete(tto_system);
+    delete(tto_actor_01);
+    delete(tto_actor_02);
 }

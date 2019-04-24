@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <asm/errno.h>
 #include "lfcActorSystem.h"
 
 
@@ -14,10 +15,48 @@ static lfcActorSystem_methods_t _lfcActorSystem_methods;
 /* PROTOTYPES                                                                             */
 /******************************************************************************************/
 
+static void private_lfcActorSystem_dispatchMsg(void *msg);
+static int private_lfcActorSystem_tell(lfcActorSystem_t *self, lfcActorMessage_t *msg);
 
 /******************************************************************************************/
 /* PRIVATE METHODS                                                                        */
 /******************************************************************************************/
+
+static void private_lfcActorSystem_dispatchMsg(
+    void *msg
+) {
+    if (!msg) { return; }
+
+    lfcActorMessage_t *actorMessage = asInstanceOf(lfcActorMessage(), msg);
+    if (!actorMessage) { return; }
+
+    lfcActor_t *actor = asInstanceOf(lfcActor(), actorMessage->recipient);
+    if (!actor) { return; }
+
+    actor->receive_fn(actor, actorMessage);
+
+    delete(msg);
+}
+
+/**
+ * Send a message to an actor.
+ */
+static int private_lfcActorSystem_tell(
+    lfcActorSystem_t *self,
+    lfcActorMessage_t *msg
+) {
+    if (!self) { return -EINVAL; }
+    if (!msg) { return -EINVAL; }
+
+    lfcThreadPool_addWorker(
+        self->threadPool,
+        private_lfcActorSystem_dispatchMsg,
+        msg,
+        0
+    );
+
+    return 0;
+}
 
 
 /******************************************************************************************/
@@ -78,7 +117,7 @@ static lfcActorSystem_t *public_lfcActorSystem_dtor(
 /**
  * create an Actor.
  */
-static lfcActor_t *public_lfcActorSystem_create(
+static lfcActorRef_t *public_lfcActorSystem_create(
     lfcActorSystem_t *self,
     const char *name,
     receive_fn_cb receive_fn
@@ -89,7 +128,7 @@ static lfcActor_t *public_lfcActorSystem_create(
     lfcActor_t *actor= lfcActor_ctor(name, self, receive_fn);
     lfcList_add(self->actorList, actor);
 
-    return actor;
+    return asInstanceOf(lfcActorRef(), actor);
 }
 
 /**
@@ -100,6 +139,29 @@ static const char *public_lfcActorSystem_getName(
 ) {
     return self->name;
 }
+
+/**
+ * Send a message to an actor.
+ */
+static int public_lfcActorSystem_tell(
+    lfcActorSystem_t *self,
+    const lfcActorRef_t *sender,
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
+) {
+    return private_lfcActorSystem_tell(self, lfcActorMessage_ctor(sender, recipient, msg, msg_len));
+}
+
+static int public_lfcActorSystem_tell_noSender(
+    lfcActorSystem_t *self,
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
+) {
+    return private_lfcActorSystem_tell(self, lfcActorMessage_ctor_noSender(recipient, msg, msg_len));
+}
+
 
 /******************************************************************************************/
 /* INITIALIZATION                                                                         */
@@ -117,6 +179,8 @@ static const char *public_lfcActorSystem_getName(
 CLASS_CTOR__START(lfcActorSystem)
         OVERRIDE_METHOD(lfcActorSystem, create)
         OVERRIDE_METHOD(lfcActorSystem, getName)
+        OVERRIDE_METHOD(lfcActorSystem, tell)
+        OVERRIDE_METHOD(lfcActorSystem, tell_noSender)
     CLASS_CTOR__INIT_SUPER(lfcActorSystem, lfcObject)
     CLASS_CTOR__INIT_IFACES()
 CLASS_CTOR__END()
@@ -146,6 +210,9 @@ const lfcActorSystem_t *lfcActorSystem() {
             lfcActorSystem_create, "create", public_lfcActorSystem_create,
             lfcActorSystem_getName, "getName", public_lfcActorSystem_getName,
 
+            lfcActorSystem_tell, "tell", public_lfcActorSystem_tell,
+            lfcActorSystem_tell_noSender, "tell_noSender", public_lfcActorSystem_tell_noSender,
+
             (void *) 0)
         );
 }
@@ -167,8 +234,10 @@ lfcActorSystem_t *lfcActorSystem_ctor(
 }
 
 
-IMPL_API__wRET__w_2PARAM(lfcActorSystem, create, lfcActor_t *, const char *, receive_fn_cb)
+IMPL_API__wRET__w_2PARAM(lfcActorSystem, create, lfcActorRef_t *, const char *, receive_fn_cb)
 IMPL_API__wRET__w_0PARAM(lfcActorSystem, getName, const char *)
+IMPL_API__wRET__w_4PARAM(lfcActorSystem, tell, int, const lfcActorRef_t *, const lfcActorRef_t *, const char *, size_t)
+IMPL_API__wRET__w_3PARAM(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, const char *, size_t)
 
 
 /******************************************************************************************/

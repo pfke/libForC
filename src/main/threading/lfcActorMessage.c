@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "lfcActorMessage.h"
 
 
@@ -37,8 +38,24 @@ lfcActorMessage_t *public_lfcActorMessage_ctor(
     }
 
     // read args
+    self->sender = va_arg(*app, const lfcActorRef_t *);
+    self->recipient = va_arg(*app, const lfcActorRef_t *);
+    const char *msg = va_arg(*app, const char *);
+    self->msg_len =  va_arg(*app, size_t);
+
+    if (!self->recipient) { goto err; }
+    if (!msg) { goto err; }
+    self->msg = strdup(msg);
+    if (!self->msg) { goto err; }
+    if (!self->msg_len) { goto err; }
 
     return self;
+
+err:
+    if (self->msg) { free(self->msg); }
+    free(self);
+
+    return NULL;
 }
 
 /**
@@ -47,8 +64,41 @@ lfcActorMessage_t *public_lfcActorMessage_ctor(
 static lfcActorMessage_t *public_lfcActorMessage_dtor(
     lfcActorMessage_t *self
 ) {
+    if (self->msg) { free(self->msg); }
+
     return self;
 }
+
+static bool public_lfcActorMessage_hasSender(
+    lfcActorMessage_t *self
+) {
+    return self->sender != NULL;
+}
+
+static const lfcActorRef_t *public_lfcActorMessage_getSender(
+    lfcActorMessage_t *self
+) {
+    return self->sender;
+}
+
+static const lfcActorRef_t *public_lfcActorMessage_getRecipient(
+    lfcActorMessage_t *self
+) {
+    return self->recipient;
+}
+
+static const char *public_lfcActorMessage_getMsg(
+    lfcActorMessage_t *self
+) {
+    return self->msg;
+}
+
+static size_t public_lfcActorMessage_getMsgLen(
+    lfcActorMessage_t *self
+) {
+    return self->msg_len;
+}
+
 
 
 /******************************************************************************************/
@@ -65,6 +115,11 @@ static lfcActorMessage_t *public_lfcActorMessage_dtor(
  * @return die Instanz selbst
  */
 CLASS_CTOR__START(lfcActorMessage)
+        OVERRIDE_METHOD(lfcActorMessage, hasSender)
+        OVERRIDE_METHOD(lfcActorMessage, getSender)
+        OVERRIDE_METHOD(lfcActorMessage, getRecipient)
+        OVERRIDE_METHOD(lfcActorMessage, getMsg)
+        OVERRIDE_METHOD(lfcActorMessage, getMsgLen)
     CLASS_CTOR__INIT_SUPER(lfcActorMessage, lfcObject)
     CLASS_CTOR__INIT_IFACES()
 CLASS_CTOR__END()
@@ -91,6 +146,12 @@ const lfcActorMessage_t *lfcActorMessage() {
             lfcObject_ctor, "ctor", public_lfcActorMessage_ctor,
             lfcObject_dtor, "dtor", public_lfcActorMessage_dtor,
 
+            lfcActorMessage_hasSender, "hasSender", public_lfcActorMessage_hasSender,
+            lfcActorMessage_getSender, "getSender", public_lfcActorMessage_getSender,
+            lfcActorMessage_getRecipient, "getRecipient", public_lfcActorMessage_getRecipient,
+            lfcActorMessage_getMsg, "getMsg", public_lfcActorMessage_getMsg,
+            lfcActorMessage_getMsgLen, "getMsgLen", public_lfcActorMessage_getMsgLen,
+
             (void *) 0)
         );
 }
@@ -106,9 +167,27 @@ CLASS_MAKE_METHODS_FUNC(lfcActorMessage);
  * Erzeugt eine lfcActorMessage Instanz.
  */
 lfcActorMessage_t *lfcActorMessage_ctor(
+    const lfcActorRef_t *sender,
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
 ) {
-    return (lfcActorMessage_t *)new(lfcActorMessage());
+    return (lfcActorMessage_t *)new(lfcActorMessage(), sender, recipient, msg, msg_len);
 }
+
+lfcActorMessage_t *lfcActorMessage_ctor_noSender(
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
+) {
+    return lfcActorMessage_ctor (NULL, recipient, msg, msg_len );
+}
+
+IMPL_API__wRET__w_0PARAM(lfcActorMessage, hasSender, bool)
+IMPL_API__wRET__w_0PARAM(lfcActorMessage, getSender, const lfcActorRef_t *)
+IMPL_API__wRET__w_0PARAM(lfcActorMessage, getRecipient, const lfcActorRef_t *)
+IMPL_API__wRET__w_0PARAM(lfcActorMessage, getMsg, const char *)
+IMPL_API__wRET__w_0PARAM(lfcActorMessage, getMsgLen, size_t)
 
 
 /******************************************************************************************/

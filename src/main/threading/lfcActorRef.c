@@ -1,13 +1,14 @@
 #include <stdlib.h>
-#include "lfcActor.h"
+#include <asm/errno.h>
+#include "lfcActorRef.h"
 
 
 /******************************************************************************************/
 /* FIELDS                                                                                 */
 /******************************************************************************************/
-static const lfcActor_t *_lfcActor;
-static const lfcActor_class_t *_lfcActor_class;
-static lfcActor_methods_t _lfcActor_methods;
+static const lfcActorRef_t *_lfcActorRef;
+static const lfcActorRef_class_t *_lfcActorRef_class;
+static lfcActorRef_methods_t _lfcActorRef_methods;
 
 
 /******************************************************************************************/
@@ -27,68 +28,43 @@ static lfcActor_methods_t _lfcActor_methods;
 /**
  * Diese Funktion erstellt eine Instanz.
  */
-lfcActor_t *public_lfcActor_ctor(
+lfcActorRef_t *public_lfcActorRef_ctor(
     void *_self,
     va_list *app
 ) {
-    lfcActor_t *self = (lfcActor_t *) lfcObject_super_ctor(lfcActor(), _self);
+    lfcActorRef_t *self = (lfcActorRef_t *) lfcObject_super_ctor(lfcActorRef(), _self);
 
     if (self == 0) {
         return 0;
     }
 
-    // read args
-    const char *name = va_arg(*app, const char *);
-    self->actorSystem = va_arg(*app, const lfcActorSystem_t *);
-    self->receive_fn = va_arg(*app, receive_fn_cb);
-
-    if (!self->receive_fn) { return NULL; }
-    if (!name) { goto err; }
-    self->name = strdup(name);
-
     return self;
-err:
-    if (self->name) { free(self->name); }
-
-    return NULL;
 }
 
 /**
  * Destructor-Funktion.
  */
-static lfcActor_t *public_lfcActor_dtor(
-    lfcActor_t *self
+static lfcActorRef_t *public_lfcActorRef_dtor(
+    lfcActorRef_t *self
 ) {
-    if (self->name) { free(self->name); }
-
-    return self;
+    return lfcObject_super_dtor(lfcActorRef(), self);
 }
 
 /**
- * Returns the actor system
+ * Send a message to an actor.
  */
-static const lfcActorSystem_t *public_lfcActor_getActorSystem(
-    lfcActor_t *self
+static int public_lfcActorRef_tell(
+    lfcActorRef_t *self,
+    const lfcActorRef_t *recipient,
+    const char *msg,
+    size_t msg_len
 ) {
-    return self->actorSystem;
-}
+    if (!self) return -EINVAL;
+    if (!recipient) return -EINVAL;
+    if (!msg) return -EINVAL;
+    if (!msg_len) return -EINVAL;
 
-/**
- * Return name of this actor
- */
-static const char *public_lfcActor_getName(
-    lfcActor_t *self
-) {
-    return self->name;
-}
-
-/**
- * Returns the actor receive fn.
- */
-static receive_fn_cb public_lfcActor_getReceiveFn(
-    lfcActor_t *self
-) {
-    return self->receive_fn;
+    return -1;
 }
 
 
@@ -105,65 +81,48 @@ static receive_fn_cb public_lfcActor_getReceiveFn(
  *
  * @return die Instanz selbst
  */
-CLASS_CTOR__START(lfcActor)
-        OVERRIDE_METHOD(lfcActor, getActorSystem)
-        OVERRIDE_METHOD(lfcActor, getName)
-        OVERRIDE_METHOD(lfcActor, getReceiveFn)
-    CLASS_CTOR__INIT_SUPER(lfcActor, lfcActorRef)
+CLASS_CTOR__START(lfcActorRef)
+        OVERRIDE_METHOD(lfcActorRef, tell)
+    CLASS_CTOR__INIT_SUPER(lfcActorRef, lfcObject)
     CLASS_CTOR__INIT_IFACES()
 CLASS_CTOR__END()
 
-const lfcActor_class_t *lfcActor_class() {
-    return _lfcActor_class
-        ? _lfcActor_class
-        : (_lfcActor_class = (lfcActor_class_t *) new(
-            lfcObject_class(), "lfcActor_class", lfcObject_class(), sizeof(lfcActor_class_t),
+const lfcActorRef_class_t *lfcActorRef_class() {
+    return _lfcActorRef_class
+        ? _lfcActorRef_class
+        : (_lfcActorRef_class = (lfcActorRef_class_t *) new(
+            lfcObject_class(), "lfcActorRef_class", lfcObject_class(), sizeof(lfcActorRef_class_t),
 
-            lfcObject_ctor, "", impl_lfcActor_class_ctor,
-
-            (void *) 0)
-        );
-}
-
-const lfcActor_t *lfcActor() {
-    return _lfcActor
-        ? _lfcActor
-        : (_lfcActor = (lfcActor_t *) new(
-            lfcActor_class(),
-            "lfcActor", lfcObject(), sizeof(lfcActor_t),
-
-            lfcObject_ctor, "ctor", public_lfcActor_ctor,
-            lfcObject_dtor, "dtor", public_lfcActor_dtor,
-
-            lfcActor_getActorSystem, "getActorSystem", public_lfcActor_getActorSystem,
-            lfcActor_getName, "getName", public_lfcActor_getName,
-            lfcActor_getReceiveFn, "getReceiveFn", public_lfcActor_getReceiveFn,
+            lfcObject_ctor, "", impl_lfcActorRef_class_ctor,
 
             (void *) 0)
         );
 }
 
-CLASS_MAKE_METHODS_FUNC(lfcActor);
+const lfcActorRef_t *lfcActorRef() {
+    return _lfcActorRef
+        ? _lfcActorRef
+        : (_lfcActorRef = (lfcActorRef_t *) new(
+            lfcActorRef_class(),
+            "lfcActorRef", lfcObject(), sizeof(lfcActorRef_t),
+
+            lfcObject_ctor, "ctor", public_lfcActorRef_ctor,
+            lfcObject_dtor, "dtor", public_lfcActorRef_dtor,
+
+            lfcActorRef_tell, "tell", public_lfcActorRef_tell,
+
+            (void *) 0)
+        );
+}
+
+CLASS_MAKE_METHODS_FUNC(lfcActorRef);
 
 
 /******************************************************************************************/
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-/**
- * Erzeugt eine lfcActor Instanz.
- */
-lfcActor_t *lfcActor_ctor(
-    const char *name,
-    const lfcActorSystem_t *actorSystem,
-    receive_fn_cb receive_fn
-) {
-    return (lfcActor_t *)new(lfcActor(), name, actorSystem, receive_fn);
-}
-
-IMPL_API__wRET__w_0PARAM(lfcActor, getActorSystem, const lfcActorSystem_t *)
-IMPL_API__wRET__w_0PARAM(lfcActor, getName, const char *)
-IMPL_API__wRET__w_0PARAM(lfcActor, getReceiveFn, receive_fn_cb)
+IMPL_API__wRET__w_3PARAM(lfcActorRef, tell, int, const lfcActorRef_t *, const char *, size_t)
 
 
 /******************************************************************************************/

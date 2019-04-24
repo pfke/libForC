@@ -1,5 +1,5 @@
-#ifndef LIBFORC_THREADING_LFCACTOR_H
-#define LIBFORC_THREADING_LFCACTOR_H
+#ifndef LIBFORC_THREADING_LFCACTORRef_H
+#define LIBFORC_THREADING_LFCACTORRef_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,74 +13,40 @@ extern "C" {
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
 DEFINE_CLASS(lfcActorRef);
-DEFINE_CLASS(lfcActor);
-
-typedef struct lfcActorSystem lfcActorSystem_t ;
-typedef void (*receive_fn_cb)(lfcActorSystem_t *, lfcActor_t *, lfcActorMessage_t *);
 
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-struct lfcActorRef { const struct lfcObject _;
-};
+struct lfcActorRef { const struct lfcObject _; };
 
 struct lfcActorRef_class { const struct lfcObject_class _;
+    method_t tell;
 };
 
 struct lfcActorRef_methods {
+    int (*tell)(lfcActorRef_t *self, const lfcActorRef_t *recipent, const char *msg, size_t msg_len);
+
     // super
     const lfcObject_methods_t *base;
 };
 
-
-struct lfcActor { const struct lfcActorRef _;
-    const lfcActorSystem_t *actorSystem;
-    char *name;
-    receive_fn_cb receive_fn;
-};
-
-struct lfcActor_class { const struct lfcActorRef_class _;
-    method_t getActorSystem;
-    method_t getName;
-    method_t getReceiveFn;
-};
-
-struct lfcActor_methods {
-    const lfcActorSystem_t *(*getActorSystem)(lfcActor_t *self);
-    const char *(*getName)(lfcActor_t *self);
-    receive_fn_cb (*getReceiveFn)(lfcActor_t *self);
-
-    // super
-    const lfcActorRef_methods_t *base;
-};
+/**
+ * Erzeugt eine lfcActorRef Instanz.
+ */
+lfcActorRef_t *lfcActorRef_ctor();
 
 /**
- * Erzeugt eine lfcActor Instanz.
+ * Send a message to an actor.
  */
-lfcActor_t *lfcActor_ctor(
-    const char *name,
-    const lfcActorSystem_t *actorSystem,
-    receive_fn_cb receive_fn
+int lfcActorRef_tell(
+    lfcActorRef_t *self,
+    const lfcActorRef_t *recipent,
+    const char *msg,
+    size_t msg_len
 );
-
-/**
- * Returns the actor system
- */
-const lfcActorSystem_t *lfcActor_getActorSystem(lfcActor_t *self);
-
-/**
- * Returns the actor name
- */
-const char *lfcActor_getName(lfcActor_t *self);
-
-/**
- * Returns the actor receive fn.
- */
-receive_fn_cb lfcActor_getReceiveFn(lfcActor_t *self);
-
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //LIBFORC_THREADING_LFCACTOR_H
+#endif //LIBFORC_THREADING_LFCACTORREF_H
