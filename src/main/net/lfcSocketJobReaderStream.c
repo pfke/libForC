@@ -51,11 +51,9 @@ static lfcSocketJobReaderStream_t *public_lfcSocketJobReaderStream_ctor(
     lfcSocketJobReaderStream_t *self = (lfcSocketJobReaderStream_t *) lfcObject_super_ctor(
         lfcSocketJobReaderStream(), _self,
         fd, context, ident, timeout_in_s, 0,
-        buf, buf_len, onReadComplete
+        buf, buf_len, free_buf_on_exit, onReadComplete
     );
     ASSERT_PTR(self, err_self, "could not instantiate super");
-
-    self->free_buf_on_exit = free_buf_on_exit;
 
     return self;
 
@@ -70,8 +68,6 @@ static lfcSocketJobReaderStream_t *public_lfcSocketJobReaderStream_dtor(
     lfcSocketJobReaderStream_t *self
 ) {
     lfcObject_super_dtor(lfcSocketJobReaderStream(), self);
-
-    if (self->free_buf_on_exit) free(self->_.buf);
 
     return self;
 }

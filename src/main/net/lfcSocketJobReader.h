@@ -29,6 +29,7 @@ struct lfcSocketJobReader { const struct lfcSocketJob _;
     size_t buf_len;
     size_t already_read;
     fn_onReadComplete_cb onReadComplete;
+    bool free_buf;
 };
 
 struct lfcSocketJobReader_class { const struct lfcSocketJob_class _;
@@ -94,6 +95,7 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor_wBuffer (
  * @param repeat Angabe, wie oft der Lese-Befehl ausgeführt werden soll (0 .. endlos, 1 .. one-shot, >1 .. Anzahl)
  * @param read_buf in diesen Buffer soll gelesen werden
  * @param len_to_read zu lesende Länge
+ * qparam free_buf soll der uebergebene buffer im dtor gefreed werden?
  * @param Callback der aufgerufen wird, wenn der Lese-Zugriff fertig ist
  * @return die erstellte Instanz
  */
@@ -105,6 +107,7 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor_wRepeat(
     unsigned int repeat,
     char *read_buf,
     size_t len_to_read,
+    bool free_buf,
     fn_onReadComplete_cb onReadComplete
 );
 

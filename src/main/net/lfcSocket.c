@@ -131,6 +131,7 @@ static ssize_t public_lfcSocket_read (
         1,
         buf,
         buf_size,
+        false,
         wait_for_mutex
      );
 
@@ -208,6 +209,7 @@ static ssize_t public_lfcSocket_read_async (
             repeat,
             buf,
             buf_size,
+            false,
             onReadComplete
         )
     );

@@ -17,7 +17,6 @@ DEFINE_CLASS(lfcSocketJobReaderStream)
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
 struct lfcSocketJobReaderStream { const struct lfcSocketJobReader _;
-    int free_buf_on_exit;
 };
 
 struct lfcSocketJobReaderStream_class { const struct lfcSocketJobReader_class _;

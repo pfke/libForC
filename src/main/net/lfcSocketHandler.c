@@ -309,7 +309,7 @@ static int priv_lfcSocketHandler_createCmdPipeReaderJob (
     self->cmd_pipe_readJob = lfcSocketJobReader_ctor_wRepeat(
         self->thread_cmd_pipe[LNSH_CMDPIPE_FROMUSER_THREAD],
         self, NULL, 0, 0,
-        buf, LNSH_CMDPIPE_MSG_SIZE,
+        buf, LNSH_CMDPIPE_MSG_SIZE, true,
         priv_lfcSocketHandler_onCmdPipeReader_readComplete_cb
     );
     if (!self->cmd_pipe_readJob) { return -ENOMEM; }

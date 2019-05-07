@@ -54,9 +54,11 @@ static lfcSocketJobReader_t *public_lfcSocketJobReader_ctor(
     // read args
     self->buf =  va_arg(*app, char *);
     self->buf_len = va_arg(*app, size_t);
+    bool free_buf = va_arg(*app, int) ? true : false;
     self->onReadComplete = va_arg(*app, fn_onReadComplete_cb);
     ASSERT_PTR(self->buf, err_no_mem, "no buf given");
     ASSERT_PTR(self->onReadComplete, err_param_null, "onReadComplete is NULL");
+    self->free_buf = free_buf;
 
     memset(self->buf, 0, self->buf_len);
 
@@ -66,6 +68,8 @@ err_param_null:
 err_no_mem:
     delete(self);
 err_self:
+    if (self->buf && self->free_buf) { free(self->buf); }
+
     return NULL;
 }
 
@@ -75,9 +79,9 @@ err_self:
 static lfcSocketJobReader_t *public_lfcSocketJobReader_dtor(
     lfcSocketJobReader_t *self
 ) {
-    lfcObject_super_dtor(lfcSocketJobReader(), self);
+    if (self->buf && self->free_buf) { free(self->buf); }
 
-    return self;
+    return lfcObject_super_dtor(lfcSocketJobReader(), self);
 }
 
 /**
@@ -276,13 +280,12 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor (
     size_t len_to_read,
     fn_onReadComplete_cb onReadComplete
 ) {
-    return lfcSocketJobReader_ctor_wBuffer (
+    return lfcSocketJobReader_ctor_wRepeat(
         fd,
-        context,
-        ident,
+        context, ident,
         timeout_in_s,
-        calloc(1, len_to_read),
-        len_to_read,
+        1,
+        calloc(1, len_to_read), len_to_read, true,
         onReadComplete
     );
 }
@@ -316,7 +319,7 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor_wBuffer (
         context, ident,
         timeout_in_s,
         1,
-        read_buf, len_to_read,
+        read_buf, len_to_read, false,
         onReadComplete
     );
 }
@@ -332,6 +335,7 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor_wBuffer (
  * @param repeat Angabe, wie oft der Lese-Befehl ausgeführt werden soll (0 .. endlos, 1 .. one-shot, >1 .. Anzahl)
  * @param read_buf in diesen Buffer soll gelesen werden
  * @param len_to_read zu lesende Länge
+ * qparam free_buf soll der uebergebene buffer im dtor gefreed werden?
  * @param Callback der aufgerufen wird, wenn der Lese-Zugriff fertig ist
  * @return die erstellte Instanz
  */
@@ -343,6 +347,7 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor_wRepeat(
     unsigned int repeat,
     char *read_buf,
     size_t len_to_read,
+    bool free_buf,
     fn_onReadComplete_cb onReadComplete
 ) {
     if (!read_buf) { return NULL; }
@@ -354,7 +359,7 @@ lfcSocketJobReader_t *lfcSocketJobReader_ctor_wRepeat(
         context, ident,
         timeout_in_s,
         repeat,
-        read_buf, len_to_read,
+        read_buf, len_to_read, free_buf,
         onReadComplete
     );
 }
