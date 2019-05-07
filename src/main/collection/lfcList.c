@@ -371,6 +371,8 @@ static int public_lfcList_bubbleSort (
     lfcList_t *self,
     lfcList_compare_fn compare_fn
 ) {
+    if (!compare_fn) return -1;
+
     if(0 == pthread_mutex_lock(&self->lock)) {
         private_lfcList_bubbleSort(self, impl_lfcList__IIterable__count((lfcIIterable_t *)self), compare_fn);
 
@@ -433,6 +435,7 @@ static lfcList_t *impl_lfcList__IIterable__filter(
     lfcList_t *self = asInstanceOf(lfcList(), _self);
 
     if (!self) return 0;
+    if (!fn) return 0;
 
     uint32_t i;
     lfcList_t *result = lfcList_ctor();
@@ -460,6 +463,8 @@ static lfcList_t *impl_lfcList__IIterable__filterNot(
     lfcIIterable_freeOldCollection_e free_source,
     lambda_fn__retInt__param1_voidPtr fn
 ) {
+    if (!fn) return 0;
+
     return impl_lfcList__IIterable__filter(_self, free_source, lambda(int, (void *item) { return !fn(item); }));
 }
 
@@ -473,6 +478,7 @@ static void *impl_lfcList__IIterable__find(
     lfcList_t *self = asInstanceOf(lfcList(), _self);
 
     if (!self) return 0;
+    if (!fn) return 0;
 
     uint32_t i;
     void *result = NULL;
@@ -500,6 +506,7 @@ static void impl_lfcList__IIterable__foreach(
     lfcList_t *self = asInstanceOf(lfcList(), _self);
 
     if (!self) return;
+    if (!fn) return;
 
     for (i = 0; i < self->size; i++) {
         fn(self->table[i]);
@@ -569,6 +576,7 @@ static lfcList_t *impl_lfcList__IIterable__map(
     lfcList_t *self = asInstanceOf(lfcList(), _self);
 
     if (!self) return 0;
+    if (!fn) return 0;
 
     uint32_t i;
     lfcList_t *result = lfcList_ctor();

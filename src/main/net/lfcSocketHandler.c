@@ -139,7 +139,7 @@ static int priv_lfcSocketHandler_addJob(
 
     result = epoll_ctl(self->epoll_fd, epoll_op, job->fd, &epoll_change);
     if (result) {
-        fprintf(stderr, "%d@%s: errno=%d / %s\n", __LINE__, __func__, errno, strerror(errno));
+        fprintf(stderr, "%d@%s: errno=%d / %s (fd=%d)\n", __LINE__, __func__, errno, strerror(errno), job->fd);
     }
 
     return result;
@@ -192,8 +192,8 @@ static int priv_lfcSocketHandler_delJob(
         epoll_change.data.fd = job->fd;
     }
 
-    delete(job);
     fd = job->fd;
+    delete(job);
     return epoll_ctl(self->epoll_fd, epoll_op, fd, &epoll_change);
 }
 

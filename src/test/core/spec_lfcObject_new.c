@@ -1,7 +1,7 @@
 #include "mocks/ClassA.h"
 #include "testing/lfcCriterionHelper.h"
 
-#define TEST_SUITE_NAME               Object_new
+#define TEST_SUITE_NAME               spec_lfcObject_new
 
 Test(
     TEST_SUITE_NAME,

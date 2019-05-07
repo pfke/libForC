@@ -91,10 +91,13 @@ static int impl_object_puto (
 static void impl_object_delete (
   void *_self
 ) {
-  free(
-    lfcObject_dtor(
-      asInstanceOf(lfcObject(), _self)
-    ));
+    lfcObject_t *self = asInstanceOf(lfcObject(), _self);
+    lfcObject_class_t *clazz = asInstanceOf(lfcObject_class(), self->class);
+
+    lfcObject_dtor(self);
+    memset(_self, 0, clazz->instance_size);
+
+    free(_self);
 }
 
 /**
@@ -299,8 +302,9 @@ void delete (
 
   if (class->delete.method) {
     ((void (*) (void *))class->delete.method)(_self);
-  } else
+  } else {
     lfcObject_forward(_self, 0, (method_fn) delete, "delete", _self);
+  }
 }
 
 struct lfcObject *new (

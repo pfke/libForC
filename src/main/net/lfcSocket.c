@@ -117,6 +117,11 @@ static ssize_t public_lfcSocket_read (
         return -1;
     }
 
+    void wait_for_mutex(void *context, void *ident, ssize_t read_len, char *read_buf) {
+        ret_len = read_len;
+        pthread_mutex_unlock(&mutex);
+    }
+
     // lesen anwerfen und auf unseren mutex laufen
     job = lfcSocketJobReader_ctor_wRepeat (
         self->fd,
@@ -126,10 +131,7 @@ static ssize_t public_lfcSocket_read (
         1,
         buf,
         buf_size,
-        lambda(void, (void *context isAnUnused_param, void *ident isAnUnused_param, ssize_t read_len, char *read_buf isAnUnused_param) {
-            ret_len = read_len;
-            pthread_mutex_unlock(&mutex);
-        })
+        wait_for_mutex
      );
 
     ret_len = lfcSocketHandler_read (

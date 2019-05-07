@@ -179,6 +179,8 @@ set(SOURCE_FILES_unitTests
         src/test/collection/lfcQueue/spec_lfcQueue_dequeue.c
         src/test/collection/lfcQueue/spec_lfcQueue_methods.c
 
+        src/test/core/spec_lfcObject_asInstanceOf.c
+        src/test/core/spec_lfcObject_isInstanceOf.c
         src/test/core/spec_lfcObject_new.c
         src/test/core/mocks/ClassA.h
         src/test/core/mocks/ClassA.c
@@ -203,6 +205,7 @@ set(SOURCE_FILES_unitTests
         src/test/net/lfcSocket/spec_lfcSocket_write_async.c
         src/test/net/lfcSocket/spec_lfcSocket_write_realWorld_01.c
         src/test/net/lfcSocket/spec_lfcSocket_write_realWorld_02.c
+        src/test/net/lfcSocketHandler/spec_lfcSocketHandler_crashDetection.c
         src/test/net/lfcSocketHandler/spec_lfcSocketHandler_singleton.c
         src/test/net/lfcSocketHandler/spec_lfcSocketHandler_read.c
         src/test/net/lfcSocketHandler/spec_lfcSocketHandler_write.c
