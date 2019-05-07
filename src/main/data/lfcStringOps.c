@@ -16,8 +16,8 @@ char *lfcStringOps_replace(
     if (!needle) { return NULL; }
     if (!replace) { return NULL; }
 
-    size_t newWlen = strlen(needle);
-    size_t oldWlen = strlen(replace);
+    size_t needleLen = strlen(needle);
+    size_t replaceLen = strlen(replace);
 
     // Counting the number of times needle word
     // occur in the string
@@ -26,12 +26,12 @@ char *lfcStringOps_replace(
             cnt++;
 
             // Jumping to index after the needle word.
-            i += oldWlen - 1;
+            i += needleLen - 1;
         }
     }
 
     // Making new string of enough length
-    result = (char *)malloc(i + cnt * (newWlen - oldWlen) + 1);
+    result = (char *)malloc(i + cnt * (replaceLen - needleLen) + 1);
     if (!result) { return NULL; }
 
     i = 0;
@@ -39,8 +39,8 @@ char *lfcStringOps_replace(
         // compare the substring with the result
         if (strstr(haystack, needle) == haystack) {
             strcpy(&result[i], replace);
-            i += oldWlen;
-            haystack += newWlen;
+            i += replaceLen;
+            haystack += needleLen;
         } else {
             result[i++] = *haystack++;
         }
