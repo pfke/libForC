@@ -345,7 +345,15 @@ static int priv_lfcSocketHandler_readSocket (
         struct epoll_event epoll_change;
 
         memset(&epoll_change, 0, sizeof(epoll_change));
-        epoll_ctl(self->epoll_fd, EPOLL_CTL_DEL, fd, &epoll_change);
+        epoll_change.events = EPOLLIN;
+
+        int epoll_op = lfcIIterable_find(
+            self->pending_jobs,
+            lambda_int((void *item isAnIncognito_param) {
+                return isInstanceOf(lfcSocketJobWriter(), item);
+            })) ? EPOLL_CTL_MOD : EPOLL_CTL_DEL;
+
+        epoll_ctl(self->epoll_fd, epoll_op, fd, &epoll_change);
 
         return -1;
     }
@@ -378,7 +386,18 @@ static int priv_lfcSocketHandler_writeSocket (
     );
     if (!found) {
         // aus dem epoll loeschen
-        epoll_ctl(self->epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+        struct epoll_event epoll_change;
+
+        memset(&epoll_change, 0, sizeof(epoll_change));
+        epoll_change.events = EPOLLOUT;
+
+        int epoll_op = lfcIIterable_find(
+            self->pending_jobs,
+            lambda_int((void *item isAnIncognito_param) {
+                return isInstanceOf(lfcSocketJobReader(), item);
+            })) ? EPOLL_CTL_MOD : EPOLL_CTL_DEL;
+
+        epoll_ctl(self->epoll_fd, epoll_op, fd, &epoll_change);
 
         return -1;
     }
