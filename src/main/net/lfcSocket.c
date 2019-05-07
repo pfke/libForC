@@ -275,6 +275,7 @@ static ssize_t public_lfcSocket_write (
             pthread_mutex_unlock(&mutex);
         })
     );
+    if (!job) { return -1; }
     ret_len = lfcSocketHandler_write (
         self->socketHandler, job
     );
@@ -310,9 +311,6 @@ static ssize_t public_lfcSocket_write (
     }
     pthread_mutex_unlock(&mutex);
     pthread_mutex_destroy(&mutex);
-
-    // die scheisse canceln, job disablen
-    lfcSocketJob_disable(asInstanceOf(lfcSocketJob(), job));
 
     errno = 0;
     return ret_len;
