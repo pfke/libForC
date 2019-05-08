@@ -53,6 +53,8 @@
       method_t write_uint16;
       method_t write_uint32;
       method_t write_uint64;
+
+      method_t toArray;
     };
 
     struct lfcByteBuffer_methods {
@@ -80,6 +82,8 @@
         size_t (*write_uint64)  (lfcByteBuffer_t *self, uint64_t data);
         size_t (*write_int8ptr) (lfcByteBuffer_t *self, size_t len, const int8_t *buf);
 
+        size_t (*toArray)(lfcByteBuffer_t *self, int8_t **data);
+
         // super
         const lfcObject_methods_t *base;
     };
@@ -91,7 +95,7 @@
         size_t increase_by
     );
 
-    lfcByteBuffer_t *lfcByteBuffer_init_wArray(
+    lfcByteBuffer_t *lfcByteBuffer_init_fromArray(
         lfcByteBuffer_endian_e endian,
         size_t len,
         int8_t *initial_array
@@ -178,6 +182,14 @@
      * @return Anzahl der geschriebenen Bytes
      */
     size_t lfcByteBuffer_write_int8ptr(lfcByteBuffer_t *self, size_t len, const int8_t *buf);
+
+    /**
+     * Gibt ein geclontes Array von read-ptr bis write-ptr zurück - Buffer der selbst freigegeben werden muss.
+     *
+     * @param self
+     * @return Groesse des zurueckgegebenen Arrays
+     */
+    size_t lfcByteBuffer_toArray(lfcByteBuffer_t *self, int8_t **result);
 
 
 #endif //LIBFORC_COLLECTION_LFCBYTEBUFFER_H

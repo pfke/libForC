@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <asm/errno.h>
+#include <core/lfcCore.h>
 
 /******************************************************************************************/
 /* FIELDS                                                                                 */
@@ -363,6 +364,29 @@ static size_t public_lfcByteBuffer_write_int8ptr (
     return 0;
 }
 
+/**
+ * Gibt ein geclontes Array von read-ptr bis write-ptr zurück.
+ *
+ * @param self
+ * @return Buffer der selbst freigegeben werden muss.
+ */
+static size_t public_lfcByteBuffer_toArray (
+    lfcByteBuffer_t *self,
+    int8_t **result
+) {
+    if (!result) { return 0; }
+
+    size_t array_size = self->write_ptr - self->read_ptr;
+    int8_t *result_ptr = malloc(lfcMAX(0, self->write_ptr - self->read_ptr));
+    if (!result_ptr) { return 0; }
+
+    *result = result_ptr;
+
+    memcpy(result_ptr, &self->table[self->read_ptr], array_size);
+
+    return array_size;
+}
+
 
 /******************************************************************************************/
 /* INITIALIZATION                                                                         */
@@ -381,6 +405,7 @@ CLASS_CTOR__START(lfcByteBuffer)
         OVERRIDE_METHOD(lfcByteBuffer, capacity)
         OVERRIDE_METHOD(lfcByteBuffer, isEmpty)
         OVERRIDE_METHOD(lfcByteBuffer, nonEmpty)
+
         OVERRIDE_METHOD(lfcByteBuffer, read_int8)
         OVERRIDE_METHOD(lfcByteBuffer, read_int16)
         OVERRIDE_METHOD(lfcByteBuffer, read_int32)
@@ -390,6 +415,7 @@ CLASS_CTOR__START(lfcByteBuffer)
         OVERRIDE_METHOD(lfcByteBuffer, read_uint32)
         OVERRIDE_METHOD(lfcByteBuffer, read_uint64)
         OVERRIDE_METHOD(lfcByteBuffer, read_int8ptr)
+
         OVERRIDE_METHOD(lfcByteBuffer, write_int8)
         OVERRIDE_METHOD(lfcByteBuffer, write_int16)
         OVERRIDE_METHOD(lfcByteBuffer, write_int32)
@@ -399,6 +425,8 @@ CLASS_CTOR__START(lfcByteBuffer)
         OVERRIDE_METHOD(lfcByteBuffer, write_uint32)
         OVERRIDE_METHOD(lfcByteBuffer, write_uint64)
         OVERRIDE_METHOD(lfcByteBuffer, write_int8ptr)
+
+        OVERRIDE_METHOD(lfcByteBuffer, toArray)
     CLASS_CTOR__INIT_SUPER(lfcByteBuffer, lfcObject)
     CLASS_CTOR__INIT_IFACES()
 CLASS_CTOR__END()
@@ -427,6 +455,7 @@ const lfcByteBuffer_t *lfcByteBuffer() {
             lfcByteBuffer_capacity, "capacity", public_lfcByteBuffer_capacity,
             lfcByteBuffer_isEmpty, "isEmpty", public_lfcByteBuffer_isEmpty,
             lfcByteBuffer_nonEmpty, "nonEmpty", public_lfcByteBuffer_nonEmpty,
+
             lfcByteBuffer_read_int8, "read_int8", public_lfcByteBuffer_read_int8,
             lfcByteBuffer_read_int16, "read_int16", public_lfcByteBuffer_read_int16,
             lfcByteBuffer_read_int32, "read_int32", public_lfcByteBuffer_read_int32,
@@ -436,6 +465,7 @@ const lfcByteBuffer_t *lfcByteBuffer() {
             lfcByteBuffer_read_uint32, "read_uint32", public_lfcByteBuffer_read_uint32,
             lfcByteBuffer_read_uint64, "read_uint64", public_lfcByteBuffer_read_uint64,
             lfcByteBuffer_read_int8ptr, "read_int8ptr", public_lfcByteBuffer_read_int8ptr,
+
             lfcByteBuffer_write_int8, "write_int8", public_lfcByteBuffer_write_int8,
             lfcByteBuffer_write_int16, "write_int16", public_lfcByteBuffer_write_int16,
             lfcByteBuffer_write_int32, "write_int32", public_lfcByteBuffer_write_int32,
@@ -445,6 +475,8 @@ const lfcByteBuffer_t *lfcByteBuffer() {
             lfcByteBuffer_write_uint32, "write_uint32", public_lfcByteBuffer_write_uint32,
             lfcByteBuffer_write_uint64, "write_uint64", public_lfcByteBuffer_write_uint64,
             lfcByteBuffer_write_int8ptr, "write_int8ptr", public_lfcByteBuffer_write_int8ptr,
+
+            lfcByteBuffer_toArray, "toArray", public_lfcByteBuffer_toArray,
 
             (void *) 0)
            );
@@ -490,7 +522,7 @@ lfcByteBuffer_t *lfcByteBuffer_ctorComplete(
     return (lfcByteBuffer_t *)new(lfcByteBuffer(), endian, initial_size, increase_by);
 }
 
-lfcByteBuffer_t *lfcByteBuffer_init_wArray(
+lfcByteBuffer_t *lfcByteBuffer_init_fromArray(
     lfcByteBuffer_endian_e endian,
     size_t len,
     int8_t *initial_array
@@ -503,7 +535,6 @@ lfcByteBuffer_t *lfcByteBuffer_init_wArray(
             bb = NULL;
         }
     }
-
 
     return bb;
 }
@@ -529,3 +560,4 @@ IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint16, size_t, uint16_t)
 IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint32, size_t, uint32_t)
 IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint64, size_t, uint64_t)
 IMPL_API__wRET__w_2PARAM(lfcByteBuffer, write_int8ptr, size_t, size_t, const int8_t *)
+IMPL_API__wRET__w_1PARAM(lfcByteBuffer, toArray, size_t, int8_t **)

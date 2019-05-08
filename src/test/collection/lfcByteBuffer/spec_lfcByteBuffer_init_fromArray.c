@@ -1,14 +1,14 @@
 #include "collection/lfcByteBuffer.h"
 #include "testing/lfcCriterionHelper.h"
 
-#define TEST_SUITE_NAME               spec_lfcByteBuffer_init_wArray
+#define TEST_SUITE_NAME               spec_lfcByteBuffer_init_fromArray
 
 Test(
     TEST_SUITE_NAME,
     checkIf_return_is_not_null
 ) {
     int8_t array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    lfcByteBuffer_t *tto = lfcByteBuffer_init_wArray(lfcBB_BIG_ENDIAN, sizeof(array), array);
+    lfcByteBuffer_t *tto = lfcByteBuffer_init_fromArray(lfcBB_BIG_ENDIAN, sizeof(array), array);
 
     should_not_be_null(tto);
 
@@ -20,7 +20,7 @@ Test(
     checkIf_arrayWasWritten
 ) {
     int8_t array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    lfcByteBuffer_t *tto = lfcByteBuffer_init_wArray(lfcBB_BIG_ENDIAN, sizeof(array), array);
+    lfcByteBuffer_t *tto = lfcByteBuffer_init_fromArray(lfcBB_BIG_ENDIAN, sizeof(array), array);
     int8_t result;
 
     lfcByteBuffer_read_int8(tto, &result);
@@ -60,7 +60,7 @@ Test(
     checkIf_read_wDiffSizesWorks_BE
 ) {
     int8_t array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    lfcByteBuffer_t *tto = lfcByteBuffer_init_wArray(lfcBB_BIG_ENDIAN, sizeof(array), array);
+    lfcByteBuffer_t *tto = lfcByteBuffer_init_fromArray(lfcBB_BIG_ENDIAN, sizeof(array), array);
     int8_t result_8;
     int16_t result_16;
     int32_t result_32;
@@ -90,7 +90,7 @@ Test(
     checkIf_read_wDiffSizesWorks_LE
 ) {
     int8_t array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    lfcByteBuffer_t *tto = lfcByteBuffer_init_wArray(lfcBB_LITTLE_ENDIAN, sizeof(array), array);
+    lfcByteBuffer_t *tto = lfcByteBuffer_init_fromArray(lfcBB_LITTLE_ENDIAN, sizeof(array), array);
     int8_t result_8;
     int16_t result_16;
     int32_t result_32;

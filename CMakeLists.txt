@@ -112,7 +112,8 @@ set(SOURCE_FILES_unitTests
         src/test/collection/lfcByteBuffer/spec_lfcByteBuffer_write_uint32.c
         src/test/collection/lfcByteBuffer/spec_lfcByteBuffer_write_uint64.c
         src/test/collection/lfcByteBuffer/spec_lfcByteBuffer_write_int8ptr.c
-        src/test/collection/lfcByteBuffer/spec_lfcByteBuffer_init_wArray.c
+        src/test/collection/lfcByteBuffer/spec_lfcByteBuffer_init_fromArray.c
+        src/test/collection/lfcByteBuffer/spec_lfcByteBuffer_toArray.c
 
         src/test/collection/lfcHashmap/spec_lfcHashmap__lfcIIterable_count.c
         src/test/collection/lfcHashmap/spec_lfcHashmap__lfcIIterable_exists.c
