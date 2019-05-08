@@ -35,7 +35,6 @@ Test(
                 should_be_same_int_wText(res_read_len, strlen(buf), "[r] Anzahl gelesender Bytes stimmt nicht");
                 should_be_same_array_wText(res_buf, buf, strlen(buf), "[r] Daten stimmen nicht");
 
-                free(res_buf);
                 read_wait_for = true;
             })
         )
@@ -91,7 +90,6 @@ Test(
                 should_be_same_int_wText(res_read_len, strlen(buf), "[r] Anzahl gelesender Bytes stimmt nicht");
                 should_be_same_array_wText(res_buf, buf, strlen(buf), "[r] Daten stimmen nicht");
 
-                free(res_buf);
                 read_wait_for = true;
             })
         )

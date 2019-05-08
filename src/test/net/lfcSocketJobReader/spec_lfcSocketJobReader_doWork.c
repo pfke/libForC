@@ -32,8 +32,6 @@ Test(
             should_be_same_ptr_wText(res_ident, &ident, "callback-ident stimmt nicht");
             should_be_same_int_wText(res_read_len, strlen(buf), "Anzahl gelesender Bytes stimmt nicht");
             should_be_same_array_wText(res_buf, buf, strlen(buf), "Daten stimmen nicht");
-
-            free(res_buf);
         })
     );
 
@@ -71,8 +69,6 @@ Test(
             should_be_same_ptr_wText(res_ident, &ident, "callback-ident stimmt nicht");
             should_be_same_int_wText(res_read_len, strlen(buf), "Anzahl gelesender Bytes stimmt nicht");
             should_be_same_array_wText(res_buf, buf, strlen(buf), "Daten stimmen nicht");
-
-            free(res_buf);
         })
     );
 
@@ -110,7 +106,6 @@ Test(
         strlen(buf),
         lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
             callback_call_counter++;
-            if (res_buf) free(res_buf);
         })
     );
 
@@ -151,8 +146,6 @@ Test(
             should_be_same_ptr_wText(res_context, &context, "callback-context stimmt nicht");
             should_be_same_ptr_wText(res_ident, &ident, "callback-ident stimmt nicht");
             should_be_same_int_wText(res_read_len, -EBADF, "Anzahl gelesender Bytes stimmt nicht");
-
-            free(res_buf);
         })
     );
 
@@ -187,6 +180,7 @@ Test(
         0,
         calloc(1, strlen(buf)),
         strlen(buf),
+        true,
         lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
             callback_call_counter++;
             if (callback_call_counter == 2) {
@@ -241,9 +235,9 @@ Test(
         1,
         calloc(1, strlen(buf)),
         strlen(buf),
+        true,
         lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
             callback_call_counter++;
-            free(res_buf);
         })
     );
 
@@ -284,12 +278,13 @@ Test(
         2,
         calloc(1, strlen(buf)),
         strlen(buf),
+        true,
         lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
             callback_call_counter++;
 
-            if (callback_call_counter == 2) {
-                free(res_buf);
-            }
+//            if (callback_call_counter == 2) {
+//                free(res_buf);
+//            }
         })
     );
 

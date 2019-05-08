@@ -9,7 +9,7 @@ Test(
 ) {
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, NULL, NULL, 2, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, NULL, NULL, 2, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_int(tto->_.fd, 1345);
 
@@ -23,7 +23,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 2, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 2, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_ptr(tto->_.context, &context);
 
@@ -38,7 +38,7 @@ Test(
     int ident;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, &ident, 2, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, &ident, 2, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_ptr(tto->_.ident, &ident);
 
@@ -52,7 +52,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_int(tto->_.timeout_in_s, 456461);
 
@@ -66,7 +66,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 11221, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 11221, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_int(tto->_.repeat, 11221);
 
@@ -80,7 +80,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_ptr(tto->buf, &buf_mock);
 
@@ -94,7 +94,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock[21];
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, buf_mock, 21, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, buf_mock, 21, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_int(tto->buf_len, 21);
 
@@ -108,7 +108,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_int(tto->onReadComplete, (fn_onReadComplete_cb)&fn_mock);
 
@@ -122,7 +122,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_not_be_null(tto->buf);
 
@@ -137,7 +137,7 @@ Test(
     int fn_mock;
     size_t array_size = 1024;
     char buf_mock[1024];
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, buf_mock, array_size, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, buf_mock, array_size, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_a_cleared_array(tto->buf, 0, array_size)
 
@@ -151,7 +151,7 @@ Test(
     int context;
     int fn_mock;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, (fn_onReadComplete_cb)&fn_mock);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, false, (fn_onReadComplete_cb)&fn_mock);
 
     should_be_same_int(tto->already_read, 0);
 
@@ -163,7 +163,7 @@ Test(
     err_if_buf_is_null
 ) {
     int context;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, NULL, 1, NULL);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, NULL, 1, false, NULL);
 
     should_be_null(tto);
 }
@@ -174,7 +174,7 @@ Test(
 ) {
     int context;
     char buf_mock;
-    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, NULL);
+    lfcSocketJobReader_t *tto = lfcSocketJobReader_ctor_wRepeat(1345, &context, NULL, 456461, 1, &buf_mock, 1, false, NULL);
 
     should_be_null(tto);
 }
