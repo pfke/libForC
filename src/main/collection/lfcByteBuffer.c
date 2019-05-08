@@ -57,7 +57,7 @@ static size_t public_lfcByteBuffer_write_uint8   (lfcByteBuffer_t *self, uint8_t
 static size_t public_lfcByteBuffer_write_uint16  (lfcByteBuffer_t *self, uint16_t data);
 static size_t public_lfcByteBuffer_write_uint32  (lfcByteBuffer_t *self, uint32_t data);
 static size_t public_lfcByteBuffer_write_uint64  (lfcByteBuffer_t *self, uint64_t data);
-static size_t public_lfcByteBuffer_write_int8ptr (lfcByteBuffer_t *self, size_t len, int8_t *buf);
+static size_t public_lfcByteBuffer_write_int8ptr (lfcByteBuffer_t *self, size_t len, const int8_t *buf);
 
 
 /******************************************************************************************/
@@ -334,7 +334,7 @@ static size_t public_lfcByteBuffer_write_uint64 ( lfcByteBuffer_t *self, uint64_
 static size_t public_lfcByteBuffer_write_int8ptr (
     lfcByteBuffer_t *self,
     size_t len,
-    int8_t *buf
+    const int8_t *buf
 ) {
     int result = 0;
 
@@ -528,4 +528,4 @@ IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint8, size_t, uint8_t)
 IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint16, size_t, uint16_t)
 IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint32, size_t, uint32_t)
 IMPL_API__wRET__w_1PARAM(lfcByteBuffer, write_uint64, size_t, uint64_t)
-IMPL_API__wRET__w_2PARAM(lfcByteBuffer, write_int8ptr, size_t, size_t, int8_t *)
+IMPL_API__wRET__w_2PARAM(lfcByteBuffer, write_int8ptr, size_t, size_t, const int8_t *)

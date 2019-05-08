@@ -78,7 +78,7 @@
         size_t (*write_uint16)  (lfcByteBuffer_t *self, uint16_t data);
         size_t (*write_uint32)  (lfcByteBuffer_t *self, uint32_t data);
         size_t (*write_uint64)  (lfcByteBuffer_t *self, uint64_t data);
-        size_t (*write_int8ptr) (lfcByteBuffer_t *self, size_t len, int8_t *buf);
+        size_t (*write_int8ptr) (lfcByteBuffer_t *self, size_t len, const int8_t *buf);
 
         // super
         const lfcObject_methods_t *base;
@@ -177,7 +177,7 @@
      * @param buf ist der Buffer mit dem zu schreibendem Inhalt
      * @return Anzahl der geschriebenen Bytes
      */
-    size_t lfcByteBuffer_write_int8ptr(lfcByteBuffer_t *self, size_t len, int8_t *buf);
+    size_t lfcByteBuffer_write_int8ptr(lfcByteBuffer_t *self, size_t len, const int8_t *buf);
 
 
 #endif //LIBFORC_COLLECTION_LFCBYTEBUFFER_H
