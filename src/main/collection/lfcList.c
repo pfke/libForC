@@ -177,8 +177,6 @@ static lfcList_t *public_lfcList_ctor(
 static lfcList_t *public_lfcList_dtor(
     lfcList_t *self
 ) {
-    lfcObject_super_dtor(lfcList(), self);
-
     pthread_mutex_lock(&self->lock);
     pthread_mutex_unlock(&self->lock);
     pthread_mutex_destroy(&self->lock);
@@ -188,7 +186,7 @@ static lfcList_t *public_lfcList_dtor(
     self->increaseBy = 0;
     self->table_size = 0;
 
-    return self;
+    return lfcObject_super_dtor(lfcList(), self);
 }
 
 /**

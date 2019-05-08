@@ -606,8 +606,6 @@ err_self:
 static lfcSocketHandler_t *public_lfcSocketHandler_dtor (
     lfcSocketHandler_t *self
 ) {
-    lfcObject_super_dtor(lfcSocketHandler(), self);
-
     priv_lfcSocketHandler_sendCmdPipe(self, LNSH_CMDPIPE_IDENT_IS_CMD, (void *)LNSH_CMDPIPE_CMD_EXIT);
     pthread_join(self->thread, NULL);
 
@@ -627,7 +625,7 @@ static lfcSocketHandler_t *public_lfcSocketHandler_dtor (
     pthread_mutex_destroy(&self->thread_global_mutex);
     pthread_mutex_destroy(&self->cmd_pipe_write_mutex);
 
-    return self;
+    return lfcObject_super_dtor(lfcSocketHandler(), self);
 }
 
 /**
