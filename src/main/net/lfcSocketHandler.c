@@ -913,11 +913,11 @@ CLASS_MAKE_METHODS_FUNC(lfcSocketHandler);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-IMPL_API__wRET__w_1PARAM (lfcSocketHandler, read, int, lfcSocketJobReader_t *);
-IMPL_API__wRET__w_1PARAM (lfcSocketHandler, write, int, lfcSocketJobWriter_t *);
-IMPL_API__wRET__w_1PARAM (lfcSocketHandler, killall, pthread_mutex_t*, int);
-IMPL_API__wRET__w_2PARAM (lfcSocketHandler, killall_waitFor, int, int, long);
-IMPL_API__wRET__w_1PARAM (lfcSocketHandler, printSupportData, int, FILE *);
+lfcOOP_IMPL_ACCESSOR(lfcSocketHandler, read, int, lfcSocketJobReader_t *);
+lfcOOP_IMPL_ACCESSOR(lfcSocketHandler, write, int, lfcSocketJobWriter_t *);
+lfcOOP_IMPL_ACCESSOR(lfcSocketHandler, killall, pthread_mutex_t*, int);
+lfcOOP_IMPL_ACCESSOR(lfcSocketHandler, killall_waitFor, int, int, long);
+lfcOOP_IMPL_ACCESSOR(lfcSocketHandler, printSupportData, int, FILE *);
 
 /**
  * Gibt die lfcSocketHandler Instanz zurück.

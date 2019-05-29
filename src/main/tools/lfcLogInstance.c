@@ -233,10 +233,10 @@ CLASS_MAKE_METHODS_FUNC(lfcLogInstance);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-IMPL_API__wRET__w_4PARAM (lfcLogInstance, log, int, lfcLogInstance_loglevel_e, const char *, const char *, va_list *);
-IMPL_API__wRET__w_0PARAM (lfcLogInstance, redirectToStderr, int);
-IMPL_API__wRET__w_0PARAM (lfcLogInstance, redirectToSyslog, int);
-IMPL_API__wRET__w_1PARAM (lfcLogInstance, setDebugLevel, int, lfcLogInstance_loglevel_e);
+lfcOOP_IMPL_ACCESSOR(lfcLogInstance, log, int, lfcLogInstance_loglevel_e, const char *, const char *, va_list *);
+lfcOOP_IMPL_ACCESSOR(lfcLogInstance, redirectToStderr, int);
+lfcOOP_IMPL_ACCESSOR(lfcLogInstance, redirectToSyslog, int);
+lfcOOP_IMPL_ACCESSOR(lfcLogInstance, setDebugLevel, int, lfcLogInstance_loglevel_e);
 
 /**
  * Erzeugt eine lfcLogInstance Instanz.

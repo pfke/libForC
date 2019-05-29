@@ -299,8 +299,8 @@ lfcBitset_t *lfcBitset_ctor_withBits(
     return self;
 }
 
-IMPL_API__wRET__w_1PARAM(lfcBitset, clear, int, size_t)
-IMPL_API__wRET__w_0PARAM(lfcBitset, count, size_t)
-IMPL_API__wRET__w_1PARAM(lfcBitset, get, int, size_t)
-IMPL_API__wRET__w_1PARAM(lfcBitset, set, int, size_t)
-IMPL_API__wRET__w_1PARAM(lfcBitset, toggle, int, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcBitset, clear, int, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcBitset, count, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcBitset, get, int, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcBitset, set, int, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcBitset, toggle, int, size_t)

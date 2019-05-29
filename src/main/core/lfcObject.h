@@ -446,27 +446,120 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         }
 
 
-#define IMPL_API__wRET__w_0PARAM(PREFIX, METHOD, RESULT_TYPE) \
-      MAKE__RET__w_0PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE)
-#define IMPL_API__wRET__w_1PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE) \
-      MAKE__RET__w_1PARAM(PREFIX##_##METHOD,   , PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE)
-#define IMPL_API__wRET__w_2PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE) \
-      MAKE__RET__w_2PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE)
+#define IMPL_API__wRET__w_0PARAM(PREFIX, METHOD, RESULT_TYPE)                                           lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE)
+#define IMPL_API__wRET__w_1PARAM(PREFIX, METHOD, RESULT_TYPE, p1)                                       lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1)
+#define IMPL_API__wRET__w_2PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2)                                   lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2)
+#define IMPL_API__wRET__w_3PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3)                               lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3)
+#define IMPL_API__wRET__w_4PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4)                           lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4)
+#define IMPL_API__wRET__w_5PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5)                       lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5)
+#define IMPL_API__wRET__w_6PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6)                   lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6)
+#define IMPL_API__wRET__w_7PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7)               lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7)
+#define IMPL_API__wRET__w_8PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8)           lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8)
+#define IMPL_API__wRET__w_9PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8, p9)       lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+
 #define IMPL_API__wRET__w_2PARAM_VA(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE) \
       MAKE__RET__w_2PARAM_VA(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE)
-#define IMPL_API__wRET__w_3PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE) \
-      MAKE__RET__w_3PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE)
-#define IMPL_API__wRET__w_4PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE) \
-      MAKE__RET__w_4PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE)
-#define IMPL_API__wRET__w_5PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE, PARAM5_TYPE) \
-      MAKE__RET__w_5PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE, PARAM5_TYPE)
-#define IMPL_API__wRET__w_8PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE, PARAM5_TYPE, PARAM6_TYPE, PARAM7_TYPE, PARAM8_TYPE) \
-      MAKE__RET__w_8PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE, PARAM5_TYPE, PARAM6_TYPE, PARAM7_TYPE, PARAM8_TYPE)
-#define IMPL_API__wRET__w_9PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE, PARAM5_TYPE, PARAM6_TYPE, PARAM7_TYPE, PARAM8_TYPE, PARAM9_TYPE) \
-      MAKE__RET__w_9PARAM(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE, PARAM2_TYPE, PARAM3_TYPE, PARAM4_TYPE, PARAM5_TYPE, PARAM6_TYPE, PARAM7_TYPE, PARAM8_TYPE, PARAM9_TYPE)
 
 #define CONST_IMPL_API__wRET__w_1PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE) \
       MAKE__RET__w_1PARAM(PREFIX##_##METHOD, const, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE)
+
+
+
+#define lfcCORE_NARGS_SINGLE_IMPL( \
+     _0,  _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9,   \
+    _10, _11, _12, _13, _14, _15, _16, _17, _18, _19,   \
+    all, ...)           all
+// The next macro lfcCORE_NARGS_SINGLE builds upon lfcCORE_NARGS_SINGLE_IMPL.
+// The more arguments that are passed to lfcCORE_NARGS_SINGLE, the more the
+// »counting arguments« ( 9, 8, 7…) are pushed to the right.
+// Thus the macro evaluates to the number of arguments that are passed to the macro.
+#define lfcCORE_NARGS_SINGLE(...)                                                       lfcCORE_NARGS_SINGLE_IMPL(X,##__VA_ARGS__, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+
+#define lfcOOP_IMPL_ACCESSOR_VAARG_IMPL2(base, count, clazz, method, resultType, ...)   base##_##count##Params(clazz, method, resultType, __VA_ARGS__)
+#define lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(base, count, clazz, method, resultType, ...)    lfcOOP_IMPL_ACCESSOR_VAARG_IMPL2(base, count, clazz, method, resultType, __VA_ARGS__)
+#define lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, ...)                      lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(lfcOOP_IMPL_ACCESSOR, lfcCORE_NARGS_SINGLE(__VA_ARGS__), clazz, method, resultType, __VA_ARGS__)
+#define lfcOOP_IMPL_ACCESSOR(clazz, method, resultType, ...)                            lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, __VA_ARGS__)
+
+
+#define lfcOOP_IMPL_ACCESSOR_0Params( \
+    clazz, method, resultType , dummy\
+)       MAKE__RET__w_0PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType)
+
+#define lfcOOP_IMPL_ACCESSOR_1Params( \
+    clazz, method, resultType, p1 \
+)       MAKE__RET__w_1PARAM(clazz##_##method, , clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1)
+
+#define lfcOOP_IMPL_ACCESSOR_2Params( \
+    clazz, method, resultType, p1, p2 \
+)       MAKE__RET__w_2PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2)
+
+#define lfcOOP_IMPL_ACCESSOR_3Params( \
+    clazz, method, resultType, p1, p2, p3 \
+)       MAKE__RET__w_3PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3)
+
+#define lfcOOP_IMPL_ACCESSOR_4Params( \
+    clazz, method, resultType, p1, p2, p3, p4 \
+)       MAKE__RET__w_4PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4)
+
+#define lfcOOP_IMPL_ACCESSOR_5Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5 \
+)       MAKE__RET__w_5PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5)
+
+#define lfcOOP_IMPL_ACCESSOR_6Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6 \
+)       MAKE__RET__w_6PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6)
+
+#define lfcOOP_IMPL_ACCESSOR_7Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7 \
+)       MAKE__RET__w_7PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7)
+
+#define lfcOOP_IMPL_ACCESSOR_8Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8 \
+)       MAKE__RET__w_8PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8)
+
+#define lfcOOP_IMPL_ACCESSOR_9Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9 \
+)       MAKE__RET__w_9PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+
+#define lfcOOP_IMPL_ACCESSOR_10Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 \
+)       MAKE__RET__w_10PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
+
+#define lfcOOP_IMPL_ACCESSOR_11Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 \
+)       MAKE__RET__w_11PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11)
+
+#define lfcOOP_IMPL_ACCESSOR_12Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 \
+)       MAKE__RET__w_12PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12)
+
+#define lfcOOP_IMPL_ACCESSOR_13Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13 \
+)       MAKE__RET__w_13PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13)
+
+#define lfcOOP_IMPL_ACCESSOR_14Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14 \
+)       MAKE__RET__w_14PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14)
+
+#define lfcOOP_IMPL_ACCESSOR_15Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 \
+)       MAKE__RET__w_15PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15)
+
+#define lfcOOP_IMPL_ACCESSOR_16Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16 \
+)       MAKE__RET__w_16PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16)
+
+#define lfcOOP_IMPL_ACCESSOR_17Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17 \
+)       MAKE__RET__w_17PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17)
+
+#define lfcOOP_IMPL_ACCESSOR_18Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18 \
+)       MAKE__RET__w_18PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18)
+
+#define lfcOOP_IMPL_ACCESSOR_19Params( \
+    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19 \
+)       MAKE__RET__w_19PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19)
 
 /**
    * Macro zum Erstellen der Implementierung einer globalen Funktion, die dann entweder die super-Methode aufruft.

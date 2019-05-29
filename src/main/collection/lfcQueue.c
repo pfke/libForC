@@ -394,6 +394,6 @@ lfcQueue_t *lfcQueue_ctorWithSize(
     return (lfcQueue_t *)new(lfcQueue(), initial_size, increase_by);
 }
 
-IMPL_API__wRET__w_0PARAM(lfcQueue, clear, int)
-IMPL_API__wRET__w_1PARAM(lfcQueue, enqueue, int, void *)
-IMPL_API__wRET__w_0PARAM(lfcQueue, dequeue, void *)
+lfcOOP_IMPL_ACCESSOR(lfcQueue, clear, int)
+lfcOOP_IMPL_ACCESSOR(lfcQueue, enqueue, int, void *)
+lfcOOP_IMPL_ACCESSOR(lfcQueue, dequeue, void *)

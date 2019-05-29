@@ -122,7 +122,7 @@ CLASS_MAKE_METHODS_FUNC(lfcActorRef);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-IMPL_API__wRET__w_3PARAM(lfcActorRef, tell, int, const lfcActorRef_t *, const char *, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcActorRef, tell, int, const lfcActorRef_t *, const char *, size_t)
 
 
 /******************************************************************************************/

@@ -900,18 +900,18 @@ int lfcMemPool_dump (
     return result;
 }
 
-IMPL_API__wRET__w_1PARAM(lfcMemPool, alloc, void *, uint16_t)
-IMPL_API__wRET__w_1PARAM(lfcMemPool, calloc, void *, uint16_t)
-IMPL_API__wRET__w_1PARAM(lfcMemPool, free, int, void *)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, alloc, void *, uint16_t)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, calloc, void *, uint16_t)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, free, int, void *)
 
-IMPL_API__wRET__w_0PARAM(lfcMemPool, defrag, int)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, defrag, int)
 
-IMPL_API__wRET__w_0PARAM(lfcMemPool, getBlockCount, size_t)
-IMPL_API__wRET__w_1PARAM(lfcMemPool, getBlockSize, size_t, void *)
-IMPL_API__wRET__w_0PARAM(lfcMemPool, getFreeDataSize, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, getBlockCount, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, getBlockSize, size_t, void *)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, getFreeDataSize, size_t)
 
-IMPL_API__wRET__w_1PARAM(lfcMemPool, next, void *, const void *)
-IMPL_API__wRET__w_1PARAM(lfcMemPool, prev, void *, const void *)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, next, void *, const void *)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, prev, void *, const void *)
 
-IMPL_API__wRET__w_5PARAM(lfcMemPool, dump_va, int, size_t, char, FILE *, const char *, va_list)
-IMPL_API__wRET__w_1PARAM(lfcMemPool, isValid, uint8_t, char**)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, dump_va, int, size_t, char, FILE *, const char *, va_list)
+lfcOOP_IMPL_ACCESSOR(lfcMemPool, isValid, uint8_t, char**)

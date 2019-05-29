@@ -196,10 +196,10 @@ lfcActor_t *lfcActor_ctor(
     return (lfcActor_t *)new(lfcActor(), name, actorSystem, receive_fn);
 }
 
-IMPL_API__wRET__w_0PARAM(lfcActor, getActorSystem, lfcActorSystem_t *)
-IMPL_API__wRET__w_0PARAM(lfcActor, getName, const char *)
-IMPL_API__wRET__w_0PARAM(lfcActor, getReceiveFn, receive_fn_cb)
-IMPL_API__wRET__w_0PARAM(lfcActor, getRef, lfcActorRef_t *)
+lfcOOP_IMPL_ACCESSOR(lfcActor, getActorSystem, lfcActorSystem_t *)
+lfcOOP_IMPL_ACCESSOR(lfcActor, getName, const char *)
+lfcOOP_IMPL_ACCESSOR(lfcActor, getReceiveFn, receive_fn_cb)
+lfcOOP_IMPL_ACCESSOR(lfcActor, getRef, lfcActorRef_t *)
 
 
 /******************************************************************************************/

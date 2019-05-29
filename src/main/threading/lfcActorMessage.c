@@ -183,11 +183,11 @@ lfcActorMessage_t *lfcActorMessage_ctor_noSender(
     return lfcActorMessage_ctor (NULL, recipient, msg, msg_len );
 }
 
-IMPL_API__wRET__w_0PARAM(lfcActorMessage, hasSender, bool)
-IMPL_API__wRET__w_0PARAM(lfcActorMessage, getSender, const lfcActorRef_t *)
-IMPL_API__wRET__w_0PARAM(lfcActorMessage, getRecipient, const lfcActorRef_t *)
-IMPL_API__wRET__w_0PARAM(lfcActorMessage, getMsg, const char *)
-IMPL_API__wRET__w_0PARAM(lfcActorMessage, getMsgLen, size_t)
+lfcOOP_IMPL_ACCESSOR(lfcActorMessage, hasSender, bool)
+lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getSender, const lfcActorRef_t *)
+lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getRecipient, const lfcActorRef_t *)
+lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getMsg, const char *)
+lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getMsgLen, size_t)
 
 
 /******************************************************************************************/

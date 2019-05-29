@@ -151,4 +151,4 @@ lfcOptParserParam_t *lfcOptParserParam_ctor(
 }
 
 
-IMPL_API__wRET__w_1PARAM(lfcOptParserParam, parse, int, const char *)
+lfcOOP_IMPL_ACCESSOR(lfcOptParserParam, parse, int, const char *)

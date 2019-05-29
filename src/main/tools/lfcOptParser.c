@@ -249,7 +249,7 @@ lfcOptParserParam_t *lfcOptParser_hlpr_addParam (
     return toAdd;
 }
 
-IMPL_API__wRET__w_1PARAM(lfcOptParser, addCmd, int, lfcOptParserCmd_t *)
-IMPL_API__wRET__w_1PARAM(lfcOptParser, addParam, int, lfcOptParserParam_t *)
-IMPL_API__wRET__w_1PARAM(lfcOptParser, dump, int, FILE *)
-IMPL_API__wRET__w_1PARAM(lfcOptParser, parse, int, const char *)
+lfcOOP_IMPL_ACCESSOR(lfcOptParser, addCmd, int, lfcOptParserCmd_t *)
+lfcOOP_IMPL_ACCESSOR(lfcOptParser, addParam, int, lfcOptParserParam_t *)
+lfcOOP_IMPL_ACCESSOR(lfcOptParser, dump, int, FILE *)
+lfcOOP_IMPL_ACCESSOR(lfcOptParser, parse, int, const char *)

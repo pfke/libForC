@@ -756,8 +756,8 @@ lfcHashmap_t *lfcHashmap_ctorWithSize(
     return (lfcHashmap_t *)new(lfcHashmap(), initial_size, hash_fn);
 }
 
-IMPL_API__wRET__w_0PARAM(lfcHashmap, clear, int)
-IMPL_API__wRET__w_1PARAM(lfcHashmap, get, void *, const void *)
-IMPL_API__wRET__w_2PARAM(lfcHashmap, put, int, const void *, void *)
-IMPL_API__wRET__w_1PARAM(lfcHashmap, remove, int, const void *)
-IMPL_API__wRET__w_0PARAM(lfcHashmap, values, lfcList_t *)
+lfcOOP_IMPL_ACCESSOR(lfcHashmap, clear, int)
+lfcOOP_IMPL_ACCESSOR(lfcHashmap, get, void *, const void *)
+lfcOOP_IMPL_ACCESSOR(lfcHashmap, put, int, const void *, void *)
+lfcOOP_IMPL_ACCESSOR(lfcHashmap, remove, int, const void *)
+lfcOOP_IMPL_ACCESSOR(lfcHashmap, values, lfcList_t *)

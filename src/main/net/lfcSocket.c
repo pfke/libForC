@@ -433,12 +433,12 @@ CLASS_MAKE_METHODS_FUNC(lfcSocket);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-IMPL_API__wRET__w_3PARAM (lfcSocket, read, ssize_t, char *, size_t, int);
-IMPL_API__wRET__w_5PARAM (lfcSocket, read_async, ssize_t, char *, size_t, int, unsigned int, fn_onReadComplete_cb);
-IMPL_API__wRET__w_1PARAM (lfcSocket, read_job, ssize_t, lfcSocketJobReader_t *);
-IMPL_API__wRET__w_3PARAM (lfcSocket, write, ssize_t, const char *, size_t, int);
-IMPL_API__wRET__w_4PARAM (lfcSocket, write_async, ssize_t, const char *, size_t, int, fn_onWriteComplete_cb);
-IMPL_API__wRET__w_1PARAM (lfcSocket, write_job, ssize_t, lfcSocketJobWriter_t *);
+lfcOOP_IMPL_ACCESSOR(lfcSocket, read, ssize_t, char *, size_t, int);
+lfcOOP_IMPL_ACCESSOR(lfcSocket, read_async, ssize_t, char *, size_t, int, unsigned int, fn_onReadComplete_cb);
+lfcOOP_IMPL_ACCESSOR(lfcSocket, read_job, ssize_t, lfcSocketJobReader_t *);
+lfcOOP_IMPL_ACCESSOR(lfcSocket, write, ssize_t, const char *, size_t, int);
+lfcOOP_IMPL_ACCESSOR(lfcSocket, write_async, ssize_t, const char *, size_t, int, fn_onWriteComplete_cb);
+lfcOOP_IMPL_ACCESSOR(lfcSocket, write_job, ssize_t, lfcSocketJobWriter_t *);
 
 /**
  * Erzeugt eine lfcSocket Instanz.

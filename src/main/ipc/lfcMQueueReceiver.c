@@ -172,7 +172,7 @@ CLASS_MAKE_METHODS_FUNC(lfcMQueueReceiver);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-IMPL_API__wRET__w_2PARAM(lfcMQueueReceiver, receive, const char *, size_t *, unsigned int *);
+lfcOOP_IMPL_ACCESSOR(lfcMQueueReceiver, receive, const char *, size_t *, unsigned int *);
 
 
 /**

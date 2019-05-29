@@ -156,7 +156,7 @@ CLASS_MAKE_METHODS_FUNC(lfcMQueueSender);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-IMPL_API__wRET__w_3PARAM(lfcMQueueSender, send, ssize_t, char *, size_t, unsigned int);
+lfcOOP_IMPL_ACCESSOR(lfcMQueueSender, send, ssize_t, char *, size_t, unsigned int);
 
 
 /**
