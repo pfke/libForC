@@ -57,14 +57,14 @@ set(SOURCE_FILES
         src/main/testing/lfcCriterionHelper.h
         src/main/testing/lfcCriterionHelper.c
         src/main/testing/lfcCriterionObject.h
-        src/main/threading/lfcActor.c
-        src/main/threading/lfcActor.h
-        src/main/threading/lfcActorRef.c
-        src/main/threading/lfcActorRef.h
-        src/main/threading/lfcActorMessage.c
-        src/main/threading/lfcActorMessage.h
-        src/main/threading/lfcActorSystem.c
-        src/main/threading/lfcActorSystem.h
+        src/main/threading/actor/lfcActor.c
+        src/main/threading/actor/lfcActor.h
+        src/main/threading/actor/lfcActorRef.c
+        src/main/threading/actor/lfcActorRef.h
+        src/main/threading/actor/lfcActorMessage.c
+        src/main/threading/actor/lfcActorMessage.h
+        src/main/threading/actor/lfcActorSystem.c
+        src/main/threading/actor/lfcActorSystem.h
         src/main/threading/lfcThreadMisc.h
         src/main/threading/lfcThreadMisc.c
         src/main/threading/lfcThreadPool.c
@@ -224,25 +224,25 @@ set(SOURCE_FILES_unitTests
         src/test/net/lfcSocketJobWriter/spec_lfcSocketJobWriter_ctor.c
         src/test/net/lfcSocketJobWriter/spec_lfcSocketJobWriter_doWork.c
 
-        src/test/threading/lfcActor/spec_lfcActor_ctor.c
-        src/test/threading/lfcActor/spec_lfcActor_getActorSystem.c
-        src/test/threading/lfcActor/spec_lfcActor_getName.c
-        src/test/threading/lfcActor/spec_lfcActor_getReceiveFn.c
-        src/test/threading/lfcActor/spec_lfcActor_tell.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_ctor.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_ctor_noSender.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getMsg.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getMsgLen.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getRecipient.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_getSender.c
-        src/test/threading/lfcActorMessage/spec_lfcActorMessage_hasSender.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_ctor.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_create.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_getName.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_equals.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_equals_byActor.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_equals_byActorRef.c
-        src/test/threading/lfcActorSystem/spec_lfcActorSystem_tell.c
+        src/test/threading/actor/lfcActor/spec_lfcActor_ctor.c
+        src/test/threading/actor/lfcActor/spec_lfcActor_getActorSystem.c
+        src/test/threading/actor/lfcActor/spec_lfcActor_getName.c
+        src/test/threading/actor/lfcActor/spec_lfcActor_getReceiveFn.c
+        src/test/threading/actor/lfcActor/spec_lfcActor_tell.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_ctor.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_ctor_noSender.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_getMsg.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_getMsgLen.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_getRecipient.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_getSender.c
+        src/test/threading/actor/lfcActorMessage/spec_lfcActorMessage_hasSender.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_ctor.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_create.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_getName.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_equals.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_equals_byActor.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_equals_byActorRef.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_tell.c
         )
 
 set(SOURCE_FILES_runner

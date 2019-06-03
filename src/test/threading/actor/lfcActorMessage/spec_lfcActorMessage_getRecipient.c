@@ -1,14 +1,14 @@
-#include "threading/lfcActor.h"
-#include "threading/lfcActorSystem.h"
+#include "threading/actor/lfcActor.h"
+#include "threading/actor/lfcActorSystem.h"
 #include "testing/lfcCriterionHelper.h"
 
-#define TEST_SUITE_NAME               lfcActorMessage__lfcActorMessage_getMsgLen
+#define TEST_SUITE_NAME               spec_lfcActorMessage__lfcActorMessage_getRecipient
 
 Test(
     TEST_SUITE_NAME,
     passing_null
 ) {
-    should_be_same_int(lfcActorMessage_getMsgLen(NULL), 0);
+    should_be_null(lfcActorMessage_getRecipient(NULL));
 }
 
 Test(
@@ -23,7 +23,7 @@ Test(
     const char *msg = ";lköklö";
     lfcActorMessage_t *tto = lfcActorMessage_ctor(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
-    should_be_same_int(lfcActorMessage_getMsgLen(tto), strlen(msg));
+    should_be_same_ptr(lfcActorMessage_getRecipient(tto), tto_actor_02);
 
     delete(system);
     delete(tto);

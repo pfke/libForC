@@ -8,7 +8,7 @@ extern "C" {
 #include <mqueue.h>
 #include <collection/lfcList.h>
 #include "core/lfcObject.h"
-#include "lfcThreadPool.h"
+#include "threading/lfcThreadPool.h"
 #include "lfcActorMessage.h"
 #include "lfcActor.h"
 

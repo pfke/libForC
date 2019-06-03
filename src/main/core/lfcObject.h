@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include "lfcCore.h"
 
 #define   MAGIC  0x0effaced
 #define   abstract
@@ -465,19 +466,9 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
 
 
 
-#define lfcCORE_NARGS_SINGLE_IMPL( \
-     _0,  _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9,   \
-    _10, _11, _12, _13, _14, _15, _16, _17, _18, _19,   \
-    all, ...)           all
-// The next macro lfcCORE_NARGS_SINGLE builds upon lfcCORE_NARGS_SINGLE_IMPL.
-// The more arguments that are passed to lfcCORE_NARGS_SINGLE, the more the
-// »counting arguments« ( 9, 8, 7…) are pushed to the right.
-// Thus the macro evaluates to the number of arguments that are passed to the macro.
-#define lfcCORE_NARGS_SINGLE(...)                                                       lfcCORE_NARGS_SINGLE_IMPL(X,##__VA_ARGS__, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-
 #define lfcOOP_IMPL_ACCESSOR_VAARG_IMPL2(base, count, clazz, method, resultType, ...)   base##_##count##Params(clazz, method, resultType, __VA_ARGS__)
 #define lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(base, count, clazz, method, resultType, ...)    lfcOOP_IMPL_ACCESSOR_VAARG_IMPL2(base, count, clazz, method, resultType, __VA_ARGS__)
-#define lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, ...)                      lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(lfcOOP_IMPL_ACCESSOR, lfcCORE_NARGS_SINGLE(__VA_ARGS__), clazz, method, resultType, __VA_ARGS__)
+#define lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, ...)                      lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(lfcOOP_IMPL_ACCESSOR, lfcCORE_VARGSCOUNT_TUPLE1(__VA_ARGS__), clazz, method, resultType, __VA_ARGS__)
 #define lfcOOP_IMPL_ACCESSOR(clazz, method, resultType, ...)                            lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, __VA_ARGS__)
 
 
@@ -631,33 +622,9 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
 /******************************************************************************************/
 /* MACROS FOR EASE CLASS DEFINITION (w/o ifaces)                                          */
 /******************************************************************************************/
-#define lfcCLASS_VA_NARGS_IMPL(_1, _2, _3,        \
-                               _4, _5, _6,        \
-                               _7, _8, _9,        \
-                               _10, _11, _12,     \
-                               _13, _14, _15,     \
-                               _16, _17, _18,     \
-                               _19, _20, _21,     \
-                               _22, _23, _24,     \
-                               _25, _26, _27,     \
-                               _28, _29, _30,     \
-                               _31, _32, _33,     \
-                               N, ...)                                          N
-#define lfcCLASS_VA_NARGS(...)                                                  lfcCLASS_VA_NARGS_IMPL(X,##__VA_ARGS__, \
-                                                                                       0, 0, 10,  \
-                                                                                       0, 0,  9,  \
-                                                                                       0, 0,  8,  \
-                                                                                       0, 0,  7,  \
-                                                                                       0, 0,  6,  \
-                                                                                       0, 0,  5,  \
-                                                                                       0, 0,  4,  \
-                                                                                       0, 0,  3,  \
-                                                                                       0, 0,  2,  \
-                                                                                       0, 0,  1,  \
-                                                                                       0, 0,  0)
 #define lfcCLASS_VARARG_IMPL2(base, count, name, super, fields, ...)            base##count(name, super, fields, __VA_ARGS__)
 #define lfcCLASS_VARARG_IMPL(base, count, name, super, fields, ...)             lfcCLASS_VARARG_IMPL2(base, count, name, super, fields, __VA_ARGS__)
-#define lfcCLASS_VARARG(base, name, super, fields, ...)                         lfcCLASS_VARARG_IMPL(base, lfcCLASS_VA_NARGS(__VA_ARGS__), name, super, fields, __VA_ARGS__)
+#define lfcCLASS_VARARG(base, name, super, fields, ...)                         lfcCLASS_VARARG_IMPL(base, lfcCORE_VARGSCOUNT_TUPLE3(__VA_ARGS__), name, super, fields, __VA_ARGS__)
 
 #define lfcDEFINE_CLASS(name, super, fields, ...)                               lfcCLASS_VARARG(lfcCLASS_noIface, name, super, fields, __VA_ARGS__)
 

@@ -1,9 +1,9 @@
-#include "threading/lfcActorMessage.h"
-#include "threading/lfcActorRef.h"
-#include "threading/lfcActorSystem.h"
+#include "threading/actor/lfcActorMessage.h"
+#include "threading/actor/lfcActorRef.h"
+#include "threading/actor/lfcActorSystem.h"
 #include "testing/lfcCriterionHelper.h"
 
-#define TEST_SUITE_NAME               lfcActorMessage__lfcActorMessage_ctor
+#define TEST_SUITE_NAME               spec_lfcActorMessage__lfcActorMessage_ctor
 
 Test(
     TEST_SUITE_NAME,

@@ -1,9 +1,9 @@
-#include "threading/lfcActor.h"
-#include "threading/lfcActorSystem.h"
+#include "threading/actor/lfcActor.h"
+#include "threading/actor/lfcActorSystem.h"
 #include "testing/lfcCriterionHelper.h"
 #include <unistd.h>
 
-#define TEST_SUITE_NAME               lfcActorSystem__lfcActorSystem_equals
+#define TEST_SUITE_NAME               spec_lfcActorSystem__lfcActorSystem_equals
 
 Test(
     TEST_SUITE_NAME,

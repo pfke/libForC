@@ -4,7 +4,7 @@
 #include <malloc.h>
 #include <mem/lfcMemPool.h>
 #include <threading/lfcThreadPool.h>
-#include <threading/lfcActorSystem.h>
+#include <threading/actor/lfcActorSystem.h>
 
 #define ALIGN(x)    (x + (__BIGGEST_ALIGNMENT__ - x % __BIGGEST_ALIGNMENT__))
 #define CALLOC_STATIC_MEM(name, size, value) \
