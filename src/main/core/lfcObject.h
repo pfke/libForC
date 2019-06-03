@@ -88,7 +88,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
    * Macro zur Erstellung der Klassendefinition:
    *
    *   .structs fuer Objekt, Klasse + Methoden
-   *   .Funktoins-Deklaration fuer Objekt, Klasse + Methoden
+   *   .Funktions-Deklaration fuer Objekt, Klasse + Methoden
    */
 #define DEFINE_CLASS(name) \
         typedef struct name             name##_t;           \
@@ -629,13 +629,14 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
 #define lfcDEFINE_CLASS(name, super, fields, ...)                               lfcCLASS_VARARG(lfcCLASS_noIface, name, super, fields, __VA_ARGS__)
 
 #define lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields) \
+    DEFINE_CLASS(name); \
     struct name { const super##_t _; \
         fields \
     }; \
 
 #define lfcCLASS_noIface1(name, super, fields,          \
     _1Return, _1Name, _1Args                            \
-)                                                   \
+)                                                       \
     lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields)  \
     struct name##_class { const super##_class_t _;      \
         method_t _1Name;                                \
@@ -643,14 +644,14 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
     struct name##_methods {                             \
         _1Return (*_1Name)_1Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;
 
 #define lfcCLASS_noIface2(name, super, fields,          \
     _1Return, _1Name, _1Args,                           \
     _2Return, _2Name, _2Args                            \
-)                                                   \
+)                                                       \
     lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields)  \
     struct name##_class { const super##_class_t _;      \
         method_t _1Name;                                \
@@ -660,7 +661,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _1Return (*_1Name)_1Args;                       \
         _2Return (*_2Name)_2Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;
@@ -669,7 +670,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
     _1Return, _1Name, _1Args,                           \
     _2Return, _2Name, _2Args,                           \
     _3Return, _3Name, _3Args                            \
-)                                                   \
+)                                                       \
     lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields)  \
     struct name##_class { const super##_class_t _;      \
         method_t _1Name;                                \
@@ -681,7 +682,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _2Return (*_2Name)_2Args;                       \
         _3Return (*_3Name)_3Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -692,7 +693,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
     _2Return, _2Name, _2Args,                           \
     _3Return, _3Name, _3Args,                           \
     _4Return, _4Name, _4Args                            \
-)                                                   \
+)                                                       \
     lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields)  \
     struct name##_class { const super##_class_t _;      \
         method_t _1Name;                                \
@@ -706,7 +707,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _3Return (*_3Name)_3Args;                       \
         _4Return (*_4Name)_4Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -735,7 +736,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _4Return (*_4Name)_4Args;                       \
         _5Return (*_5Name)_5Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -768,7 +769,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _5Return (*_5Name)_5Args;                       \
         _6Return (*_6Name)_6Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -805,7 +806,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _6Return (*_6Name)_6Args;                       \
         _7Return (*_6Name)_7Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -843,10 +844,10 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _4Return (*_4Name)_4Args;                       \
         _5Return (*_5Name)_5Args;                       \
         _6Return (*_6Name)_6Args;                       \
-        _7Return (*_6Name)_7Args;                       \
+        _7Return (*_7Name)_7Args;                       \
         _8Return (*_8Name)_8Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -891,7 +892,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _8Return (*_8Name)_8Args;                       \
         _9Return (*_9Name)_9Args;                       \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
     _1Return name##_##_1Name _1Args;                    \
     _2Return name##_##_2Name _2Args;                    \
@@ -940,7 +941,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
          _9Return (* _9Name) _9Args;                    \
         _10Return (*_10Name)_10Args;                    \
                                                         \
-        const super##_methods_t *super;                 \
+        const super##_methods_t *base;                  \
     };                                                  \
      _1Return name##_##_1Name _1Args;                   \
      _2Return name##_##_2Name _2Args;                   \
@@ -952,5 +953,117 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
      _8Return name##_##_8Name _8Args;                   \
      _9Return name##_##_9Name _9Args;                   \
     _10Return name##_##_10Name _10Args;
+
+#define lfcCLASS_noIface11(name, super, fields,         \
+     _1Return,  _1Name,  _1Args,                        \
+     _2Return,  _2Name,  _2Args,                        \
+     _3Return,  _3Name,  _3Args,                        \
+     _4Return,  _4Name,  _4Args,                        \
+     _5Return,  _5Name,  _5Args,                        \
+     _6Return,  _6Name,  _6Args,                        \
+     _7Return,  _7Name,  _7Args,                        \
+     _8Return,  _8Name,  _8Args,                        \
+     _9Return,  _9Name,  _9Args,                        \
+    _10Return, _10Name, _10Args,                        \
+    _11Return, _11Name, _11Args                         \
+)                                                       \
+    lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields)  \
+    struct name##_class { const super##_class_t _;      \
+        method_t  _1Name;                               \
+        method_t  _2Name;                               \
+        method_t  _3Name;                               \
+        method_t  _4Name;                               \
+        method_t  _5Name;                               \
+        method_t  _6Name;                               \
+        method_t  _7Name;                               \
+        method_t  _8Name;                               \
+        method_t  _9Name;                               \
+        method_t _10Name;                               \
+        method_t _11Name;                               \
+    };                                                  \
+    struct name##_methods {                             \
+         _1Return (* _1Name) _1Args;                    \
+         _2Return (* _2Name) _2Args;                    \
+         _3Return (* _3Name) _3Args;                    \
+         _4Return (* _4Name) _4Args;                    \
+         _5Return (* _5Name) _5Args;                    \
+         _6Return (* _6Name) _6Args;                    \
+         _7Return (* _6Name) _7Args;                    \
+         _8Return (* _8Name) _8Args;                    \
+         _9Return (* _9Name) _9Args;                    \
+        _10Return (*_10Name)_10Args;                    \
+        _11Return (*_11Name)_11Args;                    \
+                                                        \
+        const super##_methods_t *base;                  \
+    };                                                  \
+     _1Return name##_##_1Name _1Args;                   \
+     _2Return name##_##_2Name _2Args;                   \
+     _3Return name##_##_3Name _3Args;                   \
+     _4Return name##_##_4Name _4Args;                   \
+     _5Return name##_##_5Name _5Args;                   \
+     _6Return name##_##_6Name _6Args;                   \
+     _7Return name##_##_7Name _7Args;                   \
+     _8Return name##_##_8Name _8Args;                   \
+     _9Return name##_##_9Name _9Args;                   \
+    _10Return name##_##_10Name _10Args;                 \
+    _11Return name##_##_11Name _11Args;
+
+#define lfcCLASS_noIface12(name, super, fields,         \
+     _1Return,  _1Name,  _1Args,                        \
+     _2Return,  _2Name,  _2Args,                        \
+     _3Return,  _3Name,  _3Args,                        \
+     _4Return,  _4Name,  _4Args,                        \
+     _5Return,  _5Name,  _5Args,                        \
+     _6Return,  _6Name,  _6Args,                        \
+     _7Return,  _7Name,  _7Args,                        \
+     _8Return,  _8Name,  _8Args,                        \
+     _9Return,  _9Name,  _9Args,                        \
+    _10Return, _10Name, _10Args,                        \
+    _11Return, _11Name, _11Args,                        \
+    _12Return, _12Name, _12Args                         \
+)                                                       \
+    lfcDEFINE_CLASS__OBJECTSTRUCT(name, super, fields)  \
+    struct name##_class { const super##_class_t _;      \
+        method_t  _1Name;                               \
+        method_t  _2Name;                               \
+        method_t  _3Name;                               \
+        method_t  _4Name;                               \
+        method_t  _5Name;                               \
+        method_t  _6Name;                               \
+        method_t  _7Name;                               \
+        method_t  _8Name;                               \
+        method_t  _9Name;                               \
+        method_t _10Name;                               \
+        method_t _11Name;                               \
+        method_t _12Name;                               \
+    };                                                  \
+    struct name##_methods {                             \
+         _1Return (* _1Name) _1Args;                    \
+         _2Return (* _2Name) _2Args;                    \
+         _3Return (* _3Name) _3Args;                    \
+         _4Return (* _4Name) _4Args;                    \
+         _5Return (* _5Name) _5Args;                    \
+         _6Return (* _6Name) _6Args;                    \
+         _7Return (* _6Name) _7Args;                    \
+         _8Return (* _8Name) _8Args;                    \
+         _9Return (* _9Name) _9Args;                    \
+        _10Return (*_10Name)_10Args;                    \
+        _11Return (*_11Name)_11Args;                    \
+        _11Return (*_12Name)_12Args;                    \
+                                                        \
+        const super##_methods_t *base;                  \
+    };                                                  \
+     _1Return name##_##_1Name _1Args;                   \
+     _2Return name##_##_2Name _2Args;                   \
+     _3Return name##_##_3Name _3Args;                   \
+     _4Return name##_##_4Name _4Args;                   \
+     _5Return name##_##_5Name _5Args;                   \
+     _6Return name##_##_6Name _6Args;                   \
+     _7Return name##_##_7Name _7Args;                   \
+     _8Return name##_##_8Name _8Args;                   \
+     _9Return name##_##_9Name _9Args;                   \
+    _10Return name##_##_10Name _10Args;                 \
+    _11Return name##_##_11Name _11Args;                 \
+    _12Return name##_##_12Name _12Args;
 
 #endif //LIBFORC_CORE_LFCOBJECT_H

@@ -15,87 +15,66 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-DEFINE_CLASS(lfcActorSystem);
-
-
-/*--------------------------------------------------------------------------------------*\
-\*--------------------------------------------------------------------------------------*/
-struct lfcActorSystem { const struct lfcObject _;
+lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
+    //-----------------------------------------------------------------------------
+    // FIELDS
+    //-----------------------------------------------------------------------------
     char *name;
-
     lfcList_t *actorList;
     lfcThreadPool_t *threadPool;
-};
 
-struct lfcActorSystem_class { const struct lfcObject_class _;
-    method_t create;
-    method_t getName;
+    ,
+    //-----------------------------------------------------------------------------
+    // PUBLIC METHOD
+    //-----------------------------------------------------------------------------
 
-    method_t equals;
-    method_t equals_byActor;
-    method_t equals_byActorRef;
+    /**
+     * create an Actor.
+     */
+    lfcActorRef_t *, create, (lfcActorSystem_t *self, const char *name, receive_fn_cb receive_fn),
 
-    method_t tell;
-    method_t tell_byMsg;
-    method_t tell_noSender;
-};
+    /**
+     * Get the actorsystem name.
+     */
+    const char *, getName, (lfcActorSystem_t *self),
 
-struct lfcActorSystem_methods {
-    lfcActorRef_t *(*create)(lfcActorSystem_t *self, const char *name, receive_fn_cb receive_fn);
-    const char *(*getName)(lfcActorSystem_t *self);
+    /**
+     * Returns true, if the that actorsystem is equal to ours.
+     */
+    bool, equals, (lfcActorSystem_t *self, lfcActorSystem_t *that),
+    /**
+     * Returns true, if the that actorsystem is equal to ours.
+     * Get system from passed actor.
+     */
+    bool, equals_byActor, (lfcActorSystem_t *self, lfcActor_t *that),
+    /**
+     * Returns true, if the that actorsystem is equal to ours
+     * Get system from passed actorref.
+     */
+    bool, equals_byActorRef, (lfcActorSystem_t *self, lfcActorRef_t *that),
 
-    bool (*equals)(lfcActorSystem_t *self, lfcActorSystem_t *that);
-    bool (*equals_byActor)(lfcActorSystem_t *self, lfcActor_t *that);
-    bool (*equals_byActorRef)(lfcActorSystem_t *self, lfcActorRef_t *that);
-
-    int (*tell)(lfcActorSystem_t *self, const lfcActorRef_t *sender, const lfcActorRef_t *recipient, const char *msg, size_t msg_len);
-    int (*tell_byMsg)(lfcActorSystem_t *self, lfcActorMessage_t *msg);
-    int (*tell_noSender)(lfcActorSystem_t *self, const lfcActorRef_t *recipient, const char *msg, size_t msg_len);
-
-    // super
-    const lfcObject_methods_t *base;
-};
+    /**
+     * Send a message from sender to recipient.
+     * The messages will be forwarded to the another actorsystem, if the recipient is none of out actors.
+     */
+    int, tell, (lfcActorSystem_t *self, const lfcActorRef_t *sender, const lfcActorRef_t *recipient, const char *msg, size_t msg_len),
+    /**
+     * Send a message from sender to recipient.
+     * The messages will be forwarded to the another actorsystem, if the recipient is none of out actors.
+     */
+    int, tell_byMsg, (lfcActorSystem_t *self, lfcActorMessage_t *msg),
+    /**
+     * Send a message from sender to recipient.
+     * The messages will be forwarded to the another actorsystem, if the recipient is none of out actors.
+     */
+    int, tell_noSender, (lfcActorSystem_t *self, const lfcActorRef_t *recipient, const char *msg, size_t msg_len)
+    )
 
 /**
  * Erzeugt eine lfcActorSystem Instanz.
  */
 lfcActorSystem_t *lfcActorSystem_ctor(
     const char *name
-);
-
-/**
- * create an Actor.
- */
-lfcActorRef_t *lfcActorSystem_create(
-    lfcActorSystem_t *self,
-    const char *name,
-    receive_fn_cb receive_fn
-);
-
-const char *lfcActorSystem_getName(lfcActorSystem_t *self);
-
-bool lfcActorSystem_equals(lfcActorSystem_t *self, lfcActorSystem_t *that);
-bool lfcActorSystem_equals_byActor(lfcActorSystem_t *self, lfcActor_t *that);
-bool lfcActorSystem_equals_byActorRef(lfcActorSystem_t *self, lfcActorRef_t *that);
-
-/**
- * Send a message to an actor.
- */
-int lfcActorSystem_tell(
-    lfcActorSystem_t *self,
-    const lfcActorRef_t *sender,
-    const lfcActorRef_t *recipient,
-    const char *msg,
-    size_t msg_len
-);
-
-int lfcActorSystem_tell_byMsg(lfcActorSystem_t *self, lfcActorMessage_t *msg);
-
-int lfcActorSystem_tell_noSender(
-    lfcActorSystem_t *self,
-    const lfcActorRef_t *recipient,
-    const char *msg,
-    size_t msg_len
 );
 
 
