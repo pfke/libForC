@@ -65,6 +65,8 @@ set(SOURCE_FILES
         src/main/threading/actor/lfcActorMessage.h
         src/main/threading/actor/lfcActorSystem.c
         src/main/threading/actor/lfcActorSystem.h
+        src/main/threading/actor/lfcRemoteActorSystem.c
+        src/main/threading/actor/lfcRemoteActorSystem.h
         src/main/threading/lfcThreadMisc.h
         src/main/threading/lfcThreadMisc.c
         src/main/threading/lfcThreadPool.c

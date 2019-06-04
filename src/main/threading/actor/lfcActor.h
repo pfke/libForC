@@ -1,5 +1,5 @@
-#ifndef LIBFORC_THREADING_LFCACTOR_H
-#define LIBFORC_THREADING_LFCACTOR_H
+#ifndef LIBFORC_THREADING_ACTOR_LFCACTOR_H
+#define LIBFORC_THREADING_ACTOR_LFCACTOR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,4 +82,4 @@ receive_fn_cb lfcActor_getReceiveFn(lfcActor_t *self);
 }
 #endif
 
-#endif //LIBFORC_THREADING_LFCACTOR_H
+#endif //LIBFORC_THREADING_ACTOR_LFCACTOR_H

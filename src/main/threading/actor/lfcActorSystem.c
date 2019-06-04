@@ -12,10 +12,12 @@ static const lfcActorSystem_t *_lfcActorSystem;
 static const lfcActorSystem_class_t *_lfcActorSystem_class;
 static lfcActorSystem_methods_t _lfcActorSystem_methods;
 
-
-static regex_t *localNamingRegex;
-static regex_t *remoteTCPNamingRegex;
-static regex_t *remoteMQNamingRegex;
+typedef struct lfcActorSystem_regex_ {
+    regex_t localNamingRegex;
+    regex_t remoteTCPNamingRegex;
+    regex_t remoteMQNamingRegex;
+} lfcActorSystem_static_regex_t;
+lfcActorSystem_static_regex_t *lfcActorSystem_static_regex = NULL;
 
 /******************************************************************************************/
 /* PROTOTYPES                                                                             */
@@ -96,6 +98,10 @@ lfcActorSystem_t *public_lfcActorSystem_ctor(
 
     if (lfcActorSystem_isLocalActorName(name)) {
         self->name = strdup(name);
+    } else if (lfcActorSystem_isRemoteActorName_viaMQ(name)) {
+        self->name = strdup(name);
+    } else if (lfcActorSystem_isRemoteActorName_viaTCP(name)) {
+        self->name = strdup(name);
     } else {
         goto err;
     }
@@ -130,7 +136,6 @@ static lfcActorSystem_t *public_lfcActorSystem_dtor(
 
     return self;
 }
-
 
 /**
  * create an Actor.
@@ -313,35 +318,21 @@ lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, 
 /******************************************************************************************/
 
 static bool static_lfcActorSystem_ensureRegexes() {
-    if (!localNamingRegex) {
-        localNamingRegex = calloc(1, sizeof(*localNamingRegex));
+    if (!lfcActorSystem_static_regex) {
+        lfcActorSystem_static_regex = calloc(1, sizeof(*lfcActorSystem_static_regex));
+        if (!lfcActorSystem_static_regex) { return false; }
 
-        if (regcomp(localNamingRegex, lfcActorSystem_LOCALNAMEREGEX, REG_EXTENDED)) {
-            free(localNamingRegex);
-
-            return false;
-        }
-    }
-    if (!remoteMQNamingRegex) {
-        remoteMQNamingRegex = calloc(1, sizeof(*remoteMQNamingRegex));
-
-        if (regcomp(remoteMQNamingRegex, lfcActorSystem_REMOTEMQNAMEREGEX, REG_EXTENDED)) {
-            free(remoteMQNamingRegex);
-
-            return false;
-        }
-    }
-    if (!remoteTCPNamingRegex) {
-        remoteTCPNamingRegex = calloc(1, sizeof(*remoteTCPNamingRegex));
-
-        if (regcomp(remoteTCPNamingRegex, lfcActorSystem_REMOTETCPNAMEREGEX, REG_EXTENDED)) {
-            free(remoteTCPNamingRegex);
-
-            return false;
-        }
+        if (regcomp(&lfcActorSystem_static_regex->localNamingRegex,     lfcActorSystem_LOCALNAMEREGEX,     REG_EXTENDED)) { goto err; }
+        if (regcomp(&lfcActorSystem_static_regex->remoteMQNamingRegex,  lfcActorSystem_REMOTEMQNAMEREGEX,  REG_EXTENDED)) { goto err; }
+        if (regcomp(&lfcActorSystem_static_regex->remoteTCPNamingRegex, lfcActorSystem_REMOTETCPNAMEREGEX, REG_EXTENDED)) { goto err; }
     }
 
     return true;
+
+err:
+    if (lfcActorSystem_static_regex) { free(lfcActorSystem_static_regex); }
+
+    return false;
 }
 
 /**
@@ -353,7 +344,7 @@ bool lfcActorSystem_isLocalActorName(
     if (!in) { return false; }
     if (!static_lfcActorSystem_ensureRegexes()) { return false; }
 
-    return !regexec(localNamingRegex, in, 0, NULL, 0);
+    return !regexec(&lfcActorSystem_static_regex->localNamingRegex, in, 0, NULL, 0);
 }
 
 /**
@@ -365,7 +356,7 @@ bool lfcActorSystem_isRemoteActorName_viaMQ(
     if (!in) { return false; }
     if (!static_lfcActorSystem_ensureRegexes()) { return false; }
 
-    return !regexec(remoteMQNamingRegex, in, 0, NULL, 0);
+    return !regexec(&lfcActorSystem_static_regex->remoteMQNamingRegex, in, 0, NULL, 0);
 }
 
 /**
@@ -377,5 +368,5 @@ bool lfcActorSystem_isRemoteActorName_viaTCP(
     if (!in) { return false; }
     if (!static_lfcActorSystem_ensureRegexes()) { return false; }
 
-    return !regexec(remoteTCPNamingRegex, in, 0, NULL, 0);
+    return !regexec(&lfcActorSystem_static_regex->remoteTCPNamingRegex, in, 0, NULL, 0);
 }
