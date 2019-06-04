@@ -1,6 +1,8 @@
-#include <stdlib.h>
-#include <asm/errno.h>
 #include "lfcActorSystem.h"
+
+#include <asm/errno.h>
+#include <regex.h>
+#include <stdlib.h>
 
 
 /******************************************************************************************/
@@ -10,6 +12,10 @@ static const lfcActorSystem_t *_lfcActorSystem;
 static const lfcActorSystem_class_t *_lfcActorSystem_class;
 static lfcActorSystem_methods_t _lfcActorSystem_methods;
 
+
+static regex_t *localNamingRegex;
+static regex_t *remoteTCPNamingRegex;
+static regex_t *remoteMQNamingRegex;
 
 /******************************************************************************************/
 /* PROTOTYPES                                                                             */
@@ -88,8 +94,11 @@ lfcActorSystem_t *public_lfcActorSystem_ctor(
     // read args
     const char *name = va_arg(*app, const char *);
 
-    if (!name) { goto err; }
-    self->name = strdup(name);
+    if (lfcActorSystem_isLocalActorName(name)) {
+        self->name = strdup(name);
+    } else {
+        goto err;
+    }
 
     self->actorList = lfcList_ctorWithSize(10, 5);
     if (!self->actorList) { goto err; }
@@ -303,3 +312,70 @@ lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, 
 /* STATIC METHODS                                                                         */
 /******************************************************************************************/
 
+static bool static_lfcActorSystem_ensureRegexes() {
+    if (!localNamingRegex) {
+        localNamingRegex = calloc(1, sizeof(*localNamingRegex));
+
+        if (regcomp(localNamingRegex, lfcActorSystem_LOCALNAMEREGEX, REG_EXTENDED)) {
+            free(localNamingRegex);
+
+            return false;
+        }
+    }
+    if (!remoteMQNamingRegex) {
+        remoteMQNamingRegex = calloc(1, sizeof(*remoteMQNamingRegex));
+
+        if (regcomp(remoteMQNamingRegex, lfcActorSystem_REMOTEMQNAMEREGEX, REG_EXTENDED)) {
+            free(remoteMQNamingRegex);
+
+            return false;
+        }
+    }
+    if (!remoteTCPNamingRegex) {
+        remoteTCPNamingRegex = calloc(1, sizeof(*remoteTCPNamingRegex));
+
+        if (regcomp(remoteTCPNamingRegex, lfcActorSystem_REMOTETCPNAMEREGEX, REG_EXTENDED)) {
+            free(remoteTCPNamingRegex);
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Returns true, if the passed name matches the local name regex patten.
+ */
+bool lfcActorSystem_isLocalActorName(
+    const char *in
+) {
+    if (!in) { return false; }
+    if (!static_lfcActorSystem_ensureRegexes()) { return false; }
+
+    return !regexec(localNamingRegex, in, 0, NULL, 0);
+}
+
+/**
+ * Returns true, if the passed name matches the local name regex patten.
+ */
+bool lfcActorSystem_isRemoteActorName_viaMQ(
+    const char *in
+) {
+    if (!in) { return false; }
+    if (!static_lfcActorSystem_ensureRegexes()) { return false; }
+
+    return !regexec(remoteMQNamingRegex, in, 0, NULL, 0);
+}
+
+/**
+ * Returns true, if the passed name matches the local name regex patten.
+ */
+bool lfcActorSystem_isRemoteActorName_viaTCP(
+    const char *in
+) {
+    if (!in) { return false; }
+    if (!static_lfcActorSystem_ensureRegexes()) { return false; }
+
+    return !regexec(remoteTCPNamingRegex, in, 0, NULL, 0);
+}

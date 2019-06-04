@@ -1,4 +1,3 @@
-#include <ipc/lfcMQueueReceiver.h>
 #include "testing/lfcCriterionHelper.h"
 #include <unistd.h>
 #include <net/lfcSocketHandler.h>

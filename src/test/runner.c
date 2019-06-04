@@ -18,27 +18,8 @@ void worker (
 }
 
 void runner_fn () {
-    lfcThreadPool_t *tp = lfcThreadPool_create(5, 10, 0);
-
-    lfcActorSystem_t *system = lfcActorSystem_ctor(
-        "klöklö"
-    );
-
-    delete(system);
-
-
-    lfcThreadPool_addWorker(tp, worker, (void *) 1, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 2, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 3, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 4, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 5, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 6, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 7, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 8, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 9, 0);
-    lfcThreadPool_addWorker(tp, worker, (void *) 0, 0);
-
-    lfcThreadPool_destroy(tp, threadpool_graceful);
+    lfcActorSystem_isRemoteActorName_viaTCP("lfcAA.tcp://m-m_8950-si@192.168.178.1:123");
+    lfcActorSystem_isRemoteActorName_viaTCP("lfcAA.tcp://m-m_8950-si@192.168.178.1:1231");
 }
 
 int main (

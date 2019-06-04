@@ -70,3 +70,50 @@ Test(
 
     delete(tto);
 }
+
+Test(
+    TEST_SUITE_NAME,
+    nameTesting_passing_validLocalName
+) {
+    lfcActorSystem_t *tto = lfcActorSystem_ctor("sUm-m_8950-si");
+
+    should_not_be_null(tto->threadPool);
+
+    delete(tto);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    nameTesting_passing_invalidLocalName_leadingUppercase
+) {
+    lfcActorSystem_t *tto = lfcActorSystem_ctor("Sumsi");
+
+    should_be_null(tto);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    nameTesting_passing_invalidLocalName_leadingNumber
+) {
+    lfcActorSystem_t *tto = lfcActorSystem_ctor("012sumsi");
+
+    should_be_null(tto);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    nameTesting_passing_invalidLocalName_invalidChars
+) {
+    lfcActorSystem_t *tto = lfcActorSystem_ctor("su?msi");
+
+    should_be_null(tto);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    nameTesting_passing_invalidLocalName_spaces
+) {
+    lfcActorSystem_t *tto = lfcActorSystem_ctor("su msi");
+
+    should_be_null(tto);
+}

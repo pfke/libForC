@@ -15,6 +15,10 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
+#define lfcActorSystem_LOCALNAMEREGEX           "^[a-z][a-zA-Z0-9_-]*$"         // '-' MUSS der letzte in der Gruppe sein, weil er ansonsten nicht als Symbol interpretiert wird
+#define lfcActorSystem_REMOTEMQNAMEREGEX        "^lfcAA.mq://([a-z][a-zA-Z0-9_-]*)@([a-z][a-zA-Z0-9_:-]*)$"
+#define lfcActorSystem_REMOTETCPNAMEREGEX       "^lfcAA.tcp://([a-z][a-zA-Z0-9_-]*)@(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):([0-9]{1,5})$"
+
 lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
@@ -72,11 +76,48 @@ lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
 
 /**
  * Erzeugt eine lfcActorSystem Instanz.
+ *
+ * @param name unter welchem das Actorsystem erreichnbar ist:
+ *             1. Lokal: '^[a-z][a-zA-Z0-9\-_]*$'
+ *
+ *
+ *
+ *
+ * @return
  */
 lfcActorSystem_t *lfcActorSystem_ctor(
     const char *name
 );
 
+/**
+ * Returns true, if the passed name matches the local name regex patten.
+ *
+ * @param in ist der zu prüfende String: '^[a-z][a-zA-Z0-9\-_]*$'
+ * @return
+ */
+bool lfcActorSystem_isLocalActorName(
+    const char *in
+);
+
+/**
+ * Returns true, if the passed name matches the local name regex patten.
+ *
+ * @param in ist der zu prüfende String: '^lfcAA.mq://([a-z][a-zA-Z0-9_-]*)@([a-z][a-zA-Z0-9_-:]*)$'
+ * @return
+ */
+bool lfcActorSystem_isRemoteActorName_viaMQ(
+    const char *in
+);
+
+/**
+ * Returns true, if the passed name matches the local name regex patten.
+ *
+ * @param in ist der zu prüfende String: '^lfcAA.tcp://([a-z][a-zA-Z0-9_-]*)@(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):([0-9]{1,5})$'
+ * @return
+ */
+bool lfcActorSystem_isRemoteActorName_viaTCP(
+    const char *in
+);
 
 #ifdef __cplusplus
 }

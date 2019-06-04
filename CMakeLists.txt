@@ -242,6 +242,9 @@ set(SOURCE_FILES_unitTests
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_equals.c
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_equals_byActor.c
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_equals_byActorRef.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_isLocalActorName.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_isRemoteActorName_viaMQ.c
+        src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_isRemoteActorName_viaTCP.c
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_tell.c
         )
 

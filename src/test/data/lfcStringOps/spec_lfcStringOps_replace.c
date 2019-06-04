@@ -1,5 +1,3 @@
-#include <ipc/lfcMQueueReceiver.h>
-#include <ipc/lfcMQueueSender.h>
 #include <data/lfcStringOps.h>
 #include "testing/lfcCriterionHelper.h"
 
