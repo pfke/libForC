@@ -2,7 +2,7 @@
 #include <net/lfcSocketHandler.h>
 #include "testing/lfcCriterionHelper.h"
 
-#define TEST_SUITE_NAME               spec_lfcSocketHandler_singleton
+#define TEST_SUITE_NAME               spec_lfcSocketHandler_ctor
 
 /**
  * --single=spec_lfcSocketHandler_singleton::singleton_should_return_not_null

@@ -9,8 +9,9 @@ extern "C" {
 #include <collection/lfcList.h>
 #include "core/lfcObject.h"
 #include "threading/lfcThreadPool.h"
-#include "lfcActorMessage.h"
 #include "lfcActor.h"
+#include "lfcActorMessage.h"
+#include "lfcActorSystemHandler.h"
 
 
 /*--------------------------------------------------------------------------------------*\
@@ -23,6 +24,7 @@ lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
     //-----------------------------------------------------------------------------
+    const lfcActorSystemHandler_t *actorSystemHandler;
     char *name;
     lfcList_t *actorList;
     lfcThreadPool_t *threadPool;
@@ -78,14 +80,19 @@ lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
  * Erzeugt eine lfcActorSystem Instanz.
  *
  * @param name unter welchem das Actorsystem erreichnbar ist:
- *             1. Lokal: '^[a-z][a-zA-Z0-9\-_]*$'
- *
- *
- *
- *
- * @return
+ *             1. Lokal
+ *             2. MessageQueue
+ *             3. TCP
  */
 lfcActorSystem_t *lfcActorSystem_ctor(
+    const char *name
+);
+
+/**
+ * Erzeugt eine lfcActorSystem Instanz.
+ */
+lfcActorSystem_t *lfcActorSystem_ctor_wActorSystemHandler(
+    const lfcActorSystemHandler_t *actorSystemHandler,
     const char *name
 );
 

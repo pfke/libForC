@@ -22,7 +22,6 @@ lfcActorSystem_static_regex_t *lfcActorSystem_static_regex = NULL;
 /******************************************************************************************/
 /* PROTOTYPES                                                                             */
 /******************************************************************************************/
-
 static void private_lfcActorSystem_dispatchMsg(void *msg);
 static int private_lfcActorSystem_tell(lfcActorSystem_t *self, lfcActorMessage_t *msg);
 
@@ -94,7 +93,10 @@ lfcActorSystem_t *public_lfcActorSystem_ctor(
     }
 
     // read args
+    self->actorSystemHandler = va_arg(*app, const lfcActorSystemHandler_t *);
     const char *name = va_arg(*app, const char *);
+
+    if (!self->actorSystemHandler) { goto err; }
 
     if (lfcActorSystem_isLocalActorName(name)) {
         self->name = strdup(name);
@@ -111,6 +113,8 @@ lfcActorSystem_t *public_lfcActorSystem_ctor(
 
     self->threadPool = lfcThreadPool_create(10, 100, 0);
     if (!self->threadPool) { goto err; }
+
+    lfcActorSystemHandler_registerActorSystem((lfcActorSystemHandler_t *)self->actorSystemHandler, self);
 
     return self;
 
@@ -134,7 +138,9 @@ static lfcActorSystem_t *public_lfcActorSystem_dtor(
     if (self->actorList) { delete(self->actorList); }
     if (self->threadPool) { lfcThreadPool_destroy(self->threadPool, 0); }
 
-    return self;
+    lfcActorSystemHandler_unregisterActorSystem((lfcActorSystemHandler_t *)self->actorSystemHandler, self);
+
+    return lfcObject_super_dtor(lfcActorSystem(), self);
 }
 
 /**
@@ -292,16 +298,6 @@ CLASS_MAKE_METHODS_FUNC(lfcActorSystem);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-/**
- * Erzeugt eine lfcActorSystem Instanz.
- */
-lfcActorSystem_t *lfcActorSystem_ctor(
-    const char *name
-) {
-    return (lfcActorSystem_t *)new(lfcActorSystem(), name);
-}
-
-
 lfcOOP_IMPL_ACCESSOR(lfcActorSystem, create, lfcActorRef_t *, const char *, receive_fn_cb)
 lfcOOP_IMPL_ACCESSOR(lfcActorSystem, getName, const char *)
 
@@ -311,6 +307,25 @@ lfcOOP_IMPL_ACCESSOR(lfcActorSystem, equals_byActorRef, bool, lfcActorRef_t *);
 lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell, int, const lfcActorRef_t *, const lfcActorRef_t *, const char *, size_t)
 lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell_byMsg, int, lfcActorMessage_t *)
 lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, const char *, size_t)
+
+/**
+ * Erzeugt eine lfcActorSystem Instanz.
+ */
+lfcActorSystem_t *lfcActorSystem_ctor(
+    const char *name
+) {
+    return lfcActorSystem_ctor_wActorSystemHandler(lfcActorSystemHandler_singleton(), name);
+}
+
+/**
+ * Erzeugt eine lfcActorSystem Instanz.
+ */
+lfcActorSystem_t *lfcActorSystem_ctor_wActorSystemHandler(
+    const lfcActorSystemHandler_t *actorSystemHandler,
+    const char *name
+) {
+    return (lfcActorSystem_t *)new(lfcActorSystem(), actorSystemHandler, name);
+}
 
 
 /******************************************************************************************/

@@ -73,6 +73,18 @@ Test(
 
 Test(
     TEST_SUITE_NAME,
+    passing_valid__isInActorSystemHandlerList
+) {
+    lfcActorSystem_t *tto = lfcActorSystem_ctor("sumsi");
+    lfcActorSystemHandler_t *ash = lfcActorSystemHandler_singleton();
+
+    should_be_true(lfcIIterable_exists(lfcActorSystemHandler_getRegisteredActorSystems(ash), tto));
+
+    delete(tto);
+}
+
+Test(
+    TEST_SUITE_NAME,
     nameTesting_passing_validLocalName
 ) {
     lfcActorSystem_t *tto = lfcActorSystem_ctor("sUm-m_8950-si");

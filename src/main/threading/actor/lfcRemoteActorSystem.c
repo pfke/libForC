@@ -67,7 +67,7 @@ static lfcRemoteActorSystem_t *public_lfcRemoteActorSystem_dtor(
 /**
  * Return our socket.
  */
-static lfcSocket_t *public_lfcRemoteActorSystem_getSocket(
+static const lfcSocket_t *public_lfcRemoteActorSystem_getSocket(
     lfcRemoteActorSystem_t *self
 ) {
     return self->socket;
