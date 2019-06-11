@@ -14,14 +14,3 @@ Test(
 
     delete(tto);
 }
-
-Test(
-    TEST_SUITE_NAME,
-    simpleCall_checkSocketHandler
-) {
-    lfcActorSystemHandler_t *tto = lfcActorSystemHandler_ctor();
-
-    should_be_null(tto->socketHandler);
-
-    delete(tto);
-}

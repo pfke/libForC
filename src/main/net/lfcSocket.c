@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <asm/errno.h>
 #include <errno.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+
+#include <net/lfcSocketJobAcceptConn.h>
 
 
 /******************************************************************************************/
@@ -36,6 +41,43 @@ static ssize_t public_lfcSocket_write_job (lfcSocket_t *self, lfcSocketJobWriter
 /* PRIVATE METHODS                                                                        */
 /******************************************************************************************/
 
+static void private_lfcSocket_onAcceptConn(
+    void *context,
+    void *ident,
+    ssize_t read_len isAnUnused_param,
+    char *read_buf isAnUnused_param
+) {
+    lfcSocket_t *self = asInstanceOf(lfcSocket(), context);
+    if (!self) { return; }
+
+    // server-Anfrage: Socket annehmen
+    struct sockaddr pin;
+    socklen_t addrlen = sizeof(pin);
+
+    // wir müssen die Verbindung annehmen, sonst ist sie für ewig pending
+    int fd = accept(self->fd, &pin, &addrlen);
+    if(fd == -1) {
+//        lfcLogger_log_ERR(
+//            self->_.logger,
+//            "%s: accept lieferte einen Fehler zurück: %d / '%s'", __func__,
+//            errno, strerror(errno)
+//        );
+        return;
+    }
+
+    fn_onAcceptConn_cb callback = lfcHashmap_get(self->listen_requestMap, ident);
+
+    if (callback) {
+        callback(self, lfcSocket_ctor(self->socketHandler, fd), context);
+    }
+
+//    lfcLogger_log_INFO(
+//        self->_.logger,
+//        "%s: neue Verbindungsanfrage bekommen (endpoint-fd=%d) und als fd %d angenommen", __func__,
+//        self->endpoint_socket->fd, fd
+//    );
+}
+
 
 /******************************************************************************************/
 /* PUBLIC METHODS                                                                         */
@@ -60,9 +102,12 @@ static lfcSocket_t *public_lfcSocket_ctor (
 
     ASSERT_PTR(isInstanceOf(lfcSocketHandler(), self->socketHandler), err_sockHandler, "SocketHandler-Instance invalid");
 
+    self->listen_requestMap = LFCHASH__CREATE_PTRKEY_HASHMAP();
+    ASSERT_PTR(self->listen_requestMap, err_reqMap, "failed to alloc listen request map");
+
     return self;
 
-//err_add_sock:
+err_reqMap:
 err_sockHandler:
     delete(self);
 err_self:
@@ -75,11 +120,40 @@ err_self:
 static lfcSocket_t *public_lfcSocket_dtor (
     lfcSocket_t *self
 ) {
-    lfcObject_super_dtor(lfcSocket(), self);
-
     lfcSocketHandler_killall_waitFor(self->socketHandler, self->fd, 1000);
 
-    return self;
+    delete(self->listen_requestMap);
+
+    close(self->fd);
+
+    return lfcObject_super_dtor(lfcSocket(), self);
+}
+
+/**
+ * Aktiviert ein Listen der Verbindung.
+ */
+static int public_lfcSocket_listen(
+    lfcSocket_t *self,
+    void *context,
+    fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    if (listen(self->fd, SOMAXCONN)) {
+        return NULL;
+    } else {
+        lfcHashmap_put(self->listen_requestMap, context, onAcceptConn_cb);
+
+        return public_lfcSocket_read_job(
+            self,
+            asInstanceOf(
+                lfcSocketJobReader(),
+                lfcSocketJobAcceptConn_ctor(
+                    self->fd,
+                    self,
+                    context,
+                    private_lfcSocket_onAcceptConn
+                ))
+        );
+    }
 }
 
 /**
@@ -382,6 +456,7 @@ static ssize_t public_lfcSocket_write_job (
  * @return die Instanz selbst
  */
 CLASS_CTOR__START(lfcSocket)
+        OVERRIDE_METHOD(lfcSocket, listen)
         OVERRIDE_METHOD(lfcSocket, read)
         OVERRIDE_METHOD(lfcSocket, read_async)
         OVERRIDE_METHOD(lfcSocket, read_job)
@@ -414,6 +489,8 @@ const lfcSocket_t *lfcSocket() {
             lfcObject_ctor, "ctor", public_lfcSocket_ctor,
             lfcObject_dtor, "dtor", public_lfcSocket_dtor,
 
+            lfcSocket_listen, "listen", public_lfcSocket_listen,
+
             lfcSocket_read, "read", public_lfcSocket_read,
             lfcSocket_read_async, "read_async", public_lfcSocket_read_async,
             lfcSocket_read_job, "read_job", public_lfcSocket_read_job,
@@ -433,6 +510,7 @@ CLASS_MAKE_METHODS_FUNC(lfcSocket);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
+lfcOOP_IMPL_ACCESSOR(lfcSocket, listen, int, void *, fn_onAcceptConn_cb);
 lfcOOP_IMPL_ACCESSOR(lfcSocket, read, ssize_t, char *, size_t, int);
 lfcOOP_IMPL_ACCESSOR(lfcSocket, read_async, ssize_t, char *, size_t, int, unsigned int, fn_onReadComplete_cb);
 lfcOOP_IMPL_ACCESSOR(lfcSocket, read_job, ssize_t, lfcSocketJobReader_t *);
@@ -448,6 +526,148 @@ lfcSocket_t *lfcSocket_ctor (
     int fd
 ) {
     return (lfcSocket_t *)new(lfcSocket(), socketHandler, fd);
+}
+
+/**
+ * Erzeugt eine lfcSocket Instanz.
+ */
+lfcSocket_t *lfcSocket_listenFor_tcpStream(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, const char *port,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    int32_t sd = -1;
+
+    struct addrinfo hints;
+    memset(&hints,0,sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = 0;
+    hints.ai_flags = AI_PASSIVE|AI_ADDRCONFIG;
+    struct addrinfo* res = NULL;
+
+    //
+    int err = getaddrinfo(node, port, &hints, &res);
+    if (err) {
+        fprintf(stderr, "failed to resolve local socket address (err=%d / '%s')\n", err, gai_strerror(err));
+        return NULL;
+    }
+
+    // create socket
+    if ((sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
+        goto err;
+    }
+
+    // SO_REUSEADDR should be routinely set for TCP server sockets in order to allow the network service to be restarted when there are connections in the ESTABLISHED or TIME-WAIT state:
+    int reuseaddr = 1;
+    if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr)) == -1) {
+        goto err;
+    }
+
+    // bind the socket to the port number
+    if (bind(sd, res->ai_addr, res->ai_addrlen) == -1) {
+        goto err;
+    }
+
+    freeaddrinfo(res);
+
+    lfcSocket_t *sock = lfcSocket_ctor(socketHandler, sd);
+
+    if (lfcSocket_listen(sock, context, onAcceptConn_cb)) {
+        delete(sock);
+        sock = NULL;
+    }
+
+    return sock;
+
+err:
+    if (sd < 0) { close(sd); }
+    if (res) { freeaddrinfo(res); }
+
+    return NULL;
+}
+
+/**
+ * Erzeugt eine lfcSocket Instanz.
+ */
+lfcSocket_t *lfcSocket_listenFor_unixDomain(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, int socketType,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    int32_t sd = -1;
+
+    if (socketType != SOCK_STREAM && socketType != SOCK_SEQPACKET) {
+        return NULL;
+    }
+
+    struct addrinfo hints;
+    memset(&hints,0,sizeof(hints));
+    hints.ai_family = PF_UNIX;
+    hints.ai_socktype = socketType;
+    hints.ai_protocol = 0;
+    hints.ai_flags = AI_PASSIVE|AI_ADDRCONFIG;
+    struct addrinfo* res = NULL;
+
+    //
+    int err = getaddrinfo(node, NULL, &hints, &res);
+    if (err) {
+        fprintf(stderr, "failed to resolve local socket address (err=%d / '%s')\n", err, gai_strerror(err));
+        return NULL;
+    }
+
+    // create socket
+    if ((sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
+        goto err;
+    }
+
+    // SO_REUSEADDR should be routinely set for TCP server sockets in order to allow the network service to be restarted when there are connections in the ESTABLISHED or TIME-WAIT state:
+    int reuseaddr = 1;
+    if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr)) == -1) {
+        goto err;
+    }
+
+    // bind the socket to the port number
+    if (bind(sd, res->ai_addr, res->ai_addrlen) == -1) {
+        goto err;
+    }
+
+    freeaddrinfo(res);
+
+    lfcSocket_t *sock = lfcSocket_ctor(socketHandler, sd);
+
+    if (lfcSocket_listen(sock, context, onAcceptConn_cb)) {
+        delete(sock);
+        sock = NULL;
+    }
+
+    return sock;
+
+err:
+    if (sd < 0) { close(sd); }
+    if (res) { freeaddrinfo(res); }
+
+    return NULL;
+}
+
+/**
+ */
+lfcSocket_t *lfcSocket_listenFor_unixDomain_asStream(
+    lfcSocketHandler_t *socketHandler,
+    const char *node,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    return lfcSocket_listenFor_unixDomain(socketHandler, node, SOCK_STREAM, context, onAcceptConn_cb);
+}
+
+/**
+ */
+lfcSocket_t *lfcSocket_listenFor_unixDomain_asSeqPacket(
+    lfcSocketHandler_t *socketHandler,
+    const char *node,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    return lfcSocket_listenFor_unixDomain(socketHandler, node, SOCK_SEQPACKET, context, onAcceptConn_cb);
 }
 
 

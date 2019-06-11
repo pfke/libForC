@@ -228,7 +228,7 @@ search_again:
 }
 
 /**
- * Read via cmd pipe ist komplett -> AUswertung
+ * Read via cmd pipe ist komplett -> Auswertung
  */
 static void priv_lfcSocketHandler_onCmdPipeReader_readComplete_cb (
     void *context,
@@ -520,6 +520,9 @@ search_again:
             priv_lfcSocketHandler_readSocket(self, epoll_result.data.fd);
         } else if (epoll_result.events & EPOLLOUT) { // oder schreiben
             priv_lfcSocketHandler_writeSocket(self, epoll_result.data.fd);
+        } else if (epoll_result.events & EPOLLHUP) {
+            // den socket killen
+            priv_lfcSocketHandler_removeFd(self, epoll_result.data.fd);
         }
     }
 

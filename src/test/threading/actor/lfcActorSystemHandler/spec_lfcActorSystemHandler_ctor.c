@@ -24,3 +24,14 @@ Test(
 
     delete(tto);
 }
+
+Test(
+    TEST_SUITE_NAME,
+    simpleCall_checkregisteredActorSystems
+) {
+    lfcActorSystemHandler_t *tto = lfcActorSystemHandler_ctor();
+
+    should_be_same_int(0, lfcIIterable_count(tto->registeredActorSystems));
+
+    delete(tto);
+}

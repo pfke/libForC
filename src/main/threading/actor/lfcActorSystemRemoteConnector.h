@@ -16,7 +16,7 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcDEFINE_CLASS(lfcRemoteActorSystem, lfcObject,
+lfcDEFINE_CLASS(lfcActorSystemRemoteConnector, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
     //-----------------------------------------------------------------------------
@@ -28,11 +28,11 @@ lfcDEFINE_CLASS(lfcRemoteActorSystem, lfcObject,
 
     /**
      */
-    const lfcSocket_t *, getSocket, (lfcRemoteActorSystem_t *self)
+    const lfcSocket_t *, getSocket, (lfcActorSystemRemoteConnector_t *self)
     )
 
 /**
- * Erzeugt eine lfcRemoteActorSystem Instanz.
+ * Erzeugt eine lfcActorSystemRemoteConnector Instanz.
  *
  * @param name unter welchem das Actorsystem erreichnbar ist:
  *             1. Lokal: '^[a-z][a-zA-Z0-9\-_]*$'
@@ -42,7 +42,7 @@ lfcDEFINE_CLASS(lfcRemoteActorSystem, lfcObject,
  *
  * @return
  */
-lfcRemoteActorSystem_t *lfcRemoteActorSystem_ctor(
+lfcActorSystemRemoteConnector_t *lfcActorSystemRemoteConnector_ctor(
     lfcSocket_t *socket
 );
 

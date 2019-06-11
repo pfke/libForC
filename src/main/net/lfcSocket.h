@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "core/lfcObject.h"
+#include "collection/lfcHashmap.h"
 #include "lfcSocketHandler.h"
 
 
@@ -13,40 +14,121 @@ extern "C" {
 \*--------------------------------------------------------------------------------------*/
 DEFINE_CLASS(lfcSocket);
 
+/**
+ * Callback der aufgerufen wird, wenn eine eingehende Verbindung angenommen werden soll
+ *
+ * @param acceptSocket über den die Verbindung angenommen wird
+ * @param newSocket ist die neue Verbindung
+ * @param context context-ptr, wichtig für den Aufrufer, hier kann die Instanz gespeichert werden
+ */
+typedef void (*fn_onAcceptConn_cb)(lfcSocket_t *acceptSocket, lfcSocket_t *newSocket, void *context);
+
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-struct lfcSocket { const struct lfcObject _;
+lfcDEFINE_CLASS(lfcSocket, lfcObject,
+    //-----------------------------------------------------------------------------
+    // FIELDS
+    //-----------------------------------------------------------------------------
     lfcSocketHandler_t *socketHandler;
+
+    /**
+     * Hierin wird gespeichert, wer ein listen-Auftrag gegeben hat, und welcher Callback dann aufgerufen werden soll.
+     */
+    lfcHashmap_t *listen_requestMap;
 
     /**
      * Ist unser socket file descriptor.
      */
     int fd;
-};
 
-struct lfcSocket_class { const struct lfcObject_class _;
-    method_t read;
-    method_t read_async;
-    method_t read_job;
+    ,
+    //-----------------------------------------------------------------------------
+    // PUBLIC METHOD
+    //-----------------------------------------------------------------------------
 
-    method_t write;
-    method_t write_async;
-    method_t write_job;
-};
+    /**
+     * Aktiviert ein Listen der Verbindung.
+     */
+    int, listen, (lfcSocket_t *self, void *context, fn_onAcceptConn_cb onAcceptConn_cb),
 
-struct lfcSocket_methods {
-    ssize_t (*read) (lfcSocket_t *self, char *buf, size_t buf_size, int timeout);
-    ssize_t (*read_async) (lfcSocket_t *self, char *buf, size_t buf_size, int timeout, unsigned int repeat, fn_onReadComplete_cb onReadComplete);
-    ssize_t (*read_job) (lfcSocket_t *self, lfcSocketJobReader_t *job);
+    /**
+     * Lesen von Daten über den Socket.
+     * Diese Funktion blockiert, bis entweder alle Daten (<code>buf_size</code>) gelesen wurde oder ein Fehler auftratt.
+     *
+     * @param self ist der Instanz-ptr vom socket client
+     * @param buf diese Daten sollen geschrieben werden
+     * @param buf_size Anzahl der zu schreibenden Bytes
+     * @param timeout -1 .. unendlich warten
+     *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
+     * @return -1 .. Fehler beim Lesen (errno is set)
+     *         >=0 Anzahl der gelesenen Daten
+     */
+    ssize_t, read, (lfcSocket_t *self, char *buf, size_t buf_size, int timeout),
 
-    ssize_t (*write) (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout);
-    ssize_t (*write_async) (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout, fn_onWriteComplete_cb onWriteComplete);
-    ssize_t (*write_job) (lfcSocket_t *self, lfcSocketJobWriter_t *job);
+    /**
+     * Lesen von Daten über den Socket - asynchron.
+     *
+     * @param self ist der Instanz-ptr vom socket client
+     * @param buf diese Daten sollen geschrieben werden
+     * @param buf_size Anzahl der zu schreibenden Bytes
+     * @param timeout -1 .. unendlich warten
+     *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
+     * @param repeat Angabe, wie oft der Lese-Befehl ausgeführt werden soll (0 .. endlos, 1 .. one-shot, >1 .. Anzahl)
+     * @param onReadComplete Callback, wenn das Lesen fertig ist
+     * @return 0 .. Auftrag konnte eingequeued werden
+     *          <0 .. Fehler
+     */
+    ssize_t, read_async, (lfcSocket_t *self, char *buf, size_t buf_size, int timeout, unsigned int repeat, fn_onReadComplete_cb onReadComplete),
 
-    // super
-    const lfcObject_methods_t *base;
-};
+    /**
+     * Lesen von Daten über den Socket - asynchron.
+     *
+     * @param self ist der Instanz-ptr vom socket client
+     * @param job Lese-Auftrag
+     * @return 0 .. Auftrag konnte eingequeued werden
+     *          <0 .. Fehler
+     */
+    ssize_t, read_job, (lfcSocket_t *self, lfcSocketJobReader_t *job),
+
+    /**
+     * Schreiben von Daten über den Socket.
+     * Diese Funktion blockiert, bis entweder alle Daten geschrieben wurde oder beim Schreiben ein Fehler auftratt.
+     *
+     * @param self ist der Instanz-ptr vom socket client
+     * @param buf diese Daten sollen geschrieben werden
+     * @param buf_size Anzahl der zu schreibenden Bytes
+     * @param timeout -1 .. unendlich warten
+     *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
+     * @return -1 .. Fehler beim Schreiben (errno is set)
+     *         >=0 Anzahl der geschriebenen Daten
+     */
+    ssize_t, write, (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout),
+
+    /**
+     * Schreiben von Daten über den Socket - asynchron.
+     *
+     * @param self ist der Instanz-ptr vom socket client
+     * @param buf diese Daten sollen geschrieben werden
+     * @param buf_size Anzahl der zu schreibenden Bytes
+     * @param timeout -1 .. unendlich warten
+     *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
+     * @param onWriteComplete Callback, wenn das Schreiben fertig ist
+     * @return 0 .. Auftrag konnte eingequeued werden
+     *          <0 .. Fehler
+     */
+    ssize_t, write_async, (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout, fn_onWriteComplete_cb onWriteComplete),
+
+    /**
+     * Schreiben von Daten über den Socket - asynchron.
+     *
+     * @param self ist der Instanz-ptr vom socket client
+     * @param job Schreib-Auftrag
+     * @return 0 .. Auftrag konnte eingequeued werden
+     *          <0 .. Fehler
+     */
+    ssize_t, write_job, (lfcSocket_t *self, lfcSocketJobWriter_t *job)
+    )
 
 /**
  * Erzeugt eine lfcSocket Instanz.
@@ -56,112 +138,36 @@ lfcSocket_t *lfcSocket_ctor(
     int fd
 );
 
-/**
- * Lesen von Daten über den Socket.
- * Diese Funktion blockiert, bis entweder alle Daten (<code>buf_size</code>) gelesen wurde oder ein Fehler auftratt.
- *
- * @param self ist der Instanz-ptr vom socket client
- * @param buf diese Daten sollen geschrieben werden
- * @param buf_size Anzahl der zu schreibenden Bytes
- * @param timeout -1 .. unendlich warten
- *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
- * @return -1 .. Fehler beim Lesen (errno is set)
- *         >=0 Anzahl der gelesenen Daten
- */
-ssize_t lfcSocket_read (
-    lfcSocket_t *self,
-    char *buf,
-    size_t buf_size,
-    int timeout
+lfcSocket_t *lfcSocket_listenFor_tcpStream(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, const char *port,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
 );
 
 /**
- * Lesen von Daten über den Socket - asynchron.
- *
- * @param self ist der Instanz-ptr vom socket client
- * @param buf diese Daten sollen geschrieben werden
- * @param buf_size Anzahl der zu schreibenden Bytes
- * @param timeout -1 .. unendlich warten
- *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
- * @param repeat Angabe, wie oft der Lese-Befehl ausgeführt werden soll (0 .. endlos, 1 .. one-shot, >1 .. Anzahl)
- * @param onReadComplete Callback, wenn das Lesen fertig ist
- * @return 0 .. Auftrag konnte eingequeued werden
- *          <0 .. Fehler
+ * @param socketType SOCK_STREAM || SOCK_SEQPACKET
  */
-ssize_t lfcSocket_read_async (
-    lfcSocket_t *self,
-    char *buf,
-    size_t buf_size,
-    int timeout,
-    unsigned int repeat,
-    fn_onReadComplete_cb onReadComplete
+lfcSocket_t *lfcSocket_listenFor_unixDomain(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, int socketType,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
 );
 
 /**
- * Lesen von Daten über den Socket - asynchron.
- *
- * @param self ist der Instanz-ptr vom socket client
- * @param job Lese-Auftrag
- * @return 0 .. Auftrag konnte eingequeued werden
- *          <0 .. Fehler
  */
-ssize_t lfcSocket_read_job (
-    lfcSocket_t *self,
-    lfcSocketJobReader_t *job
+lfcSocket_t *lfcSocket_listenFor_unixDomain_asStream(
+    lfcSocketHandler_t *socketHandler,
+    const char *node,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
 );
 
 /**
- * Schreiben von Daten über den Socket.
- * Diese Funktion blockiert, bis entweder alle Daten geschrieben wurde oder beim Schreiben ein Fehler auftratt.
- *
- * @param self ist der Instanz-ptr vom socket client
- * @param buf diese Daten sollen geschrieben werden
- * @param buf_size Anzahl der zu schreibenden Bytes
- * @param timeout -1 .. unendlich warten
- *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
- * @return -1 .. Fehler beim Schreiben (errno is set)
- *         >=0 Anzahl der geschriebenen Daten
  */
-ssize_t lfcSocket_write (
-    lfcSocket_t *self,
-    const char *buf,
-    size_t buf_size,
-    int timeout
+lfcSocket_t *lfcSocket_listenFor_unixDomain_asSeqPacket(
+    lfcSocketHandler_t *socketHandler,
+    const char *node,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
 );
-
-/**
- * Schreiben von Daten über den Socket - asynchron.
- *
- * @param self ist der Instanz-ptr vom socket client
- * @param buf diese Daten sollen geschrieben werden
- * @param buf_size Anzahl der zu schreibenden Bytes
- * @param timeout -1 .. unendlich warten
- *                  >0 .. Anzahl von Sekunden, die gewartet werden sollen
- * @param onWriteComplete Callback, wenn das Schreiben fertig ist
- * @return 0 .. Auftrag konnte eingequeued werden
- *          <0 .. Fehler
- */
-ssize_t lfcSocket_write_async (
-    lfcSocket_t *self,
-    const char *buf,
-    size_t buf_size,
-    int timeout,
-    fn_onWriteComplete_cb onWriteComplete
-);
-
-/**
- * Schreiben von Daten über den Socket - asynchron.
- *
- * @param self ist der Instanz-ptr vom socket client
- * @param job Schreib-Auftrag
- * @return 0 .. Auftrag konnte eingequeued werden
- *          <0 .. Fehler
- */
-ssize_t lfcSocket_write_job (
-    lfcSocket_t *self,
-    lfcSocketJobWriter_t *job
-);
-
 
 /******************************************************************************************/
 /* STATIC METHODS                                                                         */

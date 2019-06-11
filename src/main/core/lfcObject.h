@@ -804,7 +804,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _4Return (*_4Name)_4Args;                       \
         _5Return (*_5Name)_5Args;                       \
         _6Return (*_6Name)_6Args;                       \
-        _7Return (*_6Name)_7Args;                       \
+        _7Return (*_7Name)_7Args;                       \
                                                         \
         const super##_methods_t *base;                  \
     };                                                  \

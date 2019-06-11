@@ -67,8 +67,8 @@ set(SOURCE_FILES
         src/main/threading/actor/lfcActorSystem.h
         src/main/threading/actor/lfcActorSystemHandler.c
         src/main/threading/actor/lfcActorSystemHandler.h
-        src/main/threading/actor/lfcRemoteActorSystem.c
-        src/main/threading/actor/lfcRemoteActorSystem.h
+        src/main/threading/actor/lfcActorSystemRemoteConnector.c
+        src/main/threading/actor/lfcActorSystemRemoteConnector.h
         src/main/threading/lfcThreadMisc.h
         src/main/threading/lfcThreadMisc.c
         src/main/threading/lfcThreadPool.c
@@ -250,6 +250,7 @@ set(SOURCE_FILES_unitTests
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_isRemoteActorName_viaMQ.c
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_isRemoteActorName_viaTCP.c
         src/test/threading/actor/lfcActorSystem/spec_lfcActorSystem_tell.c
+        src/test/threading/actor/lfcActorSystemRemoteConnector/spec_lfcActorSystemRemoteConnector_ctor.c
         src/test/threading/actor/lfcActorSystemHandler/spec_lfcActorSystemHandler_ctor.c
         src/test/threading/actor/lfcActorSystemHandler/spec_lfcActorSystemHandler_getSocketHandler.c
         )

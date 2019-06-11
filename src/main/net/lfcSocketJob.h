@@ -3,10 +3,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-//#include <unitypes.h>
 #include <pthread.h>
 #include "../core/lfcObject.h"
-#include "lfcSocketJob.h"
 
 
 /*--------------------------------------------------------------------------------------*\
