@@ -5,6 +5,7 @@
 #include <mem/lfcMemPool.h>
 #include <net/lfcSocket.h>
 #include <net/lfcSocketHandler.h>
+#include <net/lfcSocketJobReaderStream.h>
 #include <threading/lfcThreadPool.h>
 #include <threading/actor/lfcActorSystem.h>
 #include <net/lfcSocketJobAcceptConn.h>
@@ -14,12 +15,42 @@
         char name[size]; \
         memset(name, value, sizeof(name));
 
+void onReadComplete_cb(
+    void *context,
+    void *ident,
+    ssize_t read_len,
+    char *read_buf
+) {
+    fprintf(stderr, "%s@%d: read_buf='%s'\n", __func__,  __LINE__, read_buf);
+}
+
 void onAcceptConn_cb (
     lfcSocket_t *acceptSocket,
     lfcSocket_t *newSocket,
     void *context
 ) {
     fprintf(stderr, "%s@%d: \n", __func__, __LINE__);
+
+    lfcSocket_read_job(
+        newSocket,
+        asInstanceOf(
+            lfcSocketJob(),
+            lfcSocketJobReaderStream_ctor(
+                lfcSocket_getFd(newSocket),
+                "1234",
+                NULL,
+                -1,
+                100,
+                onReadComplete_cb
+            ))
+    );
+
+    //lfcSocket_read_async(
+    //    newSocket,
+    //    calloc(1, 100), 100,
+    //    -1, 0,
+    //    onReadComplete_cb
+    //);
 }
 
 void runner_fn () {
@@ -30,11 +61,14 @@ void runner_fn () {
         "1234", onAcceptConn_cb
     );
 
-    lfcSocket_t *server2 = lfcSocket_listenFor_unixDomain_asSeqPacket(
+    lfcSocket_t *client = lfcSocket_connect_tcpStream(
         socketHandler,
-        "localhost",
-        "1234", onAcceptConn_cb
+        "localhost", "1234"
     );
+
+    sleep(2);
+
+    lfcSocket_write(client, "ping", strlen("ping"), -1);
 
 //    lfcSocket_listen(server, "1234", onAcceptConn_cb);
 

@@ -48,6 +48,11 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
     //-----------------------------------------------------------------------------
 
     /**
+     * Return the socket fd
+     */
+    int, getFd, (lfcSocket_t* self),
+
+    /**
      * Aktiviert ein Listen der Verbindung.
      */
     int, listen, (lfcSocket_t *self, void *context, fn_onAcceptConn_cb onAcceptConn_cb),
@@ -136,6 +141,11 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
 lfcSocket_t *lfcSocket_ctor(
     lfcSocketHandler_t *socketHandler,
     int fd
+);
+
+lfcSocket_t *lfcSocket_connect_tcpStream(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, const char *port
 );
 
 lfcSocket_t *lfcSocket_listenFor_tcpStream(

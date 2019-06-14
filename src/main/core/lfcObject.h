@@ -1066,4 +1066,106 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
     _11Return name##_##_11Name _11Args;                 \
     _12Return name##_##_12Name _12Args;
 
+
+#define lfcIMPLEMENT_CLASS_VA_IMPL2(base, clazz, super, count, ...)       base##_##count##Methods(clazz, super, __VA_ARGS__)
+#define lfcIMPLEMENT_CLASS_VA_IMPL(base, clazz, super, count, ...)        lfcIMPLEMENT_CLASS_VA_IMPL2(base, clazz, super, count, __VA_ARGS__)
+#define lfcIMPLEMENT_CLASS_VA(base, clazz, super, ...)                    lfcIMPLEMENT_CLASS_VA_IMPL(base, clazz, super, lfcCORE_VARGSCOUNT_TUPLE3(__VA_ARGS__), __VA_ARGS__)
+#define lfcIMPLEMENT_CLASS(clazz, super, ...)                             lfcIMPLEMENT_CLASS_VA(lfcIMPLEMENT_CLASS__implFor, clazz, super, __VA_ARGS__)
+
+#define lfcIMPLEMENT_CLASS_ADDSELFPARAM_VA_IMPL2(base, clazz, count, args)  base##_##count##Params(clazz, args)
+#define lfcIMPLEMENT_CLASS_ADDSELFPARAM_VA_IMPL(base, clazz, count, args)   lfcIMPLEMENT_CLASS_ADDSELFPARAM_VA_IMPL2(base, clazz, count, args)
+#define lfcIMPLEMENT_CLASS_ADDSELFPARAM_VA(base, clazz, args)               lfcIMPLEMENT_CLASS_ADDSELFPARAM_VA_IMPL(base, clazz, lfcCORE_VARGSCOUNT_ZEROorVIELE(STRIP_PARENT args), args)
+#define lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, args)                        lfcIMPLEMENT_CLASS_ADDSELFPARAM_VA(lfcIMPLEMENT_CLASS_ADDSELFPARAM__implFor, clazz, args)
+
+#define lfcIMPLEMENT_CLASS__implFor_Header(clazz) \
+    static const clazz##_t *_##clazz;                                                                   \
+    static const clazz##_class_t *_##clazz##_class;                                                     \
+    static clazz##_methods_t _##clazz##_methods isAnUnused_param;                                       \
+                                                                                                        \
+    static clazz##_t *public_##clazz##_ctor (void *_self, va_list *app);                                \
+    static clazz##_t *public_##clazz##_dtor (clazz##_t *self);
+
+#define lfcIMPLEMENT_CLASS__implFor_classCtor_START(clazz, super) \
+    const clazz##_class_t *clazz##_class() {                                                            \
+        return _##clazz##_class                                                                         \
+               ? _##clazz##_class                                                                       \
+               : (_##clazz##_class = (clazz##_class_t *) new(                                           \
+                super##_class(), STRINGIZE(clazz##_class), super##_class(), sizeof(clazz##_class_t),    \
+                lfcObject_ctor, "", impl_##clazz##_class_ctor,                                          \
+                (void *) 0)                                                                             \
+               );                                                                                       \
+    }                                                                                                   \
+                                                                                                        \
+    const clazz##_t *clazz() {                                                                          \
+        return _##clazz                                                                                 \
+               ? _##clazz                                                                               \
+               : (_##clazz = (clazz##_t *) new(                                                         \
+                clazz##_class(),                                                                        \
+                STRINGIZE(clazz), super(), sizeof(clazz##_t),                                           \
+                lfcObject_ctor, "ctor", public_##clazz##_ctor,                                          \
+                lfcObject_dtor, "dtor", public_##clazz##_dtor,
+
+#define lfcIMPLEMENT_CLASS__implFor_classCtor_END(clazz) \
+                (void *) 0)                                                                             \
+               );                                                                                       \
+    }                                                                                                   \
+    CLASS_MAKE_METHODS_FUNC(clazz);
+
+#define lfcIMPLEMENT_CLASS_ADDSELFPARAM__implFor_0Params(clazz, args) (clazz##_t *self)
+#define lfcIMPLEMENT_CLASS_ADDSELFPARAM__implFor_1Params(clazz, args) (clazz##_t *self, STRIP_PARENT args)
+
+#define lfcIMPLEMENT_CLASS__implFor_8Methods(clazz, super, \
+    _1Return, _1Name, _1Args,                                                                           \
+    _2Return, _2Name, _2Args,                                                                           \
+    _3Return, _3Name, _3Args,                                                                           \
+    _4Return, _4Name, _4Args,                                                                           \
+    _5Return, _5Name, _5Args,                                                                           \
+    _6Return, _6Name, _6Args,                                                                           \
+    _7Return, _7Name, _7Args,                                                                           \
+    _8Return, _8Name, _8Args                                                                            \
+)                                                                                                       \
+    lfcIMPLEMENT_CLASS__implFor_Header(clazz)                                                           \
+                                                                                                        \
+    static _1Return public_##clazz##_##_1Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _1Args);                                                   \
+    static _2Return public_##clazz##_##_2Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _2Args);                                                   \
+    static _3Return public_##clazz##_##_3Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _3Args);                                                   \
+    static _4Return public_##clazz##_##_4Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _4Args);                                                   \
+    static _5Return public_##clazz##_##_5Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _5Args);                                                   \
+    static _6Return public_##clazz##_##_6Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _6Args);                                                   \
+    static _7Return public_##clazz##_##_7Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _7Args);                                                   \
+    static _8Return public_##clazz##_##_8Name lfcIMPLEMENT_CLASS_ADDSELFPARAM(clazz, _8Args);                                                   \
+                                                                                                        \
+    CLASS_CTOR__START(clazz)                                                                            \
+            OVERRIDE_METHOD(clazz, _1Name)                                                              \
+            OVERRIDE_METHOD(clazz, _2Name)                                                              \
+            OVERRIDE_METHOD(clazz, _3Name)                                                              \
+            OVERRIDE_METHOD(clazz, _4Name)                                                              \
+            OVERRIDE_METHOD(clazz, _5Name)                                                              \
+            OVERRIDE_METHOD(clazz, _6Name)                                                              \
+            OVERRIDE_METHOD(clazz, _7Name)                                                              \
+            OVERRIDE_METHOD(clazz, _8Name)                                                              \
+        CLASS_CTOR__INIT_SUPER(clazz, super)                                                            \
+        CLASS_CTOR__INIT_IFACES()                                                                       \
+    CLASS_CTOR__END()                                                                                   \
+                                                                                                        \
+    lfcIMPLEMENT_CLASS__implFor_classCtor_START(clazz, super)                                           \
+                clazz##_##_1Name, STRINGIZE(_1Name), public_##clazz##_##_1Name,                         \
+                clazz##_##_2Name, STRINGIZE(_2Name), public_##clazz##_##_2Name,                         \
+                clazz##_##_3Name, STRINGIZE(_3Name), public_##clazz##_##_3Name,                         \
+                clazz##_##_4Name, STRINGIZE(_4Name), public_##clazz##_##_4Name,                         \
+                clazz##_##_5Name, STRINGIZE(_5Name), public_##clazz##_##_5Name,                         \
+                clazz##_##_6Name, STRINGIZE(_6Name), public_##clazz##_##_6Name,                         \
+                clazz##_##_7Name, STRINGIZE(_7Name), public_##clazz##_##_7Name,                         \
+                clazz##_##_8Name, STRINGIZE(_8Name), public_##clazz##_##_8Name,                         \
+    lfcIMPLEMENT_CLASS__implFor_classCtor_END(clazz) \
+    \
+    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _6Name, _6Return, STRIP_PARENT _6Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _7Name, _7Return, STRIP_PARENT _7Args) \
+    lfcOOP_IMPL_ACCESSOR(clazz, _8Name, _8Return, STRIP_PARENT _8Args)
+
 #endif //LIBFORC_CORE_LFCOBJECT_H

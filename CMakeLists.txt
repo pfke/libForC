@@ -184,6 +184,7 @@ set(SOURCE_FILES_unitTests
         src/test/collection/lfcQueue/spec_lfcQueue_dequeue.c
         src/test/collection/lfcQueue/spec_lfcQueue_methods.c
 
+        src/test/core/lfcCore/spec_lfcCore_lfcCORE_VARGSCOUNT_ZEROorVIELE.c
         src/test/core/spec_lfcObject_asInstanceOf.c
         src/test/core/spec_lfcObject_isInstanceOf.c
         src/test/core/spec_lfcObject_new.c

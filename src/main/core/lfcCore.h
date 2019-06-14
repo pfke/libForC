@@ -62,6 +62,18 @@
                 goto label;                                     \
             }
 
+#define STRIP_PARENT(...) __VA_ARGS__
+
+/**
+ * Zählt entweder 0 oder viele.
+ * Kann benötigt werden, um zu entscheiden, ob es keinen Parameter gibt oder mehr als 0.
+ */
+#define lfcCORE_VARGSCOUNT_ZEROorVIELE_IMPL( \
+     _0,  _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9,   \
+    _10, _11, _12, _13, _14, _15, _16, _17, _18, _19,   \
+    all, ...)                                                   all
+#define lfcCORE_VARGSCOUNT_ZEROorVIELE2(...)                                            lfcCORE_VARGSCOUNT_ZEROorVIELE_IMPL( X, ##__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+#define lfcCORE_VARGSCOUNT_ZEROorVIELE(...)                                             lfcCORE_VARGSCOUNT_ZEROorVIELE2(__VA_ARGS__)
 
 #define lfcCORE_VARGSCOUNT_TUPLE1_IMPL( \
      _0,  _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9,   \

@@ -3,10 +3,27 @@
 #include <asm/errno.h>
 #include <errno.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <netinet/in.h>
 #include <netdb.h>
 
 #include <net/lfcSocketJobAcceptConn.h>
+
+
+/******************************************************************************************/
+/* INITIALIZATION                                                                         */
+/******************************************************************************************/
+
+lfcIMPLEMENT_CLASS(lfcSocket, lfcObject,
+    int,     getFd,       (),
+    int,     listen,      (void *, fn_onAcceptConn_cb),
+    ssize_t, read,        (char *, size_t, int),
+    ssize_t, read_async,  (char *, size_t, int, unsigned int, fn_onReadComplete_cb),
+    ssize_t, read_job,    (lfcSocketJobReader_t *),
+    ssize_t, write,       (const char *, size_t, int),
+    ssize_t, write_async, (const char *, size_t, int, fn_onWriteComplete_cb),
+    ssize_t, write_job,   (lfcSocketJobWriter_t *)
+)
 
 
 /******************************************************************************************/
@@ -17,24 +34,11 @@
 /******************************************************************************************/
 /* FIELDS                                                                                 */
 /******************************************************************************************/
-static const lfcSocket_t *_lfcSocket;
-static const lfcSocket_class_t *_lfcSocket_class;
-static lfcSocket_methods_t _lfcSocket_methods isAnUnused_param;
 
 
 /******************************************************************************************/
 /* PROTOTYPES                                                                             */
 /******************************************************************************************/
-static lfcSocket_t *public_lfcSocket_ctor (void *_self, va_list *app);
-static lfcSocket_t *public_lfcSocket_dtor (lfcSocket_t *self);
-
-static ssize_t public_lfcSocket_read (lfcSocket_t *self, char *buf, size_t buf_size, int timeout);
-static ssize_t public_lfcSocket_read_async (lfcSocket_t *self, char *buf, size_t buf_size, int timeout, unsigned int repeat, fn_onReadComplete_cb onReadComplete);
-static ssize_t public_lfcSocket_read_job (lfcSocket_t *self, lfcSocketJobReader_t *job);
-
-static ssize_t public_lfcSocket_write (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout);
-static ssize_t public_lfcSocket_write_async (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout, fn_onWriteComplete_cb onWriteComplete);
-static ssize_t public_lfcSocket_write_job (lfcSocket_t *self, lfcSocketJobWriter_t *job);
 
 
 /******************************************************************************************/
@@ -127,6 +131,15 @@ static lfcSocket_t *public_lfcSocket_dtor (
     close(self->fd);
 
     return lfcObject_super_dtor(lfcSocket(), self);
+}
+
+/**
+ * Aktiviert ein Listen der Verbindung.
+ */
+static int public_lfcSocket_getFd(
+    lfcSocket_t *self
+) {
+    return self->fd;
 }
 
 /**
@@ -441,83 +454,6 @@ static ssize_t public_lfcSocket_write_job (
     );
 }
 
-
-/******************************************************************************************/
-/* INITIALIZATION                                                                         */
-/******************************************************************************************/
-
-/**
- * Ctor der Klasse.
- * Setzt u.a. die Methoden.
- *
- * @param _self die Instanz selbst
- * @param app Argumentenliste (Methoden, Name, Größe, ...)
- *
- * @return die Instanz selbst
- */
-CLASS_CTOR__START(lfcSocket)
-        OVERRIDE_METHOD(lfcSocket, listen)
-        OVERRIDE_METHOD(lfcSocket, read)
-        OVERRIDE_METHOD(lfcSocket, read_async)
-        OVERRIDE_METHOD(lfcSocket, read_job)
-        OVERRIDE_METHOD(lfcSocket, write)
-        OVERRIDE_METHOD(lfcSocket, write_async)
-        OVERRIDE_METHOD(lfcSocket, write_job)
-    CLASS_CTOR__INIT_SUPER(lfcSocket, lfcObject)
-    CLASS_CTOR__INIT_IFACES()
-CLASS_CTOR__END()
-
-const lfcSocket_class_t *lfcSocket_class() {
-    return _lfcSocket_class
-           ? _lfcSocket_class
-           : (_lfcSocket_class = (lfcSocket_class_t *) new(
-            lfcObject_class(), "lfcSocket_class", lfcObject_class(), sizeof(lfcSocket_class_t),
-
-            lfcObject_ctor, "", impl_lfcSocket_class_ctor,
-
-            (void *) 0)
-           );
-}
-
-const lfcSocket_t *lfcSocket() {
-    return _lfcSocket
-           ? _lfcSocket
-           : (_lfcSocket = (lfcSocket_t *) new(
-            lfcSocket_class(),
-            "lfcSocket", lfcObject(), sizeof(lfcSocket_t),
-
-            lfcObject_ctor, "ctor", public_lfcSocket_ctor,
-            lfcObject_dtor, "dtor", public_lfcSocket_dtor,
-
-            lfcSocket_listen, "listen", public_lfcSocket_listen,
-
-            lfcSocket_read, "read", public_lfcSocket_read,
-            lfcSocket_read_async, "read_async", public_lfcSocket_read_async,
-            lfcSocket_read_job, "read_job", public_lfcSocket_read_job,
-
-            lfcSocket_write, "write", public_lfcSocket_write,
-            lfcSocket_write_async, "write_async", public_lfcSocket_write_async,
-            lfcSocket_write_job, "write_job", public_lfcSocket_write_job,
-
-            (void *) 0)
-           );
-}
-
-CLASS_MAKE_METHODS_FUNC(lfcSocket);
-
-
-/******************************************************************************************/
-/* ACCESSOR METHODS                                                                       */
-/******************************************************************************************/
-
-lfcOOP_IMPL_ACCESSOR(lfcSocket, listen, int, void *, fn_onAcceptConn_cb);
-lfcOOP_IMPL_ACCESSOR(lfcSocket, read, ssize_t, char *, size_t, int);
-lfcOOP_IMPL_ACCESSOR(lfcSocket, read_async, ssize_t, char *, size_t, int, unsigned int, fn_onReadComplete_cb);
-lfcOOP_IMPL_ACCESSOR(lfcSocket, read_job, ssize_t, lfcSocketJobReader_t *);
-lfcOOP_IMPL_ACCESSOR(lfcSocket, write, ssize_t, const char *, size_t, int);
-lfcOOP_IMPL_ACCESSOR(lfcSocket, write_async, ssize_t, const char *, size_t, int, fn_onWriteComplete_cb);
-lfcOOP_IMPL_ACCESSOR(lfcSocket, write_job, ssize_t, lfcSocketJobWriter_t *);
-
 /**
  * Erzeugt eine lfcSocket Instanz.
  */
@@ -531,10 +467,9 @@ lfcSocket_t *lfcSocket_ctor (
 /**
  * Erzeugt eine lfcSocket Instanz.
  */
-lfcSocket_t *lfcSocket_listenFor_tcpStream(
+lfcSocket_t *lfcSocket_connect_tcpStream(
     lfcSocketHandler_t *socketHandler,
-    const char *node, const char *port,
-    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+    const char *node, const char *port
 ) {
     int32_t sd = -1;
 
@@ -565,24 +500,17 @@ lfcSocket_t *lfcSocket_listenFor_tcpStream(
     }
 
     // bind the socket to the port number
-    if (bind(sd, res->ai_addr, res->ai_addrlen) == -1) {
+    if (connect(sd, res->ai_addr, res->ai_addrlen) == -1) {
+        fprintf(stderr, "failed to connect (err=%d / '%s')\n", errno, strerror(errno));
         goto err;
     }
 
     freeaddrinfo(res);
 
-    lfcSocket_t *sock = lfcSocket_ctor(socketHandler, sd);
-
-    if (lfcSocket_listen(sock, context, onAcceptConn_cb)) {
-        delete(sock);
-        sock = NULL;
-    }
-
-    return sock;
+    return lfcSocket_ctor(socketHandler, sd);
 
 err:
     if (sd < 0) { close(sd); }
-    if (res) { freeaddrinfo(res); }
 
     return NULL;
 }
@@ -590,34 +518,16 @@ err:
 /**
  * Erzeugt eine lfcSocket Instanz.
  */
-lfcSocket_t *lfcSocket_listenFor_unixDomain(
+lfcSocket_t *lfcSocket_listenFor(
     lfcSocketHandler_t *socketHandler,
-    const char *node, int socketType,
+    int sock_family, int sock_socktype, int sock_protocol,
+    const struct sockaddr *sock_addr, socklen_t sock_addrlen,
     void *context, fn_onAcceptConn_cb onAcceptConn_cb
 ) {
     int32_t sd = -1;
 
-    if (socketType != SOCK_STREAM && socketType != SOCK_SEQPACKET) {
-        return NULL;
-    }
-
-    struct addrinfo hints;
-    memset(&hints,0,sizeof(hints));
-    hints.ai_family = PF_UNIX;
-    hints.ai_socktype = socketType;
-    hints.ai_protocol = 0;
-    hints.ai_flags = AI_PASSIVE|AI_ADDRCONFIG;
-    struct addrinfo* res = NULL;
-
-    //
-    int err = getaddrinfo(node, NULL, &hints, &res);
-    if (err) {
-        fprintf(stderr, "failed to resolve local socket address (err=%d / '%s')\n", err, gai_strerror(err));
-        return NULL;
-    }
-
     // create socket
-    if ((sd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
+    if ((sd = socket(sock_family, sock_socktype, sock_protocol)) == -1) {
         goto err;
     }
 
@@ -628,11 +538,10 @@ lfcSocket_t *lfcSocket_listenFor_unixDomain(
     }
 
     // bind the socket to the port number
-    if (bind(sd, res->ai_addr, res->ai_addrlen) == -1) {
+    if (bind(sd, sock_addr, sock_addrlen) == -1) {
+        fprintf(stderr, "failed to bind (err=%d / '%s')\n", errno, strerror(errno));
         goto err;
     }
-
-    freeaddrinfo(res);
 
     lfcSocket_t *sock = lfcSocket_ctor(socketHandler, sd);
 
@@ -645,9 +554,70 @@ lfcSocket_t *lfcSocket_listenFor_unixDomain(
 
 err:
     if (sd < 0) { close(sd); }
-    if (res) { freeaddrinfo(res); }
 
     return NULL;
+}
+
+/**
+ * Erzeugt eine lfcSocket Instanz.
+ */
+lfcSocket_t *lfcSocket_listenFor_tcpStream(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, const char *port,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    struct addrinfo hints;
+    memset(&hints,0,sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = 0;
+    hints.ai_flags = AI_PASSIVE|AI_ADDRCONFIG;
+    struct addrinfo* res = NULL;
+
+    //
+    int err = getaddrinfo(node, port, &hints, &res);
+    if (err) {
+        fprintf(stderr, "failed to resolve local socket address (err=%d / '%s')\n", err, gai_strerror(err));
+        return NULL;
+    }
+
+    lfcSocket_t *sock = lfcSocket_listenFor(
+        socketHandler,
+        res->ai_family, res->ai_socktype, res->ai_protocol,
+        res->ai_addr, res->ai_addrlen,
+        context, onAcceptConn_cb
+    );
+
+    freeaddrinfo(res);
+
+    return sock;
+}
+
+/**
+ * Erzeugt eine lfcSocket Instanz.
+ */
+lfcSocket_t *lfcSocket_listenFor_unixDomain(
+    lfcSocketHandler_t *socketHandler,
+    const char *node, int socketType,
+    void *context, fn_onAcceptConn_cb onAcceptConn_cb
+) {
+    if (socketType != SOCK_STREAM && socketType != SOCK_SEQPACKET) {
+        return NULL;
+    }
+
+    struct sockaddr_un addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, node, sizeof(addr.sun_path) - 1);
+
+    lfcSocket_t *sock = lfcSocket_listenFor(
+        socketHandler,
+        AF_UNIX, socketType, 0,
+        (struct sockaddr *)&addr, sizeof(addr),
+        context, onAcceptConn_cb
+    );
+
+    return sock;
 }
 
 /**
