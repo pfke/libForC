@@ -900,18 +900,18 @@ int lfcMemPool_dump (
     return result;
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, alloc, void *, uint16_t)
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, calloc, void *, uint16_t)
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, free, int, void *)
+lfcOOP_accessor(lfcMemPool, alloc, void *, uint16_t)
+lfcOOP_accessor(lfcMemPool, calloc, void *, uint16_t)
+lfcOOP_accessor(lfcMemPool, free, int, void *)
 
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, defrag, int)
+lfcOOP_accessor(lfcMemPool, defrag, int)
 
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, getBlockCount, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, getBlockSize, size_t, void *)
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, getFreeDataSize, size_t)
+lfcOOP_accessor(lfcMemPool, getBlockCount, size_t)
+lfcOOP_accessor(lfcMemPool, getBlockSize, size_t, void *)
+lfcOOP_accessor(lfcMemPool, getFreeDataSize, size_t)
 
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, next, void *, const void *)
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, prev, void *, const void *)
+lfcOOP_accessor(lfcMemPool, next, void *, const void *)
+lfcOOP_accessor(lfcMemPool, prev, void *, const void *)
 
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, dump_va, int, size_t, char, FILE *, const char *, va_list)
-lfcOOP_IMPL_ACCESSOR(lfcMemPool, isValid, uint8_t, char**)
+lfcOOP_accessor(lfcMemPool, dump_va, int, size_t, char, FILE *, const char *, va_list)
+lfcOOP_accessor(lfcMemPool, isValid, uint8_t, char**)

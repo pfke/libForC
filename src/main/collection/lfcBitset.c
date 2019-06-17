@@ -299,8 +299,8 @@ lfcBitset_t *lfcBitset_ctor_withBits(
     return self;
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcBitset, clear, int, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcBitset, count, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcBitset, get, int, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcBitset, set, int, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcBitset, toggle, int, size_t)
+lfcOOP_accessor(lfcBitset, clear, int, size_t)
+lfcOOP_accessor(lfcBitset, count, size_t)
+lfcOOP_accessor(lfcBitset, get, int, size_t)
+lfcOOP_accessor(lfcBitset, set, int, size_t)
+lfcOOP_accessor(lfcBitset, toggle, int, size_t)

@@ -128,7 +128,7 @@ CLASS_MAKE_METHODS_FUNC(lfcActorSystemRemoteConnector);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcActorSystemRemoteConnector, getSocket, const lfcSocket_t *)
+lfcOOP_accessor(lfcActorSystemRemoteConnector, getSocket, const lfcSocket_t *)
 
 /**
  * Erzeugt eine lfcActorSystemRemoteConnector Instanz.

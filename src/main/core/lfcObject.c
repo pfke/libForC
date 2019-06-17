@@ -265,9 +265,9 @@ const lfcObject_class_t * super (const void * _self) {
   return (self == NULL) ? NULL : self->super;
 }
 
-IMPL_API__wRET__w_1PARAM(lfcObject, ctor, void *, va_list *)
-IMPL_API__wRET__w_0PARAM(lfcObject, dtor, void *)
-IMPL_API__wRET__w_1PARAM(lfcObject, puto, int, FILE *)
+lfcOOP_accessor(lfcObject, ctor, void *, va_list *)
+lfcOOP_accessor(lfcObject, dtor, void *)
+lfcOOP_accessor(lfcObject, puto, int, FILE *)
 
 void lfcObject_forward(
   const void *_self,

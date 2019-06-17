@@ -172,7 +172,7 @@ CLASS_MAKE_METHODS_FUNC(lfcMQueueReceiver);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcMQueueReceiver, receive, const char *, size_t *, unsigned int *);
+lfcOOP_accessor(lfcMQueueReceiver, receive, const char *, size_t *, unsigned int *);
 
 
 /**

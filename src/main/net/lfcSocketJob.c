@@ -206,11 +206,11 @@ CLASS_MAKE_METHODS_FUNC(lfcSocketJob);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcSocketJob, disable, bool);
-lfcOOP_IMPL_ACCESSOR(lfcSocketJob, enable, bool);
-lfcOOP_IMPL_ACCESSOR(lfcSocketJob, isEnabled, bool);
+lfcOOP_accessor(lfcSocketJob, disable, bool);
+lfcOOP_accessor(lfcSocketJob, enable, bool);
+lfcOOP_accessor(lfcSocketJob, isEnabled, bool);
 
-lfcOOP_IMPL_ACCESSOR(lfcSocketJob, getFD, int);
+lfcOOP_accessor(lfcSocketJob, getFD, int);
 
-lfcOOP_IMPL_ACCESSOR(lfcSocketJob, doWork, int);
-lfcOOP_IMPL_ACCESSOR(lfcSocketJob, reset, bool);
+lfcOOP_accessor(lfcSocketJob, doWork, int);
+lfcOOP_accessor(lfcSocketJob, reset, bool);

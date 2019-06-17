@@ -714,11 +714,11 @@ lfcList_t *lfcList_ctorWithSize(
     return (lfcList_t *)new(lfcList(), initial_size, increase_by);
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcList, add, int, void *)
-lfcOOP_IMPL_ACCESSOR(lfcList, bubbleSort, int, lfcList_compare_fn)
-lfcOOP_IMPL_ACCESSOR(lfcList, clear, int)
-lfcOOP_IMPL_ACCESSOR(lfcList, getAt, void *, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcList, indexOf, size_t, const void *)
-lfcOOP_IMPL_ACCESSOR(lfcList, insertAt, int, size_t, void *)
-lfcOOP_IMPL_ACCESSOR(lfcList, remove, int, const void *)
-lfcOOP_IMPL_ACCESSOR(lfcList, removeAt, int, size_t)
+lfcOOP_accessor(lfcList, add, int, void *)
+lfcOOP_accessor(lfcList, bubbleSort, int, lfcList_compare_fn)
+lfcOOP_accessor(lfcList, clear, int)
+lfcOOP_accessor(lfcList, getAt, void *, size_t)
+lfcOOP_accessor(lfcList, indexOf, size_t, const void *)
+lfcOOP_accessor(lfcList, insertAt, int, size_t, void *)
+lfcOOP_accessor(lfcList, remove, int, const void *)
+lfcOOP_accessor(lfcList, removeAt, int, size_t)

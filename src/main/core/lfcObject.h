@@ -501,110 +501,112 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         }
 
 
-#define IMPL_API__wRET__w_0PARAM(PREFIX, METHOD, RESULT_TYPE)                                           lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE)
-#define IMPL_API__wRET__w_1PARAM(PREFIX, METHOD, RESULT_TYPE, p1)                                       lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1)
-#define IMPL_API__wRET__w_2PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2)                                   lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2)
-#define IMPL_API__wRET__w_3PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3)                               lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3)
-#define IMPL_API__wRET__w_4PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4)                           lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4)
-#define IMPL_API__wRET__w_5PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5)                       lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5)
-#define IMPL_API__wRET__w_6PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6)                   lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6)
-#define IMPL_API__wRET__w_7PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7)               lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7)
-#define IMPL_API__wRET__w_8PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8)           lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8)
-#define IMPL_API__wRET__w_9PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8, p9)       lfcOOP_IMPL_ACCESSOR(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8, p9)
-
-#define IMPL_API__wRET__w_2PARAM_VA(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE) \
-      MAKE__RET__w_2PARAM_VA(PREFIX##_##METHOD, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE)
-
-#define CONST_IMPL_API__wRET__w_1PARAM(PREFIX, METHOD, RESULT_TYPE, PARAM1_TYPE) \
-      MAKE__RET__w_1PARAM(PREFIX##_##METHOD, const, PREFIX##_t, PREFIX##_class_t, PREFIX(), PREFIX##_class(), METHOD, RESULT_TYPE, PARAM1_TYPE)
+#define IMPL_API__wRET__w_0PARAM(PREFIX, METHOD, RESULT_TYPE)                                           lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE)
+#define IMPL_API__wRET__w_1PARAM(PREFIX, METHOD, RESULT_TYPE, p1)                                       lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1)
+#define IMPL_API__wRET__w_2PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2)                                   lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2)
+#define IMPL_API__wRET__w_3PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3)                               lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3)
+#define IMPL_API__wRET__w_4PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4)                           lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4)
+#define IMPL_API__wRET__w_5PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5)                       lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5)
+#define IMPL_API__wRET__w_6PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6)                   lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6)
+#define IMPL_API__wRET__w_7PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7)               lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7)
+#define IMPL_API__wRET__w_8PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8)           lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8)
+#define IMPL_API__wRET__w_9PARAM(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8, p9)       lfcOOP_accessor(PREFIX, METHOD, RESULT_TYPE, p1, p2, p3, p4, p5, p6, p7, p8, p9)
 
 
+/***********************************************************************************************************************
+ ***********************************************************************************************************************
+ * START: lfcOOP_IMPL_ACCESSOR
+ *
+ * Dieses und folgende Macros werden genutzt, um Accessor-Methoden einer Klasse zu implemenieren.
+ */
+#define lfcOOP_accessor_va_impl(base, clazz, method, resultType, count, ...)            base##_##count##Params(clazz, method, resultType, __VA_ARGS__)
+#define lfcOOP_accessor_va(base, clazz, method, resultType, count, ...)                 lfcOOP_accessor_va_impl(base, clazz, method, resultType, count, __VA_ARGS__)
+#define lfcOOP_accessor(clazz, method, resultType, ...)                                 lfcOOP_accessor_va(lfcOOP_accessor_implFor, clazz, method, resultType, lfcCORE_VARGSCOUNT_TUPLE1(__VA_ARGS__), __VA_ARGS__)
 
-#define lfcOOP_IMPL_ACCESSOR_VAARG_IMPL2(base, count, clazz, method, resultType, ...)   base##_##count##Params(clazz, method, resultType, __VA_ARGS__)
-#define lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(base, count, clazz, method, resultType, ...)    lfcOOP_IMPL_ACCESSOR_VAARG_IMPL2(base, count, clazz, method, resultType, __VA_ARGS__)
-#define lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, ...)                      lfcOOP_IMPL_ACCESSOR_VAARG_IMPL(lfcOOP_IMPL_ACCESSOR, lfcCORE_VARGSCOUNT_TUPLE1(__VA_ARGS__), clazz, method, resultType, __VA_ARGS__)
-#define lfcOOP_IMPL_ACCESSOR(clazz, method, resultType, ...)                            lfcOOP_IMPL_ACCESSOR_VAARG(clazz, method, resultType, __VA_ARGS__)
-
-
-#define lfcOOP_IMPL_ACCESSOR_0Params( \
-    clazz, method, resultType , dummy\
+#define lfcOOP_accessor_implFor_0Params(clazz, method, resultType, \
+    dummy \
 )       MAKE__RET__w_0PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType)
 
-#define lfcOOP_IMPL_ACCESSOR_1Params( \
-    clazz, method, resultType, p1 \
+#define lfcOOP_accessor_implFor_1Params(clazz, method, resultType, \
+    p1 \
 )       MAKE__RET__w_1PARAM(clazz##_##method, , clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1)
 
-#define lfcOOP_IMPL_ACCESSOR_2Params( \
-    clazz, method, resultType, p1, p2 \
+#define lfcOOP_accessor_implFor_2Params(clazz, method, resultType, \
+    p1, p2 \
 )       MAKE__RET__w_2PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2)
 
-#define lfcOOP_IMPL_ACCESSOR_3Params( \
-    clazz, method, resultType, p1, p2, p3 \
+#define lfcOOP_accessor_implFor_3Params(clazz, method, resultType, \
+    p1, p2, p3 \
 )       MAKE__RET__w_3PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3)
 
-#define lfcOOP_IMPL_ACCESSOR_4Params( \
-    clazz, method, resultType, p1, p2, p3, p4 \
+#define lfcOOP_accessor_implFor_4Params(clazz, method, resultType, \
+    p1, p2, p3, p4 \
 )       MAKE__RET__w_4PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4)
 
-#define lfcOOP_IMPL_ACCESSOR_5Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5 \
+#define lfcOOP_accessor_implFor_5Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5 \
 )       MAKE__RET__w_5PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5)
 
-#define lfcOOP_IMPL_ACCESSOR_6Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6 \
+#define lfcOOP_accessor_implFor_6Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6 \
 )       MAKE__RET__w_6PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6)
 
-#define lfcOOP_IMPL_ACCESSOR_7Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7 \
+#define lfcOOP_accessor_implFor_7Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7 \
 )       MAKE__RET__w_7PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7)
 
-#define lfcOOP_IMPL_ACCESSOR_8Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8 \
+#define lfcOOP_accessor_implFor_8Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8 \
 )       MAKE__RET__w_8PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8)
 
-#define lfcOOP_IMPL_ACCESSOR_9Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9 \
+#define lfcOOP_accessor_implFor_9Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9 \
 )       MAKE__RET__w_9PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9)
 
-#define lfcOOP_IMPL_ACCESSOR_10Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 \
+#define lfcOOP_accessor_implFor_10Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 \
 )       MAKE__RET__w_10PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
 
-#define lfcOOP_IMPL_ACCESSOR_11Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 \
+#define lfcOOP_accessor_implFor_11Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 \
 )       MAKE__RET__w_11PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11)
 
-#define lfcOOP_IMPL_ACCESSOR_12Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 \
+#define lfcOOP_accessor_implFor_12Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 \
 )       MAKE__RET__w_12PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12)
 
-#define lfcOOP_IMPL_ACCESSOR_13Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13 \
+#define lfcOOP_accessor_implFor_13Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13 \
 )       MAKE__RET__w_13PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13)
 
-#define lfcOOP_IMPL_ACCESSOR_14Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14 \
+#define lfcOOP_accessor_implFor_14Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14 \
 )       MAKE__RET__w_14PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14)
 
-#define lfcOOP_IMPL_ACCESSOR_15Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 \
+#define lfcOOP_accessor_implFor_15Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 \
 )       MAKE__RET__w_15PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15)
 
-#define lfcOOP_IMPL_ACCESSOR_16Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16 \
+#define lfcOOP_accessor_implFor_16Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16 \
 )       MAKE__RET__w_16PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16)
 
-#define lfcOOP_IMPL_ACCESSOR_17Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17 \
+#define lfcOOP_accessor_implFor_17Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17 \
 )       MAKE__RET__w_17PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17)
 
-#define lfcOOP_IMPL_ACCESSOR_18Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18 \
+#define lfcOOP_accessor_implFor_18Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18 \
 )       MAKE__RET__w_18PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18)
 
-#define lfcOOP_IMPL_ACCESSOR_19Params( \
-    clazz, method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19 \
+#define lfcOOP_accessor_implFor_19Params(clazz, method, resultType, \
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19 \
 )       MAKE__RET__w_19PARAM(clazz##_##method, clazz##_t, clazz##_class_t, clazz(), clazz##_class(), method, resultType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19)
+/*
+ * END: lfcOOP_accessor
+ *
+ ***********************************************************************************************************************
+ ***********************************************************************************************************************/
 
 /**
    * Macro zum Erstellen der Implementierung einer globalen Funktion, die dann entweder die super-Methode aufruft.
@@ -1208,7 +1210,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_1Name, STRINGIZE(_1Name), public_##clazz##_##_1Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)
 
 #define lfcOOP_implementClass_implFor_2Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1231,8 +1233,8 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_2Name, STRINGIZE(_2Name), public_##clazz##_##_2Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)
 
 #define lfcOOP_implementClass_implFor_3Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1259,9 +1261,9 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_3Name, STRINGIZE(_3Name), public_##clazz##_##_3Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)
 
 #define lfcOOP_implementClass_implFor_4Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1292,10 +1294,10 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_4Name, STRINGIZE(_4Name), public_##clazz##_##_4Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)
 
 #define lfcOOP_implementClass_implFor_5Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1330,11 +1332,11 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_5Name, STRINGIZE(_5Name), public_##clazz##_##_5Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
+    lfcOOP_accessor(clazz, _5Name, _5Return, STRIP_PARENT _5Args)
 
 #define lfcOOP_implementClass_implFor_6Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1373,12 +1375,12 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_6Name, STRINGIZE(_6Name), public_##clazz##_##_6Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _6Name, _6Return, STRIP_PARENT _6Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
+    lfcOOP_accessor(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
+    lfcOOP_accessor(clazz, _6Name, _6Return, STRIP_PARENT _6Args)
 
 #define lfcOOP_implementClass_implFor_7Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1421,13 +1423,13 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_7Name, STRINGIZE(_7Name), public_##clazz##_##_7Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _7Name, _7Return, STRIP_PARENT _7Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
+    lfcOOP_accessor(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
+    lfcOOP_accessor(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
+    lfcOOP_accessor(clazz, _7Name, _7Return, STRIP_PARENT _7Args)
 
 #define lfcOOP_implementClass_implFor_8Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1474,14 +1476,14 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_8Name, STRINGIZE(_8Name), public_##clazz##_##_8Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _7Name, _7Return, STRIP_PARENT _7Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _8Name, _8Return, STRIP_PARENT _8Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
+    lfcOOP_accessor(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
+    lfcOOP_accessor(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
+    lfcOOP_accessor(clazz, _7Name, _7Return, STRIP_PARENT _7Args)                                  \
+    lfcOOP_accessor(clazz, _8Name, _8Return, STRIP_PARENT _8Args)
 
 #define lfcOOP_implementClass_implFor_9Methods(clazz, super, \
     _1Return, _1Name, _1Args,                                                                           \
@@ -1532,15 +1534,15 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_9Name, STRINGIZE(_9Name), public_##clazz##_##_9Name,                         \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _7Name, _7Return, STRIP_PARENT _7Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _8Name, _8Return, STRIP_PARENT _8Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _9Name, _9Return, STRIP_PARENT _9Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
+    lfcOOP_accessor(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
+    lfcOOP_accessor(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
+    lfcOOP_accessor(clazz, _7Name, _7Return, STRIP_PARENT _7Args)                                  \
+    lfcOOP_accessor(clazz, _8Name, _8Return, STRIP_PARENT _8Args)                                  \
+    lfcOOP_accessor(clazz, _9Name, _9Return, STRIP_PARENT _9Args)
 
 #define lfcOOP_implementClass_implFor_10Methods(clazz, super, \
      _1Return,  _1Name,  _1Args,                                                                        \
@@ -1595,16 +1597,16 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_10Name, STRINGIZE(_10Name), public_##clazz##_##_10Name,                      \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _7Name, _7Return, STRIP_PARENT _7Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _8Name, _8Return, STRIP_PARENT _8Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _9Name, _9Return, STRIP_PARENT _9Args)                                  \
-    lfcOOP_IMPL_ACCESSOR(clazz, _10Name, _10Return, STRIP_PARENT _10Args)
+    lfcOOP_accessor(clazz, _1Name, _1Return, STRIP_PARENT _1Args)                                  \
+    lfcOOP_accessor(clazz, _2Name, _2Return, STRIP_PARENT _2Args)                                  \
+    lfcOOP_accessor(clazz, _3Name, _3Return, STRIP_PARENT _3Args)                                  \
+    lfcOOP_accessor(clazz, _4Name, _4Return, STRIP_PARENT _4Args)                                  \
+    lfcOOP_accessor(clazz, _5Name, _5Return, STRIP_PARENT _5Args)                                  \
+    lfcOOP_accessor(clazz, _6Name, _6Return, STRIP_PARENT _6Args)                                  \
+    lfcOOP_accessor(clazz, _7Name, _7Return, STRIP_PARENT _7Args)                                  \
+    lfcOOP_accessor(clazz, _8Name, _8Return, STRIP_PARENT _8Args)                                  \
+    lfcOOP_accessor(clazz, _9Name, _9Return, STRIP_PARENT _9Args)                                  \
+    lfcOOP_accessor(clazz, _10Name, _10Return, STRIP_PARENT _10Args)
 
 #define lfcOOP_implementClass_implFor_11Methods(clazz, super, \
      _1Return,  _1Name,  _1Args,                                                                        \
@@ -1663,17 +1665,17 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_11Name, STRINGIZE(_11Name), public_##clazz##_##_11Name,                      \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _1Name,  _1Return, STRIP_PARENT  _1Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _2Name,  _2Return, STRIP_PARENT  _2Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _3Name,  _3Return, STRIP_PARENT  _3Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _4Name,  _4Return, STRIP_PARENT  _4Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _5Name,  _5Return, STRIP_PARENT  _5Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _6Name,  _6Return, STRIP_PARENT  _6Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _7Name,  _7Return, STRIP_PARENT  _7Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _8Name,  _8Return, STRIP_PARENT  _8Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _9Name,  _9Return, STRIP_PARENT  _9Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz, _10Name, _10Return, STRIP_PARENT _10Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz, _11Name, _11Return, STRIP_PARENT _11Args)
+    lfcOOP_accessor(clazz,  _1Name,  _1Return, STRIP_PARENT  _1Args)                               \
+    lfcOOP_accessor(clazz,  _2Name,  _2Return, STRIP_PARENT  _2Args)                               \
+    lfcOOP_accessor(clazz,  _3Name,  _3Return, STRIP_PARENT  _3Args)                               \
+    lfcOOP_accessor(clazz,  _4Name,  _4Return, STRIP_PARENT  _4Args)                               \
+    lfcOOP_accessor(clazz,  _5Name,  _5Return, STRIP_PARENT  _5Args)                               \
+    lfcOOP_accessor(clazz,  _6Name,  _6Return, STRIP_PARENT  _6Args)                               \
+    lfcOOP_accessor(clazz,  _7Name,  _7Return, STRIP_PARENT  _7Args)                               \
+    lfcOOP_accessor(clazz,  _8Name,  _8Return, STRIP_PARENT  _8Args)                               \
+    lfcOOP_accessor(clazz,  _9Name,  _9Return, STRIP_PARENT  _9Args)                               \
+    lfcOOP_accessor(clazz, _10Name, _10Return, STRIP_PARENT _10Args)                               \
+    lfcOOP_accessor(clazz, _11Name, _11Return, STRIP_PARENT _11Args)
 
 #define lfcOOP_implementClass_implFor_12Methods(clazz, super, \
      _1Return,  _1Name,  _1Args,                                                                        \
@@ -1736,18 +1738,18 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
                 clazz##_##_12Name, STRINGIZE(_12Name), public_##clazz##_##_12Name,                      \
     lfcOOP_implementClass_implFor_classCtor_END(clazz)                                                  \
                                                                                                         \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _1Name,  _1Return, STRIP_PARENT  _1Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _2Name,  _2Return, STRIP_PARENT  _2Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _3Name,  _3Return, STRIP_PARENT  _3Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _4Name,  _4Return, STRIP_PARENT  _4Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _5Name,  _5Return, STRIP_PARENT  _5Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _6Name,  _6Return, STRIP_PARENT  _6Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _7Name,  _7Return, STRIP_PARENT  _7Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _8Name,  _8Return, STRIP_PARENT  _8Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz,  _9Name,  _9Return, STRIP_PARENT  _9Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz, _10Name, _10Return, STRIP_PARENT _10Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz, _11Name, _11Return, STRIP_PARENT _11Args)                               \
-    lfcOOP_IMPL_ACCESSOR(clazz, _12Name, _12Return, STRIP_PARENT _12Args)
+    lfcOOP_accessor(clazz,  _1Name,  _1Return, STRIP_PARENT  _1Args)                               \
+    lfcOOP_accessor(clazz,  _2Name,  _2Return, STRIP_PARENT  _2Args)                               \
+    lfcOOP_accessor(clazz,  _3Name,  _3Return, STRIP_PARENT  _3Args)                               \
+    lfcOOP_accessor(clazz,  _4Name,  _4Return, STRIP_PARENT  _4Args)                               \
+    lfcOOP_accessor(clazz,  _5Name,  _5Return, STRIP_PARENT  _5Args)                               \
+    lfcOOP_accessor(clazz,  _6Name,  _6Return, STRIP_PARENT  _6Args)                               \
+    lfcOOP_accessor(clazz,  _7Name,  _7Return, STRIP_PARENT  _7Args)                               \
+    lfcOOP_accessor(clazz,  _8Name,  _8Return, STRIP_PARENT  _8Args)                               \
+    lfcOOP_accessor(clazz,  _9Name,  _9Return, STRIP_PARENT  _9Args)                               \
+    lfcOOP_accessor(clazz, _10Name, _10Return, STRIP_PARENT _10Args)                               \
+    lfcOOP_accessor(clazz, _11Name, _11Return, STRIP_PARENT _11Args)                               \
+    lfcOOP_accessor(clazz, _12Name, _12Return, STRIP_PARENT _12Args)
 /*
  * END: lfcOOP_implementClass
  ***********************************************************************************************************************

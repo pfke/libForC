@@ -251,6 +251,6 @@ lfcOptParserParam_t *lfcOptParserCmd_hlpr_addParam (
     return toAdd;
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcOptParserCmd, addCmd, int, lfcOptParserCmd_t *)
-lfcOOP_IMPL_ACCESSOR(lfcOptParserCmd, addParam, int, lfcOptParserParam_t *)
-lfcOOP_IMPL_ACCESSOR(lfcOptParserCmd, parse, int, const char *)
+lfcOOP_accessor(lfcOptParserCmd, addCmd, int, lfcOptParserCmd_t *)
+lfcOOP_accessor(lfcOptParserCmd, addParam, int, lfcOptParserParam_t *)
+lfcOOP_accessor(lfcOptParserCmd, parse, int, const char *)

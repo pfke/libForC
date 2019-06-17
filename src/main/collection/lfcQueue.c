@@ -394,6 +394,6 @@ lfcQueue_t *lfcQueue_ctorWithSize(
     return (lfcQueue_t *)new(lfcQueue(), initial_size, increase_by);
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcQueue, clear, int)
-lfcOOP_IMPL_ACCESSOR(lfcQueue, enqueue, int, void *)
-lfcOOP_IMPL_ACCESSOR(lfcQueue, dequeue, void *)
+lfcOOP_accessor(lfcQueue, clear, int)
+lfcOOP_accessor(lfcQueue, enqueue, int, void *)
+lfcOOP_accessor(lfcQueue, dequeue, void *)

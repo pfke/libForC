@@ -122,7 +122,7 @@ CLASS_MAKE_METHODS_FUNC(lfcActorRef);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcActorRef, tell, int, const lfcActorRef_t *, const char *, size_t)
+lfcOOP_accessor(lfcActorRef, tell, int, const lfcActorRef_t *, const char *, size_t)
 
 
 /******************************************************************************************/

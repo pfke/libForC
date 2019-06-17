@@ -298,15 +298,15 @@ CLASS_MAKE_METHODS_FUNC(lfcActorSystem);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, create, lfcActorRef_t *, const char *, receive_fn_cb)
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, getName, const char *)
+lfcOOP_accessor(lfcActorSystem, create, lfcActorRef_t *, const char *, receive_fn_cb)
+lfcOOP_accessor(lfcActorSystem, getName, const char *)
 
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, equals, bool, lfcActorSystem_t *);
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, equals_byActor, bool, lfcActor_t *);
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, equals_byActorRef, bool, lfcActorRef_t *);
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell, int, const lfcActorRef_t *, const lfcActorRef_t *, const char *, size_t)
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell_byMsg, int, lfcActorMessage_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, const char *, size_t)
+lfcOOP_accessor(lfcActorSystem, equals, bool, lfcActorSystem_t *);
+lfcOOP_accessor(lfcActorSystem, equals_byActor, bool, lfcActor_t *);
+lfcOOP_accessor(lfcActorSystem, equals_byActorRef, bool, lfcActorRef_t *);
+lfcOOP_accessor(lfcActorSystem, tell, int, const lfcActorRef_t *, const lfcActorRef_t *, const char *, size_t)
+lfcOOP_accessor(lfcActorSystem, tell_byMsg, int, lfcActorMessage_t *)
+lfcOOP_accessor(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, const char *, size_t)
 
 /**
  * Erzeugt eine lfcActorSystem Instanz.

@@ -196,10 +196,10 @@ lfcActor_t *lfcActor_ctor(
     return (lfcActor_t *)new(lfcActor(), name, actorSystem, receive_fn);
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcActor, getActorSystem, lfcActorSystem_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActor, getName, const char *)
-lfcOOP_IMPL_ACCESSOR(lfcActor, getReceiveFn, receive_fn_cb)
-lfcOOP_IMPL_ACCESSOR(lfcActor, getRef, lfcActorRef_t *)
+lfcOOP_accessor(lfcActor, getActorSystem, lfcActorSystem_t *)
+lfcOOP_accessor(lfcActor, getName, const char *)
+lfcOOP_accessor(lfcActor, getReceiveFn, receive_fn_cb)
+lfcOOP_accessor(lfcActor, getRef, lfcActorRef_t *)
 
 
 /******************************************************************************************/

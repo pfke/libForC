@@ -151,4 +151,4 @@ lfcOptParserParam_t *lfcOptParserParam_ctor(
 }
 
 
-lfcOOP_IMPL_ACCESSOR(lfcOptParserParam, parse, int, const char *)
+lfcOOP_accessor(lfcOptParserParam, parse, int, const char *)

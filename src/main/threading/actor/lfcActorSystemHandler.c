@@ -220,10 +220,10 @@ CLASS_MAKE_METHODS_FUNC(lfcActorSystemHandler);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcActorSystemHandler, getRegisteredActorSystems, lfcList_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActorSystemHandler, getSocketHandler, lfcSocketHandler_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActorSystemHandler, registerActorSystem, int, lfcActorSystem_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActorSystemHandler, unregisterActorSystem, int, lfcActorSystem_t *)
+lfcOOP_accessor(lfcActorSystemHandler, getRegisteredActorSystems, lfcList_t *)
+lfcOOP_accessor(lfcActorSystemHandler, getSocketHandler, lfcSocketHandler_t *)
+lfcOOP_accessor(lfcActorSystemHandler, registerActorSystem, int, lfcActorSystem_t *)
+lfcOOP_accessor(lfcActorSystemHandler, unregisterActorSystem, int, lfcActorSystem_t *)
 
 /**
  * Erzeugt eine lfcActorSystemHandler Instanz.

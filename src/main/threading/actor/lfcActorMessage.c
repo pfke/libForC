@@ -183,11 +183,11 @@ lfcActorMessage_t *lfcActorMessage_ctor_noSender(
     return lfcActorMessage_ctor (NULL, recipient, msg, msg_len );
 }
 
-lfcOOP_IMPL_ACCESSOR(lfcActorMessage, hasSender, bool)
-lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getSender, const lfcActorRef_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getRecipient, const lfcActorRef_t *)
-lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getMsg, const char *)
-lfcOOP_IMPL_ACCESSOR(lfcActorMessage, getMsgLen, size_t)
+lfcOOP_accessor(lfcActorMessage, hasSender, bool)
+lfcOOP_accessor(lfcActorMessage, getSender, const lfcActorRef_t *)
+lfcOOP_accessor(lfcActorMessage, getRecipient, const lfcActorRef_t *)
+lfcOOP_accessor(lfcActorMessage, getMsg, const char *)
+lfcOOP_accessor(lfcActorMessage, getMsgLen, size_t)
 
 
 /******************************************************************************************/

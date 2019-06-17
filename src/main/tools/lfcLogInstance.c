@@ -233,10 +233,10 @@ CLASS_MAKE_METHODS_FUNC(lfcLogInstance);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_IMPL_ACCESSOR(lfcLogInstance, log, int, lfcLogInstance_loglevel_e, const char *, const char *, va_list *);
-lfcOOP_IMPL_ACCESSOR(lfcLogInstance, redirectToStderr, int);
-lfcOOP_IMPL_ACCESSOR(lfcLogInstance, redirectToSyslog, int);
-lfcOOP_IMPL_ACCESSOR(lfcLogInstance, setDebugLevel, int, lfcLogInstance_loglevel_e);
+lfcOOP_accessor(lfcLogInstance, log, int, lfcLogInstance_loglevel_e, const char *, const char *, va_list *);
+lfcOOP_accessor(lfcLogInstance, redirectToStderr, int);
+lfcOOP_accessor(lfcLogInstance, redirectToSyslog, int);
+lfcOOP_accessor(lfcLogInstance, setDebugLevel, int, lfcLogInstance_loglevel_e);
 
 /**
  * Erzeugt eine lfcLogInstance Instanz.
