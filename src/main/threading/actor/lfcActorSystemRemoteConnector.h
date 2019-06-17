@@ -16,7 +16,7 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcDEFINE_CLASS(lfcActorSystemRemoteConnector, lfcObject,
+lfcOOP_defineClass(lfcActorSystemRemoteConnector, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
     //-----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ lfcDEFINE_CLASS(lfcActorSystemRemoteConnector, lfcObject,
 
     /**
      */
-    const lfcSocket_t *, getSocket, (lfcActorSystemRemoteConnector_t *self)
+    const lfcSocket_t *, getSocket, ()
     )
 
 /**

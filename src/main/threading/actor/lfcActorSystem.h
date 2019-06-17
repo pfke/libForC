@@ -20,7 +20,7 @@ extern "C" {
 #define lfcActorSystem_REMOTEMQNAMEREGEX        "^lfcAA.mq://([a-z][a-zA-Z0-9_-]*)@([a-z][a-zA-Z0-9_:-]*)$"
 #define lfcActorSystem_REMOTETCPNAMEREGEX       "^lfcAA.tcp://([a-z][a-zA-Z0-9_-]*)@(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):([0-9]{1,5})$"
 
-lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
+lfcOOP_defineClass(lfcActorSystem, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
     //-----------------------------------------------------------------------------
@@ -37,43 +37,43 @@ lfcDEFINE_CLASS(lfcActorSystem, lfcObject,
     /**
      * create an Actor.
      */
-    lfcActorRef_t *, create, (lfcActorSystem_t *self, const char *name, receive_fn_cb receive_fn),
+    lfcActorRef_t *, create, (const char *name, receive_fn_cb receive_fn),
 
     /**
      * Get the actorsystem name.
      */
-    const char *, getName, (lfcActorSystem_t *self),
+    const char *, getName, (),
 
     /**
      * Returns true, if the that actorsystem is equal to ours.
      */
-    bool, equals, (lfcActorSystem_t *self, lfcActorSystem_t *that),
+    bool, equals, (lfcActorSystem_t *that),
     /**
      * Returns true, if the that actorsystem is equal to ours.
      * Get system from passed actor.
      */
-    bool, equals_byActor, (lfcActorSystem_t *self, lfcActor_t *that),
+    bool, equals_byActor, (lfcActor_t *that),
     /**
      * Returns true, if the that actorsystem is equal to ours
      * Get system from passed actorref.
      */
-    bool, equals_byActorRef, (lfcActorSystem_t *self, lfcActorRef_t *that),
+    bool, equals_byActorRef, (lfcActorRef_t *that),
 
     /**
      * Send a message from sender to recipient.
      * The messages will be forwarded to the another actorsystem, if the recipient is none of out actors.
      */
-    int, tell, (lfcActorSystem_t *self, const lfcActorRef_t *sender, const lfcActorRef_t *recipient, const char *msg, size_t msg_len),
+    int, tell, (const lfcActorRef_t *sender, const lfcActorRef_t *recipient, const char *msg, size_t msg_len),
     /**
      * Send a message from sender to recipient.
      * The messages will be forwarded to the another actorsystem, if the recipient is none of out actors.
      */
-    int, tell_byMsg, (lfcActorSystem_t *self, lfcActorMessage_t *msg),
+    int, tell_byMsg, (lfcActorMessage_t *msg),
     /**
      * Send a message from sender to recipient.
      * The messages will be forwarded to the another actorsystem, if the recipient is none of out actors.
      */
-    int, tell_noSender, (lfcActorSystem_t *self, const lfcActorRef_t *recipient, const char *msg, size_t msg_len)
+    int, tell_noSender, (const lfcActorRef_t *recipient, const char *msg, size_t msg_len)
     )
 
 /**

@@ -14,7 +14,7 @@
 /* INITIALIZATION                                                                         */
 /******************************************************************************************/
 
-lfcIMPLEMENT_CLASS(lfcSocket, lfcObject,
+lfcOOP_implementClass(lfcSocket, lfcObject,
     int,     getFd,       (),
     int,     listen,      (void *, fn_onAcceptConn_cb),
     ssize_t, read,        (char *, size_t, int),

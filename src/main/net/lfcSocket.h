@@ -26,7 +26,7 @@ typedef void (*fn_onAcceptConn_cb)(lfcSocket_t *acceptSocket, lfcSocket_t *newSo
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcDEFINE_CLASS(lfcSocket, lfcObject,
+lfcOOP_defineClass(lfcSocket, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
     //-----------------------------------------------------------------------------
@@ -50,12 +50,12 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
     /**
      * Return the socket fd
      */
-    int, getFd, (lfcSocket_t* self),
+    int, getFd, (),
 
     /**
      * Aktiviert ein Listen der Verbindung.
      */
-    int, listen, (lfcSocket_t *self, void *context, fn_onAcceptConn_cb onAcceptConn_cb),
+    int, listen, (void *context, fn_onAcceptConn_cb onAcceptConn_cb),
 
     /**
      * Lesen von Daten über den Socket.
@@ -69,7 +69,7 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
      * @return -1 .. Fehler beim Lesen (errno is set)
      *         >=0 Anzahl der gelesenen Daten
      */
-    ssize_t, read, (lfcSocket_t *self, char *buf, size_t buf_size, int timeout),
+    ssize_t, read, (char *buf, size_t buf_size, int timeout),
 
     /**
      * Lesen von Daten über den Socket - asynchron.
@@ -84,7 +84,7 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
      * @return 0 .. Auftrag konnte eingequeued werden
      *          <0 .. Fehler
      */
-    ssize_t, read_async, (lfcSocket_t *self, char *buf, size_t buf_size, int timeout, unsigned int repeat, fn_onReadComplete_cb onReadComplete),
+    ssize_t, read_async, (char *buf, size_t buf_size, int timeout, unsigned int repeat, fn_onReadComplete_cb onReadComplete),
 
     /**
      * Lesen von Daten über den Socket - asynchron.
@@ -94,7 +94,7 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
      * @return 0 .. Auftrag konnte eingequeued werden
      *          <0 .. Fehler
      */
-    ssize_t, read_job, (lfcSocket_t *self, lfcSocketJobReader_t *job),
+    ssize_t, read_job, (lfcSocketJobReader_t *job),
 
     /**
      * Schreiben von Daten über den Socket.
@@ -108,7 +108,7 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
      * @return -1 .. Fehler beim Schreiben (errno is set)
      *         >=0 Anzahl der geschriebenen Daten
      */
-    ssize_t, write, (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout),
+    ssize_t, write, (const char *buf, size_t buf_size, int timeout),
 
     /**
      * Schreiben von Daten über den Socket - asynchron.
@@ -122,7 +122,7 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
      * @return 0 .. Auftrag konnte eingequeued werden
      *          <0 .. Fehler
      */
-    ssize_t, write_async, (lfcSocket_t *self, const char *buf, size_t buf_size, int timeout, fn_onWriteComplete_cb onWriteComplete),
+    ssize_t, write_async, (const char *buf, size_t buf_size, int timeout, fn_onWriteComplete_cb onWriteComplete),
 
     /**
      * Schreiben von Daten über den Socket - asynchron.
@@ -132,7 +132,7 @@ lfcDEFINE_CLASS(lfcSocket, lfcObject,
      * @return 0 .. Auftrag konnte eingequeued werden
      *          <0 .. Fehler
      */
-    ssize_t, write_job, (lfcSocket_t *self, lfcSocketJobWriter_t *job)
+    ssize_t, write_job, (lfcSocketJobWriter_t *job)
     )
 
 /**

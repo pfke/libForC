@@ -19,7 +19,7 @@ extern "C" {
 \*--------------------------------------------------------------------------------------*/
 typedef struct lfcActorSystem lfcActorSystem_t ;
 
-lfcDEFINE_CLASS(lfcActorSystemHandler, lfcObject,
+lfcOOP_defineClass(lfcActorSystemHandler, lfcObject,
     //-----------------------------------------------------------------------------
     // FIELDS
     //-----------------------------------------------------------------------------
@@ -42,15 +42,15 @@ lfcDEFINE_CLASS(lfcActorSystemHandler, lfcObject,
 
     /**
      */
-    lfcList_t *, getRegisteredActorSystems, (lfcActorSystemHandler_t *self),
+    lfcList_t *, getRegisteredActorSystems, (),
 
     /**
      * Jeder AcotrSystemHandler besitzt einen Sockethandler über den die RemoteActorSystems kommunizieren.
      */
-    lfcSocketHandler_t *, getSocketHandler, (lfcActorSystemHandler_t *self),
+    lfcSocketHandler_t *, getSocketHandler, (),
 
-    int, registerActorSystem, (lfcActorSystemHandler_t *self, lfcActorSystem_t *actorSystem),
-    int, unregisterActorSystem, (lfcActorSystemHandler_t *self, lfcActorSystem_t *actorSystem)
+    int, registerActorSystem, (lfcActorSystem_t *actorSystem),
+    int, unregisterActorSystem, (lfcActorSystem_t *actorSystem)
     )
 
 /**
