@@ -907,11 +907,11 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _1Return (*_1Name) lfcOOP_addSelfToParams(name, _1Args);                \
         _2Return (*_2Name) lfcOOP_addSelfToParams(name, _2Args);                \
         _3Return (*_3Name) lfcOOP_addSelfToParams(name, _3Args);                \
-        _5Return (*_4Name) lfcOOP_addSelfToParams(name, _4Args);                \
-        _6Return (*_5Name) lfcOOP_addSelfToParams(name, _5Args);                \
-        _7Return (*_6Name) lfcOOP_addSelfToParams(name, _6Args);                \
-        _8Return (*_7Name) lfcOOP_addSelfToParams(name, _7Args);                \
-        _4Return (*_8Name) lfcOOP_addSelfToParams(name, _8Args);                \
+        _4Return (*_4Name) lfcOOP_addSelfToParams(name, _4Args);                \
+        _5Return (*_5Name) lfcOOP_addSelfToParams(name, _5Args);                \
+        _6Return (*_6Name) lfcOOP_addSelfToParams(name, _6Args);                \
+        _7Return (*_7Name) lfcOOP_addSelfToParams(name, _7Args);                \
+        _8Return (*_8Name) lfcOOP_addSelfToParams(name, _8Args);                \
                                                                                 \
         const super##_methods_t *base;                                          \
     };                                                                          \
