@@ -1,6 +1,6 @@
 #include "lfcMQueueReceiver.h"
 #include <errno.h>
-#include <core/lfcCore.h>
+#include "../core/lfcCore.h"
 #include <stdlib.h>
 
 

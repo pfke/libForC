@@ -6,9 +6,9 @@ extern "C" {
 #endif
 
 #include <mqueue.h>
-#include <collection/lfcList.h>
-#include "core/lfcObject.h"
-#include "threading/lfcThreadPool.h"
+#include "../../collection/lfcList.h"
+#include "../../core/lfcObject.h"
+#include "../../threading/lfcThreadPool.h"
 #include "lfcActor.h"
 #include "lfcActorMessage.h"
 #include "lfcActorSystemHandler.h"

@@ -5,7 +5,7 @@
     #endif
 
     #include <mqueue.h>
-    #include "core/lfcObject.h"
+    #include "../core/lfcObject.h"
 
 
     /*--------------------------------------------------------------------------------------*\

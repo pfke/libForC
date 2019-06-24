@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "core/lfcObject.h"
+#include "../core/lfcObject.h"
 #include <pthread.h>
 #include <syslog.h>
 

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <pthread.h>
-#include <collection/lfcList.h>
+#include "../collection/lfcList.h"
 #include "../collection/lfcIIterable.h"
 #include "../core/lfcObject.h"
 #include "lfcOptParserParam.h"

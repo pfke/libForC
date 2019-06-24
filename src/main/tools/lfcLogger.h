@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include "lfcLogInstance.h"
-#include "core/lfcObject.h"
+#include "../core/lfcObject.h"
 #include <pthread.h>
 
 

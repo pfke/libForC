@@ -1,7 +1,7 @@
 #include "lfcLogInstance.h"
 
 #include <stdlib.h>
-#include <core/lfcCore.h>
+#include "../core/lfcCore.h"
 
 
 /******************************************************************************************/

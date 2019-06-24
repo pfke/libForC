@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <mqueue.h>
-#include "core/lfcObject.h"
+#include "../../core/lfcObject.h"
 #include "lfcActorMessage.h"
 #include "lfcActorRef.h"
 

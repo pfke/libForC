@@ -6,8 +6,8 @@ extern "C" {
 #endif
 
 #include <mqueue.h>
-#include <collection/lfcQueue.h>
-#include "core/lfcObject.h"
+#include "../collection/lfcQueue.h"
+#include "../core/lfcObject.h"
 #include "lfcSocketJobReader.h"
 #include "lfcSocketJobWriter.h"
 #include <stdio.h>

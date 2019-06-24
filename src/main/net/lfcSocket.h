@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include "core/lfcObject.h"
-#include "collection/lfcHashmap.h"
+#include "../core/lfcObject.h"
+#include "../collection/lfcHashmap.h"
 #include "lfcSocketHandler.h"
 
 

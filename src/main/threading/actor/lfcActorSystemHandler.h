@@ -7,10 +7,10 @@ extern "C" {
 
 #include <mqueue.h>
 #include <stdbool.h>
-#include <collection/lfcList.h>
-#include "core/lfcObject.h"
-#include "net/lfcSocketHandler.h"
-#include "threading/lfcThreadPool.h"
+#include "../../collection/lfcList.h"
+#include "../../core/lfcObject.h"
+#include "../../net/lfcSocketHandler.h"
+#include "../../threading/lfcThreadPool.h"
 #include "lfcActorMessage.h"
 #include "lfcActor.h"
 

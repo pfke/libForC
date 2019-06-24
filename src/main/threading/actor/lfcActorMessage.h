@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <mqueue.h>
-#include "core/lfcObject.h"
+#include "../../core/lfcObject.h"
 
 
 /*--------------------------------------------------------------------------------------*\

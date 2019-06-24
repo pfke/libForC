@@ -156,7 +156,7 @@ CLASS_MAKE_METHODS_FUNC(lfcMQueueSender);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_accessor(lfcMQueueSender, send, ssize_t, char *, size_t, unsigned int);
+lfcOOP_accessor(lfcMQueueSender, send, ssize_t, char*, size_t, unsigned int);
 
 
 /**
