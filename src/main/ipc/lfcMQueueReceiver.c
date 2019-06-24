@@ -172,9 +172,6 @@ CLASS_MAKE_METHODS_FUNC(lfcMQueueReceiver);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_accessor(lfcMQueueReceiver, receive, const char *, size_t *, unsigned int *);
-
-
 /**
  * Erzeugt eine lfcMQueueReceiver Instanz.
  */
@@ -195,6 +192,9 @@ lfcMQueueReceiver_t *lfcMQueueReceiver_ctorSimple(
 ) {
     return lfcMQueueReceiver_ctor(queue_name, 0, 0644, NULL);
 }
+
+lfcOOP_accessor(lfcMQueueReceiver, receive, const char *, size_t *, unsigned int *)
+
 
 /******************************************************************************************/
 /* STATIC METHODS                                                                         */

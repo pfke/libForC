@@ -11,7 +11,10 @@ extern "C" {
 #include "../../threading/lfcThreadPool.h"
 #include "lfcActor.h"
 #include "lfcActorMessage.h"
+#include "lfcActorRef.h"
 #include "lfcActorSystemHandler.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 
 /*--------------------------------------------------------------------------------------*\

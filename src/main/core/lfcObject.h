@@ -133,7 +133,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
 #define lfcOOP_addSelfToParams__implFor_0Params(clazz, args) (clazz##_t *self)
 #define lfcOOP_addSelfToParams__implFor_1Params(clazz, args) (clazz##_t *self, STRIP_PARENT args)
 /*
- * END: lfcOOP_defineClass
+ * END: lfcOOP_addSelfToParams
  ***********************************************************************************************************************
  ***********************************************************************************************************************/
 

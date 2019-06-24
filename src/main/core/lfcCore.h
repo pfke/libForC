@@ -1,8 +1,10 @@
 #ifndef LIBFORC_CORE_LFCCORE_H
 #define LIBFORC_CORE_LFCCORE_H
 
-    #define lfcMIN(a,b)    ((a < b) ? a : b)
-    #define lfcMAX(a,b)    ((a > b) ? a : b)
+#include <stdint.h>
+
+    #define lfcMIN(a,b)    (((int64_t)a < (int64_t)b) ? a : b)
+    #define lfcMAX(a,b)    (((int64_t)a > (int64_t)b) ? a : b)
 
     /**
      * Define, um Compiler-Warnungen auszublenden

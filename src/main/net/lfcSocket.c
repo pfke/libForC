@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include <net/lfcSocketJobAcceptConn.h>
+#include "lfcSocketJobAcceptConn.h"
 
 
 /******************************************************************************************/
