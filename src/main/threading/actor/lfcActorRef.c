@@ -30,7 +30,7 @@ static lfcActorRef_methods_t _lfcActorRef_methods;
  */
 lfcActorRef_t *public_lfcActorRef_ctor(
     void *_self,
-    va_list *app
+    va_list *app __attribute__((unused))
 ) {
     lfcActorRef_t *self = (lfcActorRef_t *) lfcObject_super_ctor(lfcActorRef(), _self);
 

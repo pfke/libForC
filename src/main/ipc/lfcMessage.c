@@ -31,7 +31,7 @@ static lfcMessage_methods_t _lfcMessage_methods;
  */
 lfcMessage_t *public_lfcMessage_ctor(
     void *_self,
-    va_list *app
+    va_list *app __attribute__((unused))
 ) {
     lfcMessage_t *self = (lfcMessage_t *) lfcObject_super_ctor(lfcMessage(), _self);
 

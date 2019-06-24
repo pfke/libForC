@@ -104,7 +104,7 @@ Test(
         &context, &ident,
         0,
         strlen(buf),
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len isAnUnused_param, char *res_buf isAnUnused_param) {
             callback_call_counter++;
         })
     );
@@ -142,7 +142,7 @@ Test(
         &context, &ident,
         0,
         strlen(buf),
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf isAnUnused_param) {
             should_be_same_ptr_wText(res_context, &context, "callback-context stimmt nicht");
             should_be_same_ptr_wText(res_ident, &ident, "callback-ident stimmt nicht");
             should_be_same_int_wText(res_read_len, -EBADF, "Anzahl gelesender Bytes stimmt nicht");
@@ -181,7 +181,7 @@ Test(
         calloc(1, strlen(buf)),
         strlen(buf),
         true,
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len isAnUnused_param, char *res_buf isAnUnused_param) {
             callback_call_counter++;
             if (callback_call_counter == 2) {
                 free(res_buf);
@@ -236,7 +236,7 @@ Test(
         calloc(1, strlen(buf)),
         strlen(buf),
         true,
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len isAnUnused_param, char *res_buf isAnUnused_param) {
             callback_call_counter++;
         })
     );
@@ -279,7 +279,7 @@ Test(
         calloc(1, strlen(buf)),
         strlen(buf),
         true,
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len isAnUnused_param, char *res_buf isAnUnused_param) {
             callback_call_counter++;
 
 //            if (callback_call_counter == 2) {

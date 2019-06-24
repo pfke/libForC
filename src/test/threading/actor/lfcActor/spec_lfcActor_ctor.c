@@ -35,7 +35,7 @@ Test(
     TEST_SUITE_NAME,
     passing_valid__returnNotNull
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActor_t *tto = lfcActor_ctor("sumsi", tto_system, my_receive_fn_cb);
@@ -52,7 +52,7 @@ Test(
     TEST_SUITE_NAME,
     no_spaces_in_name
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActor_t *tto = lfcActor_ctor("su msi", tto_system, my_receive_fn_cb);

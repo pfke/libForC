@@ -30,7 +30,7 @@ Test(
             NULL, NULL,
             0,
             strlen(buf),
-            lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+            lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len, char *res_buf) {
 //                fprintf(stderr, "[r] %d@%s: buf='%s'\n", __LINE__, __func__, res_buf);
                 should_be_same_int_wText(res_read_len, strlen(buf), "[r] Anzahl gelesender Bytes stimmt nicht");
                 should_be_same_array_wText(res_buf, buf, strlen(buf), "[r] Daten stimmen nicht");
@@ -47,7 +47,7 @@ Test(
             NULL, NULL,
             0,
             buf, strlen(buf),
-            lambda(void, (void *res_context, void *res_ident, ssize_t res_written_len, const char *res_buf) {
+            lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_written_len, const char *res_buf) {
 //                fprintf(stderr, "[w] %d@%s: buf='%s'\n", __LINE__, __func__, res_buf);
                 should_be_same_int_wText(res_written_len, strlen(buf), "[w] Anzahl gelesender Bytes stimmt nicht");
                 should_be_same_ptr_wText(res_buf, buf, "[w] Daten stimmen nicht");
@@ -85,7 +85,7 @@ Test(
             NULL, NULL,
             1,
             strlen(buf),
-            lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+            lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len, char *res_buf) {
 //                fprintf(stderr, "[r] %d@%s: buf='%s'\n", __LINE__, __func__, res_buf);
                 should_be_same_int_wText(res_read_len, strlen(buf), "[r] Anzahl gelesender Bytes stimmt nicht");
                 should_be_same_array_wText(res_buf, buf, strlen(buf), "[r] Daten stimmen nicht");
@@ -102,7 +102,7 @@ Test(
             NULL, NULL,
             0,
             buf, strlen(buf),
-            lambda(void, (void *res_context, void *res_ident, ssize_t res_written_len, const char *res_buf) {
+            lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_written_len, const char *res_buf) {
 //                fprintf(stderr, "[w] %d@%s: buf='%s'\n", __LINE__, __func__, res_buf);
                 should_be_same_int_wText(res_written_len, strlen(buf), "[w] Anzahl gelesender Bytes stimmt nicht");
                 should_be_same_ptr_wText(res_buf, buf, "[w] Daten stimmen nicht");

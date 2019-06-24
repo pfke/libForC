@@ -18,7 +18,7 @@ Test(
     TEST_SUITE_NAME,
     passing_2ndArg_null
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi", my_receive_fn_cb);
@@ -35,7 +35,7 @@ Test(
     TEST_SUITE_NAME,
     passing_3rdArg_null
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi_01", my_receive_fn_cb);
@@ -54,7 +54,7 @@ Test(
     TEST_SUITE_NAME,
     passing_4thArg_null
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi_01", my_receive_fn_cb);
@@ -74,7 +74,7 @@ Test(
     TEST_SUITE_NAME,
     all_valid
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi_01", my_receive_fn_cb);
@@ -94,7 +94,7 @@ Test(
     TEST_SUITE_NAME,
     all_valid_noSender
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "sumsi_02", my_receive_fn_cb);

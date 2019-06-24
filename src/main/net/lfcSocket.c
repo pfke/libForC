@@ -204,7 +204,7 @@ static ssize_t public_lfcSocket_read (
         return -1;
     }
 
-    void wait_for_mutex(void *context, void *ident, ssize_t read_len, char *read_buf) {
+    void wait_for_mutex(void *context __attribute__((unused)), void *ident __attribute__((unused)), ssize_t read_len, char *read_buf __attribute__((unused))) {
         ret_len = read_len;
         pthread_mutex_unlock(&mutex);
     }

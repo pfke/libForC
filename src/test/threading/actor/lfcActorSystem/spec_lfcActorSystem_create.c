@@ -31,7 +31,7 @@ Test(
     TEST_SUITE_NAME,
     passing_valid__returnNotNull
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto = lfcActorSystem_create(system, "actor_01", my_receive_fn_cb);
@@ -45,7 +45,7 @@ Test(
     TEST_SUITE_NAME,
     passing_valid__addedToList
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actor = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb);
@@ -61,7 +61,7 @@ Test(
     TEST_SUITE_NAME,
     passing_valid__systemIsPassedToActor
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_actorRef = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb);

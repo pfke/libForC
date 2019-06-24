@@ -16,7 +16,7 @@ Test(
 
     pipe(pipe_fds_1);
 
-    void my_fn_onReadComplete_cb(void *context, void *ident, ssize_t read_len, char *read_buf) {
+    void my_fn_onReadComplete_cb(void *context isAnUnused_param, void *ident isAnUnused_param, ssize_t read_len isAnUnused_param, char *read_buf isAnUnused_param) {
 //        fprintf(stderr, "%s@%d: read='%s'\n", __func__,  __LINE__, read_buf);
     }
 //    void my_fn_onWriteComplete_cb(void *context, void *ident, ssize_t written_len, const char *buf) {}
@@ -28,7 +28,7 @@ Test(
     lfcSocket_read_job( reader_1, asInstanceOf(lfcSocketJobReader(), lfcSocketJobReaderStream_ctor(pipe_fds_1[0], NULL, NULL, 0, 100, my_fn_onReadComplete_cb)));
 //    lfcSocket_read_job( reader_1, lfcSocketJobReader_ctor(pipe_fds_1[0], NULL, NULL, 0,      strlen(buf), my_fn_onReadComplete_cb));
 
-    void *threaddie(void *arg) {
+    void *threaddie(void *arg isAnUnused_param) {
         delete(reader_1);
 
         return NULL;

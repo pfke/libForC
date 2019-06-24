@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(libForC)
 
 set(CMAKE_C_COMPILER "gcc")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -fno-pie -no-pie -g -ggdb -Wall -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast --save-temps")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -fno-pie -no-pie -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast --save-temps")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -fno-pie -no-pie -g -ggdb -Wall -Werror -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast")
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 

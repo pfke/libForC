@@ -20,7 +20,7 @@ Test(
     TEST_SUITE_NAME,
     passing_sameSystem
 ) {
-    void my_receive_fn_cb_actor(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb_actor(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
 
@@ -35,7 +35,7 @@ Test(
     TEST_SUITE_NAME,
     passing_differentSystem
 ) {
-    void my_receive_fn_cb_actor(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb_actor(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system_01 = lfcActorSystem_ctor("jkljkl");
     lfcActorSystem_t *tto_system_02 = lfcActorSystem_ctor("jkljkl");

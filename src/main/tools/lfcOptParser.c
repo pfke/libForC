@@ -129,7 +129,7 @@ static int public_lfcOptParser_addParam(
  * Diese Methode printet die komplette Konfiguration
  */
 static int public_lfcOptParser_dump(
-    lfcOptParser_t *self,
+    lfcOptParser_t *self __attribute__((unused)),
     FILE *fp
 ) {
     if (!fp) { return -EINVAL; }
@@ -141,7 +141,7 @@ static int public_lfcOptParser_dump(
  * Parsed einen Eingabestring
  */
 static int public_lfcOptParser_parse(
-    lfcOptParser_t *self,
+    lfcOptParser_t *self __attribute__((unused)),
     const char *in
 ) {
     if (!in) { return -EINVAL; }

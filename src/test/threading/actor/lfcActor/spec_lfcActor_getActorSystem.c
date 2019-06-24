@@ -15,7 +15,7 @@ Test(
     TEST_SUITE_NAME,
     passing_valid
 ) {
-    void my_receive_fn_cb(lfcActor_t *self, lfcActorMessage_t *msg) {}
+    void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
     lfcActorRef_t *tto_ref = lfcActorSystem_create(system, "actor_01", my_receive_fn_cb);

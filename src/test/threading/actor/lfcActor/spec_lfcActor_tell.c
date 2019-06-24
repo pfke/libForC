@@ -11,7 +11,7 @@ Test(
 ) {
     bool read_wait_for = false;
 
-    void my_receive_fn_cb_actor01(lfcActor_t *self, lfcActorMessage_t *msg) {
+    void my_receive_fn_cb_actor01(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {
         read_wait_for = true;
     }
     void my_receive_fn_cb_actor02(lfcActor_t *self, lfcActorMessage_t *msg) {
@@ -46,8 +46,8 @@ Test(
 ) {
     bool read_wait_for = false;
 
-    void my_receive_fn_cb_actor01(lfcActor_t *self, lfcActorMessage_t *msg) {}
-    void my_receive_fn_cb_actor02(lfcActor_t *self, lfcActorMessage_t *msg) {
+    void my_receive_fn_cb_actor01(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
+    void my_receive_fn_cb_actor02(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {
         static int counter = 0;
 
         counter++;

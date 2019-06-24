@@ -80,7 +80,7 @@ static lfcOptParserParam_t *public_lfcOptParserParam_dtor(
  * Parsed einen Eingabestring
  */
 static int public_lfcOptParserParam_parse(
-    lfcOptParserParam_t *self,
+    lfcOptParserParam_t *self __attribute__((unused)),
     const char *in
 ) {
     if (!in) { return -EINVAL; }

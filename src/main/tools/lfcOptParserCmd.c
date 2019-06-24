@@ -141,7 +141,7 @@ static int public_lfcOptParserCmd_addParam(
  * Parsed einen Eingabestring
  */
 static int public_lfcOptParserCmd_parse(
-    lfcOptParserCmd_t *self,
+    lfcOptParserCmd_t *self __attribute__((unused)),
     const char *in
 ) {
     if (!in) { return -EINVAL; }

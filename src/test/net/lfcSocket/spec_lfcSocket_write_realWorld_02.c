@@ -35,7 +35,7 @@ Test(
     lfcSocket_t *socket_0 = lfcSocket_ctor(socketHandler, pipe_fds[0]);
     lfcSocket_read_async(
         socket_0, reader_buffer, sizeof(in_buf), -1, 0,
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len isAnUnused_param, char *res_buf isAnUnused_param) {
 //            fprintf(stderr, "[0] %d@%s: res_read_len=%zd (counter=%zu)\n", __LINE__, __func__, res_read_len, sock0_read_counter);
             sock0_read_counter++;
 
@@ -48,7 +48,7 @@ Test(
     lfcSocket_t *socket_1 = lfcSocket_ctor(socketHandler, pipe_fds[1]);
     lfcSocket_read_async(
         socket_1, reader_buffer, sizeof(in_buf), -1, 0,
-        lambda(void, (void *res_context, void *res_ident, ssize_t res_read_len, char *res_buf) {
+        lambda(void, (void *res_context isAnUnused_param, void *res_ident isAnUnused_param, ssize_t res_read_len isAnUnused_param, char *res_buf isAnUnused_param) {
 //            fprintf(stderr, "[1] %d@%s: res_read_len=%zd (counter=%zu)\n", __LINE__, __func__, res_read_len, sock1_read_counter);
             sock1_read_counter++;
 
