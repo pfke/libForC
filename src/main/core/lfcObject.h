@@ -954,7 +954,7 @@ struct lfcObject  *lfcObject_super_new    (const void *_class, void *_self, va_l
         _4Return (*_4Name) lfcOOP_addSelfToParams(name, _4Args);                \
         _5Return (*_5Name) lfcOOP_addSelfToParams(name, _5Args);                \
         _6Return (*_6Name) lfcOOP_addSelfToParams(name, _6Args);                \
-        _7Return (*_6Name) lfcOOP_addSelfToParams(name, _7Args);                \
+        _7Return (*_7Name) lfcOOP_addSelfToParams(name, _7Args);                \
         _8Return (*_8Name) lfcOOP_addSelfToParams(name, _8Args);                \
         _9Return (*_9Name) lfcOOP_addSelfToParams(name, _9Args);                \
                                                                                 \

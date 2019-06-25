@@ -73,10 +73,18 @@ set(SOURCE_FILES
         src/main/threading/lfcThreadMisc.c
         src/main/threading/lfcThreadPool.c
         src/main/threading/lfcThreadPool.h
-        src/main/tools/lfcLogger.c
-        src/main/tools/lfcLogger.h
-        src/main/tools/lfcLogInstance.c
-        src/main/tools/lfcLogInstance.h
+        src/main/tools/logging/lfcLog.c
+        src/main/tools/logging/lfcLog.h
+        src/main/tools/logging/lfcLogAppender.c
+        src/main/tools/logging/lfcLogAppender.h
+        src/main/tools/logging/lfcLogCommon.h
+        src/main/tools/logging/lfcLogConsoleAppender.c
+        src/main/tools/logging/lfcLogConsoleAppender.h
+        src/main/tools/logging/lfcLogFormatter.h
+        src/main/tools/logging/lfcLogger.c
+        src/main/tools/logging/lfcLogger.h
+        src/main/tools/logging/lfcLogHandler.c
+        src/main/tools/logging/lfcLogHandler.h
         src/main/tools/lfcOptParser.c
         src/main/tools/lfcOptParser.h
         src/main/tools/lfcOptParserCmd.c

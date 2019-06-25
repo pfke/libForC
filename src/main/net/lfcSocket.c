@@ -151,7 +151,7 @@ static int public_lfcSocket_listen(
     fn_onAcceptConn_cb onAcceptConn_cb
 ) {
     if (listen(self->fd, SOMAXCONN)) {
-        return NULL;
+        return -1;
     } else {
         lfcHashmap_put(self->listen_requestMap, context, onAcceptConn_cb);
 
