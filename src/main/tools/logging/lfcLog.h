@@ -19,13 +19,23 @@ lfcOOP_defineClass(lfcLog, lfcObject,
     time_t timeStamp;
     lfcLogging_loglevel_e logLevel;
     char *loggerPrefix;
-    char *txt;
+    char *message;
+
+    const char *method;
+    int methodLine;
+    pthread_t threadId;
 
     ,
     //-----------------------------------------------------------------------------
     // PUBLIC METHOD
     //-----------------------------------------------------------------------------
-    lfcLogging_loglevel_e, getLogLevel, ()
+    const char *,          getLoggerPrefix, (),
+    lfcLogging_loglevel_e, getLogLevel, (),
+    const char *,          getMessage, (),
+    const char *,          getMethod, (),
+    int,                   getMethodLine, (),
+    time_t,                getTimeStamp, (),
+    pthread_t,             getThreadId, ()
     )
 
 /**
@@ -34,8 +44,11 @@ lfcOOP_defineClass(lfcLog, lfcObject,
 lfcLog_t *lfcLog_ctor (
     time_t timeStamp,
     lfcLogging_loglevel_e logLevel,
-    const char *logger_prefix,
-    const char *txt
+    const char *loggerPrefix,
+    const char *method,
+    int methodLine,
+    pthread_t threadId,
+    const char *message
 );
 
 #ifdef __cplusplus

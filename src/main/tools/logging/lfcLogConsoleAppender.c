@@ -86,7 +86,6 @@ static int impl_lfcLogConsoleAppender__LogAppender__put(
 CLASS_CTOR__START(lfcLogConsoleAppender)
     CLASS_CTOR__INIT_SUPER(lfcLogConsoleAppender, lfcObject)
     CLASS_CTOR__INIT_IFACES()
-        CLASS_IMPLEMENT_IFACE(lfcLogConsoleAppender, lfcLogAppender)
 CLASS_CTOR__END()
 
 /******************************************************************************************/

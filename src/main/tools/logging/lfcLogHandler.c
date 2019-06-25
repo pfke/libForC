@@ -162,13 +162,20 @@ static int public_lfcLogHandler_setLogLevel (
 /**
  * Erzeugt eine lfcLogHandler Instanz.
  */
+lfcLogHandler_t *lfcLogHandler_ctor () {
+    return (lfcLogHandler_t *)new(lfcLogHandler(), LOGLEVEL_WARNING);
+}
+
+/**
+ * Erzeugt eine lfcLogHandler Instanz.
+ */
 const lfcLogHandler_t *lfcLogHandler_singleton () {
-        // instance bereits angelegt?
+    // instance bereits angelegt?
     if (!lfcLogHandler_instance) {
         // geschützt eine instance anlegen
         if (!pthread_mutex_lock(&lfcLogHandler_instance_mutex)) {
             if (!lfcLogHandler_instance) {
-                lfcLogHandler_instance = (lfcLogHandler_t *)new(lfcLogHandler(), LOGLEVEL_WARNING);
+                lfcLogHandler_instance = lfcLogHandler_ctor();
             }
 
             pthread_mutex_unlock(&lfcLogHandler_instance_mutex);

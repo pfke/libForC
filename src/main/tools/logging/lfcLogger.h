@@ -23,14 +23,16 @@ lfcOOP_defineClass(lfcLogger, lfcObject,
     //-----------------------------------------------------------------------------
     // PUBLIC METHOD
     //-----------------------------------------------------------------------------
-    int, log_EMERG_va,   (const char *format, va_list *args),
-    int, log_ALERT_va,   (const char *format, va_list *args),
-    int, log_CRIT_va,    (const char *format, va_list *args),
-    int, log_ERR_va,     (const char *format, va_list *args),
-    int, log_WARNING_va, (const char *format, va_list *args),
-    int, log_NOTICE_va,  (const char *format, va_list *args),
-    int, log_INFO_va,    (const char *format, va_list *args),
-    int, log_DEBUG_va,   (const char *format, va_list *args),
+    int, log_va,         (lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args),
+
+    int, log_EMERG_va,   (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_ALERT_va,   (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_CRIT_va,    (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_ERR_va,     (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_WARNING_va, (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_NOTICE_va,  (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_INFO_va,    (const char* method, int methodLine, const char *format, va_list *args),
+    int, log_DEBUG_va,   (const char* method, int methodLine, const char *format, va_list *args),
 
     /**
      * Diese Methode setzt das persönliche Loglevel des Loggers.
@@ -54,14 +56,24 @@ lfcLogger_t *lfcLogger_ctor(
  */
 #define lfcLogger_ctor_wGlobalLogHandler(prefix, ...)       lfcLogger_ctor(lfcLogHandler_singleton(), prefix, __VA_ARGS__)
 
-void lfcLogger_log_EMERG  (lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_ALERT  (lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_CRIT   (lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_ERR    (lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_WARNING(lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_NOTICE (lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_INFO   (lfcLogger_t *self, const char *format, ...);
-void lfcLogger_log_DEBUG  (lfcLogger_t *self, const char *format, ...);
+#define lfcLogger_ALL(    self, logLevel, fmt, ...)   lfcLogger_log(self, logLevel,   __func__, __LINE__, fmt, __VA_ARGS__)
+#define lfcLogger_EMERG(  self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_EMERG,   fmt, __VA_ARGS__)
+#define lfcLogger_ALERT(  self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_ALERT,   fmt, __VA_ARGS__)
+#define lfcLogger_CRIT(   self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_CRIT,    fmt, __VA_ARGS__)
+#define lfcLogger_ERR(    self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_ERR,     fmt, __VA_ARGS__)
+#define lfcLogger_WARNING(self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_WARNING, fmt, __VA_ARGS__)
+#define lfcLogger_NOTICE( self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_NOTICE,  fmt, __VA_ARGS__)
+#define lfcLogger_INFO(   self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_INFO,    fmt, __VA_ARGS__)
+#define lfcLogger_DEBUG(  self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_DEBUG,   fmt, __VA_ARGS__)
+
+void lfcLogger_log  (
+    lfcLogger_t *self,
+    lfcLogging_loglevel_e logLevel,
+    const char *method,
+    int methodLine,
+    const char *format,
+    ...
+);
 
 #ifdef __cplusplus
 }

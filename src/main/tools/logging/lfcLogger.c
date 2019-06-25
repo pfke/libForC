@@ -10,14 +10,15 @@
 /******************************************************************************************/
 
 lfcOOP_implementClass(lfcLogger, lfcObject,
-    int, log_EMERG_va,   (const char *, va_list *),
-    int, log_ALERT_va,   (const char *, va_list *),
-    int, log_CRIT_va,    (const char *, va_list *),
-    int, log_ERR_va,     (const char *, va_list *),
-    int, log_WARNING_va, (const char *, va_list *),
-    int, log_NOTICE_va,  (const char *, va_list *),
-    int, log_INFO_va,    (const char *, va_list *),
-    int, log_DEBUG_va,   (const char *, va_list *),
+    int, log_va,         (lfcLogging_loglevel_e, const char *, int, const char *, va_list *),
+    int, log_EMERG_va,   (const char *, int, const char *, va_list *),
+    int, log_ALERT_va,   (const char *, int, const char *, va_list *),
+    int, log_CRIT_va,    (const char *, int, const char *, va_list *),
+    int, log_ERR_va,     (const char *, int, const char *, va_list *),
+    int, log_WARNING_va, (const char *, int, const char *, va_list *),
+    int, log_NOTICE_va,  (const char *, int, const char *, va_list *),
+    int, log_INFO_va,    (const char *, int, const char *, va_list *),
+    int, log_DEBUG_va,   (const char *, int, const char *, va_list *),
 
     int, setLogLevel, (lfcLogging_loglevel_e)
 )
@@ -40,22 +41,6 @@ lfcOOP_implementClass(lfcLogger, lfcObject,
 /******************************************************************************************/
 /* PRIVATE METHODS                                                                        */
 /******************************************************************************************/
-
-static int private_lfcLogger_log (
-    lfcLogger_t *self,
-    lfcLogging_loglevel_e logLevel,
-    const char *format,
-    va_list *args
-) {
-    // Ist speziell dieser Logger eingeschränkt?
-    if (self->logLevel < logLevel) { return 1; }
-
-    char buf[100];
-
-    vsnprintf(buf, sizeof(buf), format, *args);
-
-    return lfcLogHandler_log(self->logHandler, lfcLog_ctor(time(NULL), logLevel, self->prefix, buf));
-}
 
 
 /******************************************************************************************/
@@ -99,14 +84,31 @@ static lfcLogger_t *public_lfcLogger_dtor (
     return lfcObject_super_dtor(lfcLogger(), self);
 }
 
-static int public_lfcLogger_log_EMERG_va   (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_EMERG,   format, args); }
-static int public_lfcLogger_log_ALERT_va   (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_ALERT,   format, args); }
-static int public_lfcLogger_log_CRIT_va    (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_CRIT,    format, args); }
-static int public_lfcLogger_log_ERR_va     (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_ERR,     format, args); }
-static int public_lfcLogger_log_WARNING_va (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_WARNING, format, args); }
-static int public_lfcLogger_log_NOTICE_va  (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_NOTICE,  format, args); }
-static int public_lfcLogger_log_INFO_va    (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_INFO,    format, args); }
-static int public_lfcLogger_log_DEBUG_va   (lfcLogger_t *self, const char *format, va_list *args) { return private_lfcLogger_log(self, LOGLEVEL_DEBUG,   format, args); }
+static int public_lfcLogger_log_va   (
+    lfcLogger_t *self,
+    lfcLogging_loglevel_e logLevel,
+    const char *method, int methodLine,
+    const char *format,
+    va_list *args
+) {
+    // Ist speziell dieser Logger eingeschränkt?
+    if (self->logLevel < logLevel) { return 1; }
+
+    char message[100];
+
+    vsnprintf(message, sizeof(message), format, *args);
+
+    return lfcLogHandler_log(self->logHandler, lfcLog_ctor(time(NULL), logLevel, self->prefix, method, methodLine, pthread_self(), message));
+}
+
+static int public_lfcLogger_log_EMERG_va   (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_EMERG,   method, methodLine, format, args); }
+static int public_lfcLogger_log_ALERT_va   (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_ALERT,   method, methodLine, format, args); }
+static int public_lfcLogger_log_CRIT_va    (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_CRIT,    method, methodLine, format, args); }
+static int public_lfcLogger_log_ERR_va     (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_ERR,     method, methodLine, format, args); }
+static int public_lfcLogger_log_WARNING_va (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_WARNING, method, methodLine, format, args); }
+static int public_lfcLogger_log_NOTICE_va  (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_NOTICE,  method, methodLine, format, args); }
+static int public_lfcLogger_log_INFO_va    (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_INFO,    method, methodLine, format, args); }
+static int public_lfcLogger_log_DEBUG_va   (lfcLogger_t *self, const char *method, int methodLine, const char *format, va_list *args) { return lfcLogger_log_va(self, LOGLEVEL_DEBUG,   method, methodLine, format, args); }
 
 static int public_lfcLogger_setLogLevel (
     lfcLogger_t *self,
@@ -116,6 +118,7 @@ static int public_lfcLogger_setLogLevel (
 
     return !(self->logLevel == logLevel);
 }
+
 
 /******************************************************************************************/
 /* STATIC METHODS                                                                         */
@@ -139,66 +142,16 @@ lfcLogger_t *lfcLogger_ctor (
     return (lfcLogger_t *)new(lfcLogger(), logHandler, buf);
 }
 
-void lfcLogger_log_EMERG (lfcLogger_t *self, const char *format, ...) {
+void lfcLogger_log (
+    lfcLogger_t *self,
+    lfcLogging_loglevel_e logLevel,
+    const char *method, int methodLine,
+    const char *format,
+    ...
+) {
     va_list args;
 
     va_start (args, format);
-    lfcLogger_log_EMERG_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_ALERT (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_ALERT_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_CRIT (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_CRIT_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_ERR (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_ERR_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_WARNING (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_WARNING_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_NOTICE (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_NOTICE_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_INFO (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_INFO_va(self, format, &args);
-    va_end (args);
-}
-
-void lfcLogger_log_DEBUG (lfcLogger_t *self, const char *format, ...) {
-    va_list args;
-
-    va_start (args, format);
-    lfcLogger_log_DEBUG_va(self, format, &args);
+    lfcLogger_log_va(self, logLevel, method, methodLine, format, &args);
     va_end (args);
 }

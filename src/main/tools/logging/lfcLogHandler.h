@@ -48,6 +48,7 @@ lfcOOP_defineClass(lfcLogHandler, lfcObject,
 /**
  * Gibt eine lfcLogHandler Instanz zurueck.
  */
+lfcLogHandler_t *lfcLogHandler_ctor(void);
 const lfcLogHandler_t *lfcLogHandler_singleton(void);
 
 
