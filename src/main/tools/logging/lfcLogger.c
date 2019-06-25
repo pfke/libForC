@@ -92,7 +92,7 @@ static int public_lfcLogger_log_va   (
     va_list *args
 ) {
     // Ist speziell dieser Logger eingeschränkt?
-    if (self->logLevel < logLevel) { return 1; }
+    if (self->logLevel > logLevel) { return 1; }
 
     char message[100];
 

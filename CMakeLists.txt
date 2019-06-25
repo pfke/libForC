@@ -28,6 +28,8 @@ set(SOURCE_FILES
         src/main/core/lfcIface.h
         src/main/core/lfcObject.h
         src/main/core/lfcObject.c
+        src/main/data/lfcStringBuilder.c
+        src/main/data/lfcStringBuilder.h
         src/main/data/lfcStringOps.c
         src/main/data/lfcStringOps.h
         src/main/io/lfcIOOps.c
@@ -77,9 +79,11 @@ set(SOURCE_FILES
         src/main/tools/logging/lfcLog.h
         src/main/tools/logging/lfcLogAppender.c
         src/main/tools/logging/lfcLogAppender.h
+        src/main/tools/logging/lfcLogCommon.c
         src/main/tools/logging/lfcLogCommon.h
         src/main/tools/logging/lfcLogConsoleAppender.c
         src/main/tools/logging/lfcLogConsoleAppender.h
+        src/main/tools/logging/lfcLogFormatter.c
         src/main/tools/logging/lfcLogFormatter.h
         src/main/tools/logging/lfcLogger.c
         src/main/tools/logging/lfcLogger.h
@@ -263,6 +267,8 @@ set(SOURCE_FILES_unitTests
         src/test/threading/actor/lfcActorSystemRemoteConnector/spec_lfcActorSystemRemoteConnector_ctor.c
         src/test/threading/actor/lfcActorSystemHandler/spec_lfcActorSystemHandler_ctor.c
         src/test/threading/actor/lfcActorSystemHandler/spec_lfcActorSystemHandler_getSocketHandler.c
+
+        src/test/tools/logging/lfcLogFormatter/spec_lfcLogFormatter_formatAsString.c
         )
 
 set(SOURCE_FILES_runner

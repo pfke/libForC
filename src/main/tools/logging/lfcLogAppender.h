@@ -16,7 +16,7 @@ lfcOOP_defineClass(lfcLogAppender, lfcObject,
     //-----------------------------------------------------------------------------
     // PUBLIC METHOD
     //-----------------------------------------------------------------------------
-    int, put, (lfcLog_t *log)
+    int, print, (lfcLog_t *log)
 )
 
 

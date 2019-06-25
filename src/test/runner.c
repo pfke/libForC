@@ -10,6 +10,7 @@
 #include <threading/actor/lfcActorSystem.h>
 #include <net/lfcSocketJobAcceptConn.h>
 
+#include "tools/logging/lfcLogConsoleAppender.h"
 #include "tools/logging/lfcLogger.h"
 #include "tools/logging/lfcLogHandler.h"
 
@@ -19,13 +20,33 @@
         memset(name, value, sizeof(name));
 
 void runner_fn () {
-    lfcLogHandler_t *logHandler = lfcLogHandler_ctor();
-    lfcLogger_t *logger = lfcLogger_ctor(logHandler, "dumi_%d", 13);
+//    lfcLogHandler_t *logHandler = lfcLogHandler_ctor();
+//    lfcLogger_t *logger = lfcLogger_ctor(logHandler, "dumi_%d", 13);
+//
+//    lfcLogHandler_addAppender(logHandler, asInstanceOf(lfcLogAppender(), lfcLogConsoleAppender_ctor("lköklö")));
+//
+//    lfcLogger_ALERT(logger, "bin hier: %s", "achso");
 
-    lfcLogHandler_addAppender(logHandler, lfcLogConsoleAppender_ctor("lköklö"));
+    lfcLog_t *log = lfcLog_ctor(
+        123456789,
+        LOGLEVEL_DEBUG,
+        "myLogger",
+        "method1",
+        13,
+        1325,
+        "simple message"
+    );
 
-    lfcLogger_ALERT(logger, "bin hier: %s", "achso");
+    char *result = lfcLogFormatter_formatAsString(
+        "%T{%A %d %H:%M:%S:}",
+        log
+    );
+    fprintf(stderr, "%s@%d: '%s'\n", __func__,  __LINE__, result);
 
+//    should_be_same_str("simple message", result);
+
+    free(result);
+    delete(log);
 }
 
 int main (

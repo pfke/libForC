@@ -23,6 +23,10 @@ typedef enum lfcLogging_loglevel {
     LOGLEVEL_DEBUG      = LOG_DEBUG,
 } lfcLogging_loglevel_e;
 
+const char *lfcLogCommon_logLevel_to_longStr (lfcLogging_loglevel_e log_level);
+const char *lfcLogCommon_logLevel_to_shortStr (lfcLogging_loglevel_e log_level);
+
+
 typedef struct lfcLog lfcLog_t;
 
 

@@ -1,4 +1,6 @@
 #include "lfcLogConsoleAppender.h"
+#include "lfcLog.h"
+#include "lfcLogFormatter.h"
 
 #include <errno.h>
 
@@ -8,46 +10,47 @@
 /******************************************************************************************/
 static const lfcLogConsoleAppender_t *_lfcLogConsoleAppender;
 static const lfcLogConsoleAppender_class_t *_lfcLogConsoleAppender_class;
-static lfcLogConsoleAppender_methods_t _lfcLogConsoleAppender_methods;
+static lfcLogConsoleAppender_methods_t _lfcLogConsoleAppender_methods isAnUnused_param;
+
 
 /******************************************************************************************/
-/* OBJECT METHODS                                                                         */
+/* PROTOTYPES                                                                             */
 /******************************************************************************************/
+static lfcLogConsoleAppender_t *public_lfcLogConsoleAppender_ctor (void *_self, va_list *app);
+static lfcLogConsoleAppender_t *public_lfcLogConsoleAppender_dtor (lfcLogConsoleAppender_t *self);
 
-static int impl_lfcLogConsoleAppender__LogAppender__put(lfcLogAppender_t *_self, lfcLog_t *log);
 
+/******************************************************************************************/
+/* PUBLIC METHODS                                                                         */
+/******************************************************************************************/
 
 /**
- * Constructor selbst.
- *
- * @param _self die bereits angelegte Instanz der Liste selbst
- * @param app ist die variable Argumenten-Liste (es werden 2 uint32_t erwartet)
- *
- * @return NULL .. wenn kein Speicher für das interne Array da ist
- *         sonst != NULL
+ * Constructor.
  */
 static lfcLogConsoleAppender_t *public_lfcLogConsoleAppender_ctor(
     void *_self,
     va_list *app
 ) {
-    lfcLogConsoleAppender_t *self = (lfcLogConsoleAppender_t *) lfcObject_super_ctor(lfcLogConsoleAppender(), _self);
-
-    if (self == 0)
-        return 0;
+    lfcLogConsoleAppender_t *self = (lfcLogConsoleAppender_t *) lfcObject_super_ctor(
+        lfcLogConsoleAppender(), _self
+    );
+    ASSERT_PTR(self, err, "could not instantiate super");
 
     // read args
-    const char *fmt = va_arg(*app, const char *);
+    const char *fmt =  va_arg(*app, char *);
     if (!fmt) { goto err; }
     self->fmt = strdup(fmt);
 
     return self;
 
 err:
+    if (self->fmt) { free(self->fmt); }
+
     return NULL;
 }
 
 /**
- * Destructor der Liste selbst.
+ * Destructor.
  */
 static lfcLogConsoleAppender_t *public_lfcLogConsoleAppender_dtor(
     lfcLogConsoleAppender_t *self
@@ -59,20 +62,27 @@ static lfcLogConsoleAppender_t *public_lfcLogConsoleAppender_dtor(
 
 /**
  */
-static int impl_lfcLogConsoleAppender__LogAppender__put(
+static int impl_lfcLogConsoleAppender__LogAppender__print (
     lfcLogAppender_t *_self,
     lfcLog_t *log
 ) {
     lfcLogConsoleAppender_t *self = asInstanceOf(lfcLogConsoleAppender(), _self);
-
     if (!self) return -EINVAL;
 
-//    lfcLog_format(log);
+    char *out = lfcLogFormatter_formatAsString(self->fmt, log);
+    if (out) {
+        fprintf(stdout, "%s\n", out);
 
-    fprintf(stdout, "%s\n", "k");
+        free(out);
+    }
 
     return 0;
 }
+
+
+/******************************************************************************************/
+/* INITIALIZATION                                                                         */
+/******************************************************************************************/
 
 /**
  * Ctor der Klasse.
@@ -84,39 +94,36 @@ static int impl_lfcLogConsoleAppender__LogAppender__put(
  * @return die Instanz selbst
  */
 CLASS_CTOR__START(lfcLogConsoleAppender)
-    CLASS_CTOR__INIT_SUPER(lfcLogConsoleAppender, lfcObject)
+    CLASS_CTOR__INIT_SUPER(lfcLogConsoleAppender, lfcLogAppender)
     CLASS_CTOR__INIT_IFACES()
 CLASS_CTOR__END()
 
-/******************************************************************************************/
-/* INITIALIZATION                                                                         */
-/******************************************************************************************/
 const lfcLogConsoleAppender_class_t *lfcLogConsoleAppender_class() {
     return _lfcLogConsoleAppender_class
-           ? _lfcLogConsoleAppender_class
-           : (_lfcLogConsoleAppender_class = (lfcLogConsoleAppender_class_t *) new(
-            lfcObject_class(), "lfcLogConsoleAppender_class", lfcObject_class(), sizeof(lfcLogConsoleAppender_class_t),
+        ? _lfcLogConsoleAppender_class
+        : (_lfcLogConsoleAppender_class = (lfcLogConsoleAppender_class_t *) new(
+            lfcLogAppender_class(), "lfcLogConsoleAppender_class", lfcLogAppender_class(), sizeof(lfcLogConsoleAppender_class_t),
 
             lfcObject_ctor, "", impl_lfcLogConsoleAppender_class_ctor,
 
             (void *) 0)
-           );
+        );
 }
 
 const lfcLogConsoleAppender_t *lfcLogConsoleAppender() {
     return _lfcLogConsoleAppender
-           ? _lfcLogConsoleAppender
-           : (_lfcLogConsoleAppender = (lfcLogConsoleAppender_t *) new(
+        ? _lfcLogConsoleAppender
+        : (_lfcLogConsoleAppender = (lfcLogConsoleAppender_t *) new(
             lfcLogConsoleAppender_class(),
-            "lfcLogConsoleAppender", lfcObject(), sizeof(lfcLogConsoleAppender_t),
+            "lfcLogConsoleAppender", lfcLogAppender(), sizeof(lfcLogConsoleAppender_t),
 
             lfcObject_ctor, "ctor", public_lfcLogConsoleAppender_ctor,
             lfcObject_dtor, "dtor", public_lfcLogConsoleAppender_dtor,
 
-            lfcLogAppender_put, "put", impl_lfcLogConsoleAppender__LogAppender__put,
+            lfcLogAppender_print, "print", impl_lfcLogConsoleAppender__LogAppender__print,
 
             (void *) 0)
-           );
+        );
 }
 
 CLASS_MAKE_METHODS_FUNC(lfcLogConsoleAppender);
@@ -126,11 +133,9 @@ CLASS_MAKE_METHODS_FUNC(lfcLogConsoleAppender);
 /******************************************************************************************/
 
 /**
- * Liste mit default-Größen initialisieren.
- *
- * @return eine Objekt-Instanz der Liste
+ * Einen neuen Appender erstellen
  */
-lfcLogConsoleAppender_t *lfcLogConsoleAppender_ctor(
+lfcLogConsoleAppender_t *lfcLogConsoleAppender_ctor (
     const char *fmt
 ) {
     return (lfcLogConsoleAppender_t *)new(lfcLogConsoleAppender(), fmt);

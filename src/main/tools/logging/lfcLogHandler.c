@@ -36,26 +36,6 @@ static const  lfcLogHandler_t *lfcLogHandler_instance;
 /* PRIVATE METHODS                                                                        */
 /******************************************************************************************/
 
-static const char *static_lfcLogHandler_tostr (
-    lfcLogging_loglevel_e log_level
-) isAnUnused_func;
-static const char *static_lfcLogHandler_tostr (
-    lfcLogging_loglevel_e log_level
-) {
-    switch (log_level) {
-        case LOGLEVEL_EMERG:    return ("UR");
-        case LOGLEVEL_ALERT:    return ("AL");
-        case LOGLEVEL_CRIT:     return ("CR");
-        case LOGLEVEL_ERR:      return ("EE");
-        case LOGLEVEL_WARNING:  return ("WW");
-        case LOGLEVEL_NOTICE:   return ("NN");
-        case LOGLEVEL_INFO:     return ("II");
-        case LOGLEVEL_DEBUG:    return ("DD");
-
-        default: return ("??");
-    }
-}
-
 static int private_lfcLogHandler_log (
     lfcLogHandler_t *self,
     lfcLog_t *log
@@ -63,7 +43,7 @@ static int private_lfcLogHandler_log (
     if (!log) { return -EINVAL; }
 
     lfcIIterable_foreach(self->appenders, lambda_void((void *item) {
-        lfcLogAppender_put(item, log);
+        lfcLogAppender_print(item, log);
     }));
 
     delete(log);

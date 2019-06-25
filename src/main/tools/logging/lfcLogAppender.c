@@ -7,7 +7,7 @@
 /******************************************************************************************/
 
 lfcOOP_implementClass(lfcLogAppender, lfcObject,
-    int, put, (lfcLog_t *)
+    int, print, (lfcLog_t *)
 )
 
 
@@ -61,7 +61,7 @@ static lfcLogAppender_t *public_lfcLogAppender_dtor (
     return lfcObject_super_dtor(lfcLogAppender(), self);
 }
 
-static int public_lfcLogAppender_put(
+static int public_lfcLogAppender_print(
     lfcLogAppender_t *self isAnUnused_param,
     lfcLog_t *log isAnUnused_param
 ) {
