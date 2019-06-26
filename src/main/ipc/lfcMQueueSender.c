@@ -41,7 +41,11 @@ lfcMQueueSender_t *public_lfcMQueueSender_ctor(
 
     // read args
     self->queue_name = va_arg(*app, const char *);
+#ifdef O_CLOEXEC
     self->open_flags = va_arg(*app, int) | O_WRONLY | O_CREAT | O_CLOEXEC;
+#else // #ifdef O_CLOEXEC
+    self->open_flags = va_arg(*app, int) | O_WRONLY | O_CREAT;
+#endif // #else // #ifdef O_CLOEXEC
     self->open_mode = va_arg(*app, mode_t);
     open_attr_ptr = va_arg(*app, struct mq_attr *);
     if (open_attr_ptr) {
