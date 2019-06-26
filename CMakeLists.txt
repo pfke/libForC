@@ -83,6 +83,8 @@ set(SOURCE_FILES
         src/main/tools/logging/lfcLogCommon.h
         src/main/tools/logging/lfcLogConsoleAppender.c
         src/main/tools/logging/lfcLogConsoleAppender.h
+        src/main/tools/logging/lfcLogSyslogAppender.c
+        src/main/tools/logging/lfcLogSyslogAppender.h
         src/main/tools/logging/lfcLogFormatter.c
         src/main/tools/logging/lfcLogFormatter.h
         src/main/tools/logging/lfcLogger.c
