@@ -1,5 +1,7 @@
 #include "lfcLogCommon.h"
 
+#include <stdio.h>
+
 const char *lfcLogCommon_logLevel_to_longStr (
     lfcLogging_loglevel_e log_level
 ) {
@@ -32,4 +34,25 @@ const char *lfcLogCommon_logLevel_to_shortStr (
 
         default: return ("??");
     }
+}
+
+const char *lfcLogCommon_logLevel_to_ansiEscCode (
+    lfcLogging_loglevel_e log_level
+) {
+    switch (log_level) {
+        case LOGLEVEL_EMERG:    return ("\33[30m\33[101m"); // Black on Bright Red
+        case LOGLEVEL_ALERT:    return ("\33[30m\33[101m"); // Black on Bright Red
+        case LOGLEVEL_CRIT:     return ("\33[91m"); // Bright Red
+        case LOGLEVEL_ERR:      return ("\33[91m"); // Bright Red
+        case LOGLEVEL_WARNING:  return ("\33[93m"); // Yellow
+        case LOGLEVEL_NOTICE:   return ("\33[34m"); // Blue
+        case LOGLEVEL_INFO:     return ("\33[94m"); // Bright Blue
+        case LOGLEVEL_DEBUG:    return lfcLogCommon_logLevel_reset_ansiEscCode (); // ...
+
+        default: return lfcLogCommon_logLevel_reset_ansiEscCode ();
+    }
+}
+
+const char *lfcLogCommon_logLevel_reset_ansiEscCode () {
+    return ("\33[0m"); // Reset:
 }

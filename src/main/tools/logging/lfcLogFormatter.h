@@ -16,6 +16,8 @@ extern "C" {
  *
  *   level/severity  %l - short term
  *   level/severity  %L - long term
+ *   level/severity  %c - colorize start (based on level)
+ *   level/severity  %C - colorize end
  *
  *   thread          %t - short term
  *   thread          %T - long term (thread name)

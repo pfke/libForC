@@ -140,3 +140,7 @@ lfcLogConsoleAppender_t *lfcLogConsoleAppender_ctor (
 ) {
     return (lfcLogConsoleAppender_t *)new(lfcLogConsoleAppender(), fmt);
 }
+
+lfcLogConsoleAppender_t *lfcLogConsoleAppender_ctor_stdFormat () {
+    return lfcLogConsoleAppender_ctor("%c%D{%F %T} [%l] %p --- [%t->%T] --- %F:%f : %m%C");
+}

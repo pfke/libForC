@@ -23,13 +23,17 @@ void runner_fn () {
     lfcLogHandler_t *logHandler = lfcLogHandler_ctor();
     lfcLogger_t *logger = lfcLogger_ctor(logHandler, "dumi_%d", 13);
 
-    lfcLogHandler_addAppender(logHandler, asInstanceOf(lfcLogAppender(), lfcLogConsoleAppender_ctor("[%l] %p/%F@%f# %m")));
+    lfcLogHandler_addAppender(logHandler, asInstanceOf(lfcLogAppender(), lfcLogConsoleAppender_ctor("%c%D{%F %T} [%l] %p --- [%t->%T] --- %F:%f : %m%C")));
     lfcLogHandler_setLogLevel(logHandler, LOGLEVEL_DEBUG);
 
+    lfcLogger_EMERG(logger, "bin hier: %s", "achso");
     lfcLogger_ALERT(logger, "bin hier: %s", "achso");
-    lfcLogger_DEBUG(logger, "debug 1");
-    lfcLogger_DEBUG(logger, "debug 2");
+    lfcLogger_CRIT(logger, "bin hier: %s", "achso");
     lfcLogger_ERR(logger, "err 5");
+    lfcLogger_WARNING(logger, "debug 1");
+    lfcLogger_NOTICE(logger, "debug 1");
+    lfcLogger_INFO(logger, "debug 1");
+    lfcLogger_DEBUG(logger, "debug 2");
 
 //    lfcLog_t *log = lfcLog_ctor(
 //        123456789,

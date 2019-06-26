@@ -58,6 +58,12 @@ char *lfcLogFormatter_formatAsString(
             case 'L':
                 lfcStringBuilder_append(stringBuilder, lfcLogCommon_logLevel_to_longStr(lfcLog_getLogLevel((lfcLog_t *)log)));
                 break;
+            case 'c':
+                lfcStringBuilder_append(stringBuilder, lfcLogCommon_logLevel_to_ansiEscCode(lfcLog_getLogLevel((lfcLog_t *)log)));
+                break;
+            case 'C':
+                lfcStringBuilder_append(stringBuilder, lfcLogCommon_logLevel_reset_ansiEscCode(lfcLog_getLogLevel((lfcLog_t *)log)));
+                break;
 
             case 'm':
                 lfcStringBuilder_append(stringBuilder, lfcLog_getMessage((lfcLog_t *)log));
@@ -68,9 +74,10 @@ char *lfcLogFormatter_formatAsString(
                 break;
 
             case 't': {
-                char buf[20];
+                char buf[100];
 
-                snprintf(buf, sizeof(buf), "%ld", lfcLog_getThreadId((lfcLog_t *)log));
+                memset(buf, 0, sizeof(buf));
+                snprintf(buf, sizeof(buf), "%lld", (long long int)lfcLog_getThreadId((lfcLog_t *)log));
 
                 lfcStringBuilder_append(stringBuilder, buf);
 

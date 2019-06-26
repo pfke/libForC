@@ -26,6 +26,8 @@ typedef enum lfcLogging_loglevel {
 const char *lfcLogCommon_logLevel_to_longStr (lfcLogging_loglevel_e log_level);
 const char *lfcLogCommon_logLevel_to_shortStr (lfcLogging_loglevel_e log_level);
 
+const char *lfcLogCommon_logLevel_to_ansiEscCode (lfcLogging_loglevel_e log_level);
+const char *lfcLogCommon_logLevel_reset_ansiEscCode ();
 
 typedef struct lfcLog lfcLog_t;
 
