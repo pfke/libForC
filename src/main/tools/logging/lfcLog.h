@@ -24,6 +24,7 @@ lfcOOP_defineClass(lfcLog, lfcObject,
     const char *method;
     int methodLine;
     pthread_t threadId;
+    char *threadName;
 
     ,
     //-----------------------------------------------------------------------------
@@ -35,7 +36,8 @@ lfcOOP_defineClass(lfcLog, lfcObject,
     const char *,          getMethod, (),
     int,                   getMethodLine, (),
     time_t,                getTimeStamp, (),
-    pthread_t,             getThreadId, ()
+    pthread_t,             getThreadId, (),
+    const char *,          getThreadName, ()
     )
 
 /**

@@ -17,14 +17,15 @@ extern "C" {
  *   level/severity  %l - short term
  *   level/severity  %L - long term
  *
- *   thread          %t
+ *   thread          %t - short term
+ *   thread          %T - long term (thread name)
  *
  *   loggerPrefix    %p
  *
  *   method          %F
  *   methodLine      %f
  *
- *   timeStamp       %T{...}   use strftime format codes
+ *   timeStamp       %D{...}   use strftime format codes
  *                      %a     The abbreviated name of the day of the week according to the
  *                             current locale.  (Calculated from tm_wday.)
  *

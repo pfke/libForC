@@ -1,6 +1,7 @@
 #include "lfcLog.h"
 
 #include <stdlib.h>
+#include <sys/prctl.h>
 
 
 /******************************************************************************************/
@@ -14,7 +15,8 @@ lfcOOP_implementClass(lfcLog, lfcObject,
     const char *,          getMethod, (),
     int,                   getMethodLine, (),
     time_t,                getTimeStamp, (),
-    pthread_t,             getThreadId, ()
+    pthread_t,             getThreadId, (),
+    const char *,          getThreadName, ()
 )
 
 
@@ -60,10 +62,14 @@ static lfcLog_t *public_lfcLog_ctor (
     self->method = va_arg(*app, const char *);
     self->methodLine = va_arg(*app, int);
     self->threadId = va_arg(*app, pthread_t);
+    const char *threadName = va_arg(*app, const char *);
     const char *message = va_arg(*app, const char *);
 
     if (!loggerPrefix) { goto err; }
     self->loggerPrefix = strdup(loggerPrefix);
+
+    if (!threadName) { goto err; }
+    self->threadName = strdup(threadName);
 
     if (!message) { goto err; }
     self->message = strdup(message);
@@ -73,6 +79,7 @@ static lfcLog_t *public_lfcLog_ctor (
 
 err:
     if (self->loggerPrefix) { free(self->loggerPrefix); }
+    if (self->threadName) { free(self->threadName); }
     if (self->message) { free(self->message); }
 
     return NULL;
@@ -86,6 +93,7 @@ static lfcLog_t *public_lfcLog_dtor (
 ) {
     if (self->loggerPrefix) { free(self->loggerPrefix); }
     if (self->message) { free(self->message); }
+    if (self->threadName) { free(self->threadName); }
 
     return lfcObject_super_dtor(lfcLog(), self);
 }
@@ -97,6 +105,7 @@ static const char *          public_lfcLog_getMethod      (lfcLog_t *self) { ret
 static int                   public_lfcLog_getMethodLine  (lfcLog_t *self) { return self->methodLine; }
 static time_t                public_lfcLog_getTimeStamp   (lfcLog_t *self) { return self->timeStamp; }
 static pthread_t             public_lfcLog_getThreadId    (lfcLog_t *self) { return self->threadId; }
+static const char *          public_lfcLog_getThreadName  (lfcLog_t *self) { return self->threadName; }
 
 
 /******************************************************************************************/
@@ -115,6 +124,11 @@ lfcLog_t *lfcLog_ctor (
     pthread_t threadId,
     const char *message
 ) {
+    char threadName[100];
+
+    memset(threadName, 0, sizeof(threadName));
+    prctl(PR_GET_NAME, threadName, 0,0,0);
+
     return (lfcLog_t *)new(lfcLog(),
         timeStamp,
         logLevel,
@@ -122,6 +136,7 @@ lfcLog_t *lfcLog_ctor (
         method,
         methodLine,
         threadId,
+        threadName,
         message
     );
 }

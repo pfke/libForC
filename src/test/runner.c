@@ -20,33 +20,37 @@
         memset(name, value, sizeof(name));
 
 void runner_fn () {
-//    lfcLogHandler_t *logHandler = lfcLogHandler_ctor();
-//    lfcLogger_t *logger = lfcLogger_ctor(logHandler, "dumi_%d", 13);
-//
-//    lfcLogHandler_addAppender(logHandler, asInstanceOf(lfcLogAppender(), lfcLogConsoleAppender_ctor("lköklö")));
-//
-//    lfcLogger_ALERT(logger, "bin hier: %s", "achso");
+    lfcLogHandler_t *logHandler = lfcLogHandler_ctor();
+    lfcLogger_t *logger = lfcLogger_ctor(logHandler, "dumi_%d", 13);
 
-    lfcLog_t *log = lfcLog_ctor(
-        123456789,
-        LOGLEVEL_DEBUG,
-        "myLogger",
-        "method1",
-        13,
-        1325,
-        "simple message"
-    );
+    lfcLogHandler_addAppender(logHandler, asInstanceOf(lfcLogAppender(), lfcLogConsoleAppender_ctor("[%l] %p/%F@%f# %m")));
+    lfcLogHandler_setLogLevel(logHandler, LOGLEVEL_DEBUG);
 
-    char *result = lfcLogFormatter_formatAsString(
-        "%T{%A %d %H:%M:%S:}",
-        log
-    );
-    fprintf(stderr, "%s@%d: '%s'\n", __func__,  __LINE__, result);
+    lfcLogger_ALERT(logger, "bin hier: %s", "achso");
+    lfcLogger_DEBUG(logger, "debug 1");
+    lfcLogger_DEBUG(logger, "debug 2");
+    lfcLogger_ERR(logger, "err 5");
+
+//    lfcLog_t *log = lfcLog_ctor(
+//        123456789,
+//        LOGLEVEL_DEBUG,
+//        "myLogger",
+//        "method1",
+//        13,
+//        1325,
+//        "simple message"
+//    );
+//
+//    char *result = lfcLogFormatter_formatAsString(
+//        "%T{%A %d %H:%M:%S:}",
+//        log
+//    );
+//    fprintf(stderr, "%s@%d: '%s'\n", __func__,  __LINE__, result);
 
 //    should_be_same_str("simple message", result);
 
-    free(result);
-    delete(log);
+//    free(result);
+//    delete(log);
 }
 
 int main (

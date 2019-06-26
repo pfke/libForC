@@ -2,6 +2,8 @@
 #include "testing/lfcCriterionHelper.h"
 #include "tools/logging/lfcLog.h"
 
+#include <sys/prctl.h>
+
 
 #define TEST_SUITE_NAME               spec_lfcLogFormatter_formatAsString
 
@@ -107,6 +109,32 @@ Test(
 
 Test(
     TEST_SUITE_NAME,
+    pattern_threadName
+) {
+    prctl(PR_SET_NAME, "threaddy", 0, 0, 0);
+    lfcLog_t *log = lfcLog_ctor(
+        123456789,
+        LOGLEVEL_ALERT,
+        "myLogger",
+        "method1",
+        13,
+        1325,
+        "simple message"
+    );
+
+    char *result = lfcLogFormatter_formatAsString(
+        "(%T)",
+        log
+    );
+
+    should_be_same_str("(threaddy)", result);
+
+    free(result);
+    delete(log);
+}
+
+Test(
+    TEST_SUITE_NAME,
     pattern_loggerPrefix
 ) {
     lfcLog_t *log = lfcLog_ctor(
@@ -195,7 +223,7 @@ Test(
     );
 
     char *result = lfcLogFormatter_formatAsString(
-        "%T{%A %d %H:%M:%s:}",
+        "%D{%A %d %H:%M:%s:}",
         log
     );
 
@@ -220,7 +248,7 @@ Test(
     );
 
     char *result = lfcLogFormatter_formatAsString(
-        "%T{%A %d %H:%M:%s:}%%",
+        "%D{%A %d %H:%M:%s:}%%",
         log
     );
 

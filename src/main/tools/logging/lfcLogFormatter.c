@@ -76,8 +76,11 @@ char *lfcLogFormatter_formatAsString(
 
                 break;
             }
+            case 'T':
+                lfcStringBuilder_append(stringBuilder, lfcLog_getThreadName((lfcLog_t *)log));
+                break;
 
-            case 'T': {
+            case 'D': {
                 char buf[100];
                 char fmtBuf[100];
 
