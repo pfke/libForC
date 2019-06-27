@@ -1,5 +1,6 @@
 #include "lfcLogger.h"
 
+#include <pthread.h>
 #include <stdlib.h>
 #include <time.h>
 #include "lfcLog.h"
@@ -10,6 +11,8 @@
 /******************************************************************************************/
 
 lfcOOP_implementClass(lfcLogger, lfcObject,
+    const char *, getPrefix, (),
+
     int, log_va,         (lfcLogging_loglevel_e, const char *, int, const char *, va_list *),
     int, log_EMERG_va,   (const char *, int, const char *, va_list *),
     int, log_ALERT_va,   (const char *, int, const char *, va_list *),
@@ -31,6 +34,9 @@ lfcOOP_implementClass(lfcLogger, lfcObject,
 /******************************************************************************************/
 /* FIELDS                                                                                 */
 /******************************************************************************************/
+
+static pthread_mutex_t lfcLogger_instance_mutex = PTHREAD_MUTEX_INITIALIZER;
+static const  lfcLogger_t *lfcLogger_instance;
 
 
 /******************************************************************************************/
@@ -84,6 +90,12 @@ static lfcLogger_t *public_lfcLogger_dtor (
     return lfcObject_super_dtor(lfcLogger(), self);
 }
 
+static const char *public_lfcLogger_getPrefix  (
+    lfcLogger_t *self
+) {
+    return self->prefix;
+}
+
 static int public_lfcLogger_log_va   (
     lfcLogger_t *self,
     lfcLogging_loglevel_e logLevel,
@@ -94,7 +106,7 @@ static int public_lfcLogger_log_va   (
     // Ist speziell dieser Logger eingeschränkt?
     if (self->logLevel > logLevel) { return 1; }
 
-    char message[100];
+    char message[1024];
 
     vsnprintf(message, sizeof(message), format, *args);
 
@@ -140,6 +152,25 @@ lfcLogger_t *lfcLogger_ctor (
     va_end (args);
 
     return (lfcLogger_t *)new(lfcLogger(), logHandler, buf);
+}
+
+/**
+ * Global logger instance
+ */
+lfcLogger_t *lfcLogger_global() {
+    // instance bereits angelegt?
+    if (!lfcLogger_instance) {
+        // geschützt eine instance anlegen
+        if (!pthread_mutex_lock(&lfcLogger_instance_mutex)) {
+            if (!lfcLogger_instance) {
+                lfcLogger_instance = lfcLogger_ctor((lfcLogHandler_t *)lfcLogHandler_singleton(), "global");
+            }
+
+            pthread_mutex_unlock(&lfcLogger_instance_mutex);
+        }
+    }
+
+    return (lfcLogger_t *)lfcLogger_instance;
 }
 
 void lfcLogger_log (

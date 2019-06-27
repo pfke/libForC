@@ -8,6 +8,7 @@ extern "C" {
 #include "../../core/lfcObject.h"
 #include "lfcLogCommon.h"
 #include <stdlib.h>
+#include <time.h>
 
 
 /*--------------------------------------------------------------------------------------*\

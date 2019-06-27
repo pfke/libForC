@@ -149,7 +149,7 @@ lfcLogHandler_t *lfcLogHandler_ctor () {
 /**
  * Erzeugt eine lfcLogHandler Instanz.
  */
-const lfcLogHandler_t *lfcLogHandler_singleton () {
+lfcLogHandler_t *lfcLogHandler_singleton () {
     // instance bereits angelegt?
     if (!lfcLogHandler_instance) {
         // geschützt eine instance anlegen
@@ -162,7 +162,7 @@ const lfcLogHandler_t *lfcLogHandler_singleton () {
         }
     }
 
-    return lfcLogHandler_instance;
+    return (lfcLogHandler_t *)lfcLogHandler_instance;
 }
 
 

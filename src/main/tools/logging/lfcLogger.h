@@ -23,6 +23,8 @@ lfcOOP_defineClass(lfcLogger, lfcObject,
     //-----------------------------------------------------------------------------
     // PUBLIC METHOD
     //-----------------------------------------------------------------------------
+    const char *, getPrefix, (),
+
     int, log_va,         (lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args),
 
     int, log_EMERG_va,   (const char* method, int methodLine, const char *format, va_list *args),
@@ -54,7 +56,7 @@ lfcLogger_t *lfcLogger_ctor(
 /**
  * Erzeugt eine lfcLogger Instanz.
  */
-#define lfcLogger_ctor_wGlobalLogHandler(prefix, ...)       lfcLogger_ctor(lfcLogHandler_singleton(), prefix, __VA_ARGS__)
+#define lfcLogger_ctor_wGlobalLogHandler(prefix, ...)       lfcLogger_ctor((lfcLogHandler_t *)lfcLogHandler_singleton(), prefix, ## __VA_ARGS__, 0)
 
 #define lfcLogger_ALL(    self, logLevel, fmt, ...)   lfcLogger_log(self, logLevel,   __func__, __LINE__, fmt, __VA_ARGS__)
 #define lfcLogger_EMERG(  self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_EMERG,   fmt, ## __VA_ARGS__, 0)
@@ -65,6 +67,23 @@ lfcLogger_t *lfcLogger_ctor(
 #define lfcLogger_NOTICE( self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_NOTICE,  fmt, ## __VA_ARGS__, 0)
 #define lfcLogger_INFO(   self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_INFO,    fmt, ## __VA_ARGS__, 0)
 #define lfcLogger_DEBUG(  self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_DEBUG,   fmt, ## __VA_ARGS__, 0)
+
+/**
+ * Global loggers, whose does not need a separate initialized logger instance.
+ */
+#define lfcLogger_EMERG_g(  fmt, ...)   lfcLogger_EMERG(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_ALERT_g(  fmt, ...)   lfcLogger_ALERT(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_CRIT_g(   fmt, ...)   lfcLogger_CRIT(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_ERR_g(    fmt, ...)   lfcLogger_ERR(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_WARNING_g(fmt, ...)   lfcLogger_WARNING(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_NOTICE_g( fmt, ...)   lfcLogger_NOTICE(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_INFO_g(   fmt, ...)   lfcLogger_INFO(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+#define lfcLogger_DEBUG_g(  fmt, ...)   lfcLogger_DEBUG(lfcLogger_global(), fmt, ## __VA_ARGS__, 0)
+
+/**
+ * Global logger instance
+ */
+lfcLogger_t *lfcLogger_global();
 
 void lfcLogger_log  (
     lfcLogger_t *self,

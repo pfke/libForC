@@ -34,6 +34,8 @@ set(SOURCE_FILES
         src/main/data/lfcStringOps.h
         src/main/io/lfcIOOps.c
         src/main/io/lfcIOOps.h
+        src/main/io/lfcMXMLParser.c
+        src/main/io/lfcMXMLParser.h
         src/main/ipc/lfcMessage.c
         src/main/ipc/lfcMessage.h
         src/main/ipc/lfcMQueueReceiver.c
@@ -282,9 +284,9 @@ link_directories(
 )
 
 add_executable(libForC_ut ${SOURCE_FILES} ${SOURCE_FILES_unitTests})
-target_link_libraries(libForC_ut criterion rt pthread)
+target_link_libraries(libForC_ut criterion rt pthread mxml)
 
 add_executable(libForC_runner ${SOURCE_FILES} ${SOURCE_FILES_runner})
-target_link_libraries(libForC_runner rt pthread)
+target_link_libraries(libForC_runner rt pthread mxml)
 
-include_directories(src/main)
+include_directories(src/main src/test/__needed_libs__)
