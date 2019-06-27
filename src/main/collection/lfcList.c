@@ -204,6 +204,17 @@ static int public_lfcList_add(
     return public_lfcList_insertAt(self, self->size, toAdd);
 }
 
+static int public_lfcList_addList(
+    lfcList_t *self,
+    lfcList_t *toAdd
+) {
+    lfcIIterable_foreach(toAdd, lambda_void((void *item) {
+        public_lfcList_add(self, item);
+    }));
+
+    return 0;
+}
+
 /**
  * Löscht die Liste.
  *
@@ -620,6 +631,7 @@ static void *impl_lfcList__IIterable__next(
  */
 CLASS_CTOR__START(lfcList)
         OVERRIDE_METHOD(lfcList, add)
+        OVERRIDE_METHOD(lfcList, addList)
         OVERRIDE_METHOD(lfcList, clear)
         OVERRIDE_METHOD(lfcList, getAt)
         OVERRIDE_METHOD(lfcList, indexOf)
@@ -657,7 +669,9 @@ const lfcList_t *lfcList() {
 
             lfcObject_ctor, "ctor", public_lfcList_ctor,
             lfcObject_dtor, "dtor", public_lfcList_dtor,
+
             lfcList_add, "add", public_lfcList_add,
+            lfcList_addList, "addList", public_lfcList_addList,
             lfcList_clear, "clear", public_lfcList_clear,
             lfcList_getAt, "getAt", public_lfcList_getAt,
             lfcList_indexOf, "indexOf", public_lfcList_indexOf,
@@ -715,6 +729,7 @@ lfcList_t *lfcList_ctorWithSize(
 }
 
 lfcOOP_accessor(lfcList, add, int, void *)
+lfcOOP_accessor(lfcList, addList, int, lfcList_t *)
 lfcOOP_accessor(lfcList, bubbleSort, int, lfcList_compare_fn)
 lfcOOP_accessor(lfcList, clear, int)
 lfcOOP_accessor(lfcList, getAt, void *, size_t)

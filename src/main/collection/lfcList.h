@@ -24,6 +24,7 @@
 
   struct lfcList_class { const struct lfcObject_class _;
     method_t add;
+    method_t addList;
     method_t clear;
     method_t getAt;
     method_t indexOf;
@@ -38,6 +39,7 @@
 
   struct lfcList_methods {
     int     (*add     )(lfcList_t *_self, void *toAdd);
+    int     (*addList )(lfcList_t *_self, lfcList_t *toAdd);
     int     (*clear   )(lfcList_t *_self);
     void   *(*getAt   )(lfcList_t *_self, size_t idx);
     size_t  (*indexOf )(lfcList_t *_self, const void *);
@@ -58,6 +60,7 @@
   lfcList_t *lfcList_ctorWithSize(size_t initial_size, size_t increase_by);
 
   int     lfcList_add     (lfcList_t *_self, void *toAdd);
+  int     lfcList_addList (lfcList_t *_self, lfcList_t *toAdd);
   int     lfcList_clear   (lfcList_t *_self);
   void   *lfcList_getAt   (lfcList_t *_self, size_t idx);
   size_t  lfcList_indexOf (lfcList_t *_self, const void *);
