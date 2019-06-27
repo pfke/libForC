@@ -29,6 +29,7 @@
     method_t getAt;
     method_t indexOf;
     method_t insertAt;
+    method_t mergeList;
     method_t remove;
     method_t removeAt;
 
@@ -38,14 +39,15 @@
   };
 
   struct lfcList_methods {
-    int     (*add     )(lfcList_t *_self, void *toAdd);
-    int     (*addList )(lfcList_t *_self, lfcList_t *toAdd);
-    int     (*clear   )(lfcList_t *_self);
-    void   *(*getAt   )(lfcList_t *_self, size_t idx);
-    size_t  (*indexOf )(lfcList_t *_self, const void *);
-    int     (*insertAt)(lfcList_t *_self, size_t idx, void *toAdd);
-    int     (*remove  )(lfcList_t *_self, const void *toRemove);
-    int     (*removeAt)(lfcList_t *_self, size_t idx);
+    int     (*add      )(lfcList_t *_self, void *toAdd);
+    int     (*addList  )(lfcList_t *_self, lfcList_t *toAdd);
+    int     (*clear    )(lfcList_t *_self);
+    void   *(*getAt    )(lfcList_t *_self, size_t idx);
+    size_t  (*indexOf  )(lfcList_t *_self, const void *);
+    int     (*insertAt )(lfcList_t *_self, size_t idx, void *toAdd);
+    int     (*mergeList)(lfcList_t *_self, lfcList_t *toAdd);
+    int     (*remove   )(lfcList_t *_self, const void *toRemove);
+    int     (*removeAt )(lfcList_t *_self, size_t idx);
 
     int     (*bubbleSort)(lfcList_t *_self, lfcList_compare_fn compare_fn);
 
@@ -59,14 +61,15 @@
   lfcList_t *lfcList_ctor(void);
   lfcList_t *lfcList_ctorWithSize(size_t initial_size, size_t increase_by);
 
-  int     lfcList_add     (lfcList_t *_self, void *toAdd);
-  int     lfcList_addList (lfcList_t *_self, lfcList_t *toAdd);
-  int     lfcList_clear   (lfcList_t *_self);
-  void   *lfcList_getAt   (lfcList_t *_self, size_t idx);
-  size_t  lfcList_indexOf (lfcList_t *_self, const void *);
-  int     lfcList_insertAt(lfcList_t *_self, size_t idx, void *toAdd);
-  int     lfcList_remove  (lfcList_t *_self, const void *toRemove);
-  int     lfcList_removeAt(lfcList_t *_self, size_t idx);
+  int     lfcList_add      (lfcList_t *_self, void *toAdd);
+  int     lfcList_addList  (lfcList_t *_self, lfcList_t *toAdd);
+  int     lfcList_clear    (lfcList_t *_self);
+  void   *lfcList_getAt    (lfcList_t *_self, size_t idx);
+  size_t  lfcList_indexOf  (lfcList_t *_self, const void *);
+  int     lfcList_insertAt (lfcList_t *_self, size_t idx, void *toAdd);
+  int     lfcList_mergeList(lfcList_t *_self, lfcList_t *toAdd);
+  int     lfcList_remove   (lfcList_t *_self, const void *toRemove);
+  int     lfcList_removeAt (lfcList_t *_self, size_t idx);
 
   int     lfcList_bubbleSort(lfcList_t *self, lfcList_compare_fn compare_fn);
 

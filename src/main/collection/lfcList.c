@@ -319,6 +319,19 @@ static int public_lfcList_insertAt(
 }
 
 /**
+ * Merge the new list and delete.
+ */
+static int public_lfcList_mergeList(
+    lfcList_t *self,
+    lfcList_t *toAdd
+) {
+    public_lfcList_addList(self, toAdd);
+    delete(toAdd);
+
+    return 0;
+}
+
+/**
  * Diese Methode entfernt das angegebene Element von der Liste.
  *
  * @param _self die Instanz der Liste selbst
@@ -636,6 +649,7 @@ CLASS_CTOR__START(lfcList)
         OVERRIDE_METHOD(lfcList, getAt)
         OVERRIDE_METHOD(lfcList, indexOf)
         OVERRIDE_METHOD(lfcList, insertAt)
+        OVERRIDE_METHOD(lfcList, mergeList)
         OVERRIDE_METHOD(lfcList, remove)
         OVERRIDE_METHOD(lfcList, removeAt)
 
@@ -676,6 +690,7 @@ const lfcList_t *lfcList() {
             lfcList_getAt, "getAt", public_lfcList_getAt,
             lfcList_indexOf, "indexOf", public_lfcList_indexOf,
             lfcList_insertAt, "insertAt", public_lfcList_insertAt,
+            lfcList_mergeList, "mergeList", public_lfcList_mergeList,
             lfcList_remove, "remove", public_lfcList_remove,
             lfcList_removeAt, "removeAt", public_lfcList_removeAt,
 
@@ -735,5 +750,6 @@ lfcOOP_accessor(lfcList, clear, int)
 lfcOOP_accessor(lfcList, getAt, void *, size_t)
 lfcOOP_accessor(lfcList, indexOf, size_t, const void *)
 lfcOOP_accessor(lfcList, insertAt, int, size_t, void *)
+lfcOOP_accessor(lfcList, mergeList, int, lfcList_t *)
 lfcOOP_accessor(lfcList, remove, int, const void *)
 lfcOOP_accessor(lfcList, removeAt, int, size_t)
