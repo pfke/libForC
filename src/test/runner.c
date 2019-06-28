@@ -23,6 +23,9 @@
         char name[size]; \
         memset(name, value, sizeof(name));
 
+#define PTESTD_PROTOCOL_VERSION_MAJOR 1
+#define PTESTD_PROTOCOL_VERSION_MINOR 5
+
 typedef struct test_wlan_finalize_forIntel_caseClass_forBlob {
     char *descr;
 
@@ -154,12 +157,12 @@ test_wlan_finalize_forIntel_caseClass_forBlob_t *test_wlan_finaliize_forIntel_pa
 
     caseClass->deviceCalVer = strtoul(deviceCalVer, NULL, 10);
     caseClass->deviceCalFile = caseClass->designCalFile + strlen(caseClass->designCalFile) + 1;
-    strcat(caseClass->designCalFile, designCalFile);
+    strcat(caseClass->deviceCalFile, deviceCalFile);
 
     caseClass->setconfigBand = caseClass->deviceCalFile + strlen(caseClass->deviceCalFile) + 1;
     strcat(caseClass->setconfigBand, setconfigBand);
 
-    lfcLogger_DEBUG(
+    lfcLogger_INFO(
         logger,
         "read blob w/ following data:          \n"
         "  blob                                \n"
@@ -273,6 +276,221 @@ err:
     return NULL;
 }
 
+int test_wlan_finaliize_forIntel_writeGetcalSetconfig_script_writeBlob (
+    lfcLogger_t *logger,
+    const test_wlan_finalize_forIntel_caseClass_forXmlData_t *xmlData,
+    int blobNr,
+    const test_wlan_finalize_forIntel_caseClass_forBlob_t *blob,
+    FILE *fp
+) {
+#define TWFFI_GETCAL_OUTFILE    "/var/ptestd/getcal.out"
+    if (!logger) { return -EINVAL; }
+    if (!xmlData) {
+        lfcLogger_ERR(logger, "invalid xmlData argument");
+        return -EINVAL;
+    }
+    if (!blob) {
+        lfcLogger_ERR(logger, "invalid blob argument");
+        return -EINVAL;
+    }
+    if (!fp) {
+        lfcLogger_ERR(logger, "invalid fp argument");
+        return -EINVAL;
+    }
+
+    char logHeader[512];
+    memset(logHeader, 0, sizeof(logHeader));
+    snprintf(logHeader, sizeof(logHeader), "[wlanFinalizeForIntel:blob %d]", blobNr);
+
+    lfcLogger_DEBUG(logger, "generate scripting for blob #%d (%s)", blobNr, blob->descr);
+
+    // getcall-call
+    fprintf(
+        fp,
+        "############################################################                                                \n"
+        "# blob no. %d                                                                                               \n"
+        "# descr: %s                                                                                                 \n"
+        "log=\"%s\"                                                                                                  \n"
+        "xferFile=\"%s\"                                                                                             \n"
+        "                                                                                                            \n"
+        "getcal_call    \"${log}\" \"${xferFile}\" \"%s\" \\                                                         \n"
+        "                                      \"%d\" \\                                                             \n"
+        "                                      \"%s\" \\                                                             \n"
+        "                                      \"%d\" \\                                                             \n"
+        "                                      \"%d\"                                                                \n"
+        "setconfig_call \"${log}\" \"${xferFile}\" \"%s\"                                                            \n"
+        "                                                                                                            \n"
+        "echo \"[${log}] finished w/o any error\" > /dev/console                                                     \n"
+        "                                                                                                            \n"
+        "",
+        // header
+        blobNr,              // comment blob_no
+        blob->descr,
+        logHeader,
+        TWFFI_GETCAL_OUTFILE,
+
+        // getcal-Aufruf
+        blob->designCalFile,
+        blob->designCalVer,
+        blob->deviceCalFile,
+        blob->deviceCalVer,
+        xmlData->productCalVer,
+
+        // setconfig zeuch
+        blob->setconfigBand
+    );
+
+    return 0;
+}
+
+int test_wlan_finaliize_forIntel_writeGetcalSetconfig_script (
+    lfcLogger_t *logger,
+    test_wlan_finalize_forIntel_caseClass_forXmlData_t *xmlData,
+    const char *scriptFileName
+) {
+    if (!logger) { return -EINVAL; }
+    if (!xmlData) {
+        lfcLogger_ERR(logger, "invalid xmlData argument");
+        return -EINVAL;
+    }
+    if (!scriptFileName) {
+        lfcLogger_ERR(logger, "invalid scriptFileName argument");
+        return -EINVAL;
+    }
+
+    lfcLogger_INFO(logger, "start generating getcal+setconfig script: '%s'", scriptFileName);
+
+    char logHeader[512];
+    memset(logHeader, 0, sizeof(logHeader));
+    snprintf(logHeader, sizeof(logHeader), "[wlanFinalizeForIntel]");
+
+    // write script
+    {
+        FILE *fp;
+
+        if ((fp = fopen(scriptFileName, "w")) == NULL) {
+            lfcLogger_ERR(logger, "could not open script file (%s) for writing: %d / %s", scriptFileName, errno, strerror(errno));
+            return -EIO;
+        }
+
+        time_t timeStamp = time(NULL);
+        struct tm *local_time = localtime(&timeStamp);
+        if(!local_time) {
+            lfcLogger_ERR(logger, "could not get localtim");
+            return -ENOMEM;
+        }
+
+        char buf[100];
+        strftime(buf, sizeof(buf)-1, "%F %T", local_time);
+
+        fprintf(
+            fp,
+            "#!/bin/sh                                                                                               \n"
+            "#                                                                                                       \n"
+            "###############################################################                                         \n"
+            "# Generiertes Skript, mit dem WLAN-Kalibirer-Daten ausgelesen                                           \n"
+            "# und in den Urlader geschrieben werden.                                                                \n"
+            "#                                                                                                       \n"
+            "# Copyright: AVM GmbH                                                                                   \n"
+            "# generated by: ptestd %d.%d                                                                            \n"
+            "# generated at: %s                                                                                      \n"
+            "# generated why: wolle wlan habe                                                                        \n"
+            "###############################################################                                         \n"
+            "                                                                                                        \n"
+            "############################################################                                            \n"
+            "# getcal zeuch                                                                                          \n"
+            "getcal_call() {                                                                                         \n"
+            "  log=$1                                                                                                \n"
+            "  outFile=$2                                                                                            \n"
+            "  designFile=$3                                                                                         \n"
+            "  designVer=$4                                                                                          \n"
+            "  deviceFile=$5                                                                                         \n"
+            "  deviceVer=$6                                                                                          \n"
+            "  prodVer=$7                                                                                            \n"
+            "                                                                                                        \n"
+            "  echo \"[${log}] calling getcal:\" > /dev/console                                                      \n"
+            "  echo \"  /wlancal/getcal       \" > /dev/console                                                      \n"
+            "  echo \"      -b ${designFile}  \" > /dev/console                                                      \n"
+            "  echo \"      -e ${deviceFile}  \" > /dev/console                                                      \n"
+            "  echo \"      -o ${outFile}     \" > /dev/console                                                      \n"
+            "  echo \"      -B ${designVer}   \" > /dev/console                                                      \n"
+            "  echo \"      -E ${designVer}   \" > /dev/console                                                      \n"
+            "  echo \"      -P ${prodVer}     \" > /dev/console                                                      \n"
+            "  /wlancal/getcal \\                                                                                    \n"
+            "      -b ${designFile} \\                                                                               \n"
+            "      -e ${deviceFile} \\                                                                               \n"
+            "      -o ${outFile}    \\                                                                               \n"
+            "      -B ${designVer}  \\                                                                               \n"
+            "      -E ${designVer}  \\                                                                               \n"
+            "      -P ${prodVer} > /dev/console                                                                      \n"
+            "  result=$?                                                                                             \n"
+            "  echo \"[${log}] getcal returned w/ ${result} as result\" > /dev/console                               \n"
+            "  if [[ ${result} -ne 0 ]]; then                                                                        \n"
+            "    echo \"[${log}] ERROR: getcal finished w/ an error\" > /dev/console                                 \n"
+            "    exit $(result)                                                                                      \n"
+            "  fi                                                                                                    \n"
+            "  return ${result}                                                                                      \n"
+            "}                                                                                                       \n"
+            "                                                                                                        \n"
+            "############################################################                                            \n"
+            "# setconfig zeuch                                                                                       \n"
+            "setconfig_call() {                                                                                      \n"
+            "  log=$1                                                                                                \n"
+            "  outFile=$2                                                                                            \n"
+            "  band=$3                                                                                               \n"
+            "                                                                                                        \n"
+            "  /usr/bin/set_config -u /dev/mtd${MTD_PARTITION} ${band} ${outFile} > /dev/console                     \n"
+            "  result=$?                                                                                             \n"
+            "  echo \"[${log}] setconfig returned w/ ${result} as result\" > /dev/console                            \n"
+            "  if [[ ${result} -ne 0 ]]; then                                                                        \n"
+            "    echo \"[${log}] ERROR: setconfig finished w/ an error\" > /dev/console                              \n"
+            "    exit $(result)                                                                                      \n"
+            "  fi                                                                                                    \n"
+            "  return ${result}                                                                                      \n"
+            "}                                                                                                       \n"
+            "                                                                                                        \n"
+            "############################################################                                            \n"
+            "# query mtd no                                                                                          \n"
+            "MTD_PARTITION=`cat /proc/mtd | grep \"\\\"%s\\\"`                                                       \n"
+            "MTD_PARTITION=${MTD_PARTITION%%:*}                                                                      \n"
+            "MTD_PARTITION=${MTD_PARTITION##mtd}                                                                     \n"
+            "echo \"%s got mtd ${MTD_PARTITION}\" > /dev/console                                                     \n"
+            "                                                                                                        \n"
+            "",
+            PTESTD_PROTOCOL_VERSION_MAJOR, PTESTD_PROTOCOL_VERSION_MINOR,
+            buf,
+            xmlData->urladerMTD,
+            logHeader
+        );
+
+        int i = 0;
+        lfcIIterable_foreach(xmlData->blobs, lambda_void((void *item) {
+            test_wlan_finaliize_forIntel_writeGetcalSetconfig_script_writeBlob(
+                logger,
+                xmlData,
+                i++,
+                (test_wlan_finalize_forIntel_caseClass_forBlob_t *)item,
+                fp
+            );
+
+            free(item);
+        }));
+
+        fprintf(
+            fp,
+            "exit 0\n"
+            "\n"
+        );
+
+        free(xmlData);
+        fclose(fp);
+    }
+
+    lfcLogger_INFO(logger, "generating getcal+setconfig finished");
+
+    return 0;
+}
+
 void runner_fn () {
     lfcLogHandler_t *logHandler = lfcLogHandler_singleton();
     lfcLogger_t *logger = lfcLogger_ctor(logHandler, "mxmlParserTest");
@@ -310,17 +528,21 @@ void runner_fn () {
     lfcLogger_INFO(logger, "callback=%p", test_wlan_finaliize_forIntel_parseXml);
     lfcList_t *result = lfcMXMLParser_parse(
         LFCMXML_ARGTYPE_XMLSTRING, xmlString,
-        LFCMXML_ARGTYPE_XMLFILE, "/home/hblobner/test.xml",
         LFCMXML_ARGTYPE_LOGGER, logger,
         LFCMXML_ARGTYPE_MAINNODE_NAME, "wlanFinalize",
         LFCMXML_ARGTYPE_MAINNODE_CALLBACK, test_wlan_finaliize_forIntel_parseXml,
         NULL
     );
 
-    test_wlan_finalize_forIntel_caseClass_forXmlData_t *data0 = lfcList_getAt(result, 0);
-    test_wlan_finalize_forIntel_caseClass_forXmlData_t *data1 = lfcList_getAt(result, 1);
+    lfcIIterable_foreach(result, lambda_void((void *item) {
+        test_wlan_finaliize_forIntel_writeGetcalSetconfig_script(
+            logger,
+            (test_wlan_finalize_forIntel_caseClass_forXmlData_t *)item,
+            "/tmp/getcal-script"
+        );
+    }));
 
-    fprintf(stderr, "%s@%d\n", __func__,  __LINE__);
+    delete(result);
 }
 
 int main (

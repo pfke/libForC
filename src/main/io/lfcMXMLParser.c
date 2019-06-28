@@ -92,8 +92,6 @@ lfcList_t *private_lfcMXMLParser_parse_xmlFile(
     const char *mainNode,
     lfcMXML_parseMainNode_fn parseMainNode_cb
 ) {
-    lfcLogger_INFO(logger, "start parsing xml...");
-
     // arg checks
     if (!xmlFile) {
         lfcLogger_ERR(logger, "no xml file given");
@@ -106,6 +104,8 @@ lfcList_t *private_lfcMXMLParser_parse_xmlFile(
     if (!mainNode) {
         lfcLogger_INFO(logger, "no main node given. Call callback for all child node...");
     }
+
+    lfcLogger_INFO(logger, "start parsing xml from file '%s'", xmlFile);
 
     // los gehts
     FILE *fd = fopen(xmlFile, "r");
