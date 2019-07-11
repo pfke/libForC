@@ -56,7 +56,7 @@ lfcLogger_t *lfcLogger_ctor(
 /**
  * Erzeugt eine lfcLogger Instanz.
  */
-#define lfcLogger_ctor_wGlobalLogHandler(prefix, ...)       lfcLogger_ctor((lfcLogHandler_t *)lfcLogHandler_singleton(), prefix, ## __VA_ARGS__, 0)
+#define lfcLogger_ctor_wGlobalLogHandler(prefix, ...)       lfcLogger_ctor(lfcLogHandler_singleton(), prefix, ## __VA_ARGS__, 0)
 
 #define lfcLogger_ALL(    self, logLevel, fmt, ...)   lfcLogger_log(self, logLevel,   __func__, __LINE__, fmt, __VA_ARGS__)
 #define lfcLogger_EMERG(  self, fmt, ...)   lfcLogger_ALL(self, LOGLEVEL_EMERG,   fmt, ## __VA_ARGS__, 0)

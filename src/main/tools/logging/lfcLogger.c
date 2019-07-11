@@ -74,7 +74,7 @@ static lfcLogger_t *public_lfcLogger_ctor (
     return self;
 
 err:
-    if (self->prefix) free(self->prefix);
+    if (self && self->prefix) free(self->prefix);
 
     return NULL;
 }

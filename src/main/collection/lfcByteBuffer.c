@@ -1,5 +1,6 @@
 #include "lfcByteBuffer.h"
 
+#include <endian.h>
 #include <stdlib.h>
 #include <asm/errno.h>
 #include "../core/lfcCore.h"

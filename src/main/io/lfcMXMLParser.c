@@ -110,14 +110,19 @@ lfcList_t *private_lfcMXMLParser_parse_xmlFile(
     // los gehts
     FILE *fd = fopen(xmlFile, "r");
 
-    lfcList_t *result = private_lfcMXMLParser_parse_xml(
-        logger,
-        mxmlLoadFile(NULL, fd, MXML_NO_CALLBACK),
-        mainNode,
-        parseMainNode_cb
-    );
+    lfcList_t *result;
+    if (fd) {
+        result = private_lfcMXMLParser_parse_xml(
+            logger,
+            mxmlLoadFile(NULL, fd, MXML_NO_CALLBACK),
+            mainNode,
+            parseMainNode_cb
+        );
 
-    fclose(fd);
+        fclose(fd);
+    } else {
+        result = lfcList_ctor();
+    }
 
     return result;
 }

@@ -44,7 +44,7 @@ static lfcLogSyslogAppender_t *public_lfcLogSyslogAppender_ctor(
     return self;
 
 err:
-    if (self->fmt) { free(self->fmt); }
+    if (self && self->fmt) { free(self->fmt); }
 
     return NULL;
 }

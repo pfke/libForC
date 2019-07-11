@@ -264,6 +264,8 @@ lfcThreadPool_t *lfcThreadPool_create (
         if(pthread_create(&(pool->threads[i]), NULL,
             lfcThreadPool_thread, (void *) pool) != 0) {
             lfcThreadPool_destroy(pool, 0);
+            pthread_mutex_destroy(&(pool->lock));
+            pthread_cond_destroy(&(pool->notify));
             return NULL;
         }
         pool->thread_count++;
@@ -328,6 +330,7 @@ int lfcThreadPool_destroy (
     } while(0);
 
     /* Only if everything went well do we deallocate the pool */
+    pthread_mutex_unlock(&(pool->lock));
     if(!err) {
         lfcThreadPool_free(pool);
     }

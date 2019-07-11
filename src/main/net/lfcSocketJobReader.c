@@ -1,6 +1,7 @@
 #include "lfcSocketJobReader.h"
 
 #include <stdlib.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <asm-generic/errno-base.h>
 #include <errno.h>
@@ -68,7 +69,7 @@ err_param_null:
 err_no_mem:
     delete(self);
 err_self:
-    if (self->buf && self->free_buf) { free(self->buf); }
+    if (self && self->buf && self->free_buf) { free(self->buf); }
 
     return NULL;
 }

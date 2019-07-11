@@ -115,7 +115,7 @@ CLASS_MAKE_METHODS_FUNC(lfcMessage);
 lfcMessage_t *lfcMessage_ctor(
     const char *queue_name,
     int open_flags,
-    mode_t open_mode,
+    int open_mode,
     struct mq_attr *open_attr_ptr
 ) {
     return (lfcMessage_t *)new(lfcMessage(), queue_name, open_flags, open_mode, open_attr_ptr);

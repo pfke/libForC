@@ -77,7 +77,7 @@ char *lfcLogFormatter_formatAsString(
                 char buf[100];
 
                 memset(buf, 0, sizeof(buf));
-                snprintf(buf, sizeof(buf), "%lld", (long long int)lfcLog_getThreadId((lfcLog_t *)log));
+                snprintf(buf, sizeof(buf), "%ld", (long int)lfcLog_getThreadId((lfcLog_t *)log));
 
                 lfcStringBuilder_append(stringBuilder, buf);
 
@@ -96,7 +96,7 @@ char *lfcLogFormatter_formatAsString(
                 memset(fmtBuf, 0, sizeof(fmtBuf));
                 strncat(fmtBuf, &fmt[i + 2], end - &fmt[i + 2]);
 
-                snprintf(buf, sizeof(buf), "%ld", lfcLog_getThreadId((lfcLog_t *)log));
+                memset(buf, 0, sizeof(buf));
 
                 time_t timeStamp = lfcLog_getTimeStamp((lfcLog_t *)log);
                 struct tm *local_time = localtime(&timeStamp);

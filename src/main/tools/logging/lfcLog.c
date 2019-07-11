@@ -78,9 +78,9 @@ static lfcLog_t *public_lfcLog_ctor (
     return self;
 
 err:
-    if (self->loggerPrefix) { free(self->loggerPrefix); }
-    if (self->threadName) { free(self->threadName); }
-    if (self->message) { free(self->message); }
+    if (self && self->loggerPrefix) { free(self->loggerPrefix); }
+    if (self && self->threadName) { free(self->threadName); }
+    if (self && self->message) { free(self->message); }
 
     return NULL;
 }

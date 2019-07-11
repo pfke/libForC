@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <asm/errno.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <netinet/in.h>
@@ -364,7 +365,11 @@ static ssize_t public_lfcSocket_write (
             pthread_mutex_unlock(&mutex);
         })
     );
-    if (!job) { return -1; }
+    if (!job) {
+        pthread_mutex_unlock(&mutex);
+
+        return -1;
+    }
     ret_len = lfcSocketHandler_write (
         self->socketHandler, job
     );
@@ -483,7 +488,7 @@ lfcSocket_t *lfcSocket_connect_tcpStream(
 
     //
     int err = getaddrinfo(node, port, &hints, &res);
-    if (err) {
+    if (err || !res) {
         fprintf(stderr, "failed to resolve local socket address (err=%d / '%s')\n", err, gai_strerror(err));
         return NULL;
     }
@@ -510,7 +515,8 @@ lfcSocket_t *lfcSocket_connect_tcpStream(
     return lfcSocket_ctor(socketHandler, sd);
 
 err:
-    if (sd < 0) { close(sd); }
+    if (sd > 0) { close(sd); }
+    if (res) { freeaddrinfo(res); }
 
     return NULL;
 }
@@ -553,7 +559,7 @@ lfcSocket_t *lfcSocket_listenFor(
     return sock;
 
 err:
-    if (sd < 0) { close(sd); }
+    if (sd > 0) { close(sd); }
 
     return NULL;
 }

@@ -1,6 +1,7 @@
 #include "lfcSocketJobReaderStream.h"
 
 #include <stdlib.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <asm-generic/errno-base.h>
 #include <errno.h>

@@ -91,8 +91,19 @@ static int impl_object_puto (
 static void impl_object_delete (
   void *_self
 ) {
+    if (!_self) { return; }
+
     lfcObject_t *self = asInstanceOf(lfcObject(), _self);
+    if (!self) {
+        free(_self);
+        return;
+    }
+
     lfcObject_class_t *clazz = asInstanceOf(lfcObject_class(), self->class);
+    if (!clazz) {
+        free(_self);
+        return;
+    }
 
     lfcObject_dtor(self);
     memset(_self, 0, clazz->instance_size);

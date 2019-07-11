@@ -44,7 +44,7 @@ static lfcLogConsoleAppender_t *public_lfcLogConsoleAppender_ctor(
     return self;
 
 err:
-    if (self->fmt) { free(self->fmt); }
+    if (self && self->fmt) { free(self->fmt); }
 
     return NULL;
 }
