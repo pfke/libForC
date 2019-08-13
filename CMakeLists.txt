@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(libForC)
+project(libForC VERSION 1.0.0 DESCRIPTION "c libraries")
 
 set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -fno-pie -no-pie -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast --save-temps")
@@ -288,5 +288,11 @@ target_link_libraries(libForC_ut criterion rt pthread mxml)
 
 add_executable(libForC_runner ${SOURCE_FILES} ${SOURCE_FILES_runner})
 target_link_libraries(libForC_runner rt pthread mxml)
+
+add_library(libForC_lib SHARED ${SOURCE_FILES})
+target_link_libraries(libForC_lib rt pthread mxml)
+set_target_properties(libForC_lib PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(libForC_lib PROPERTIES SOVERSION 1)
+set_target_properties(libForC_lib PROPERTIES OUTPUT_NAME "ForC")
 
 include_directories(src/main src/test/__needed_libs__)
