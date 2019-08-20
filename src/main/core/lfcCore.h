@@ -64,6 +64,9 @@
                 goto label;                                     \
             }
 
+int lfcCore_install_sigsegv_handler();
+const char *lfcCore_strerrno(int in);
+
 #define STRIP_PARENT(...) __VA_ARGS__
 
 /**
