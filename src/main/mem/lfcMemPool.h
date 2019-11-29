@@ -3,7 +3,6 @@
 
   #include <stdint.h>
   #include <pthread.h>
-  #include "../collection/lfcIIterable.h"
   #include "../core/lfcObject.h"
 
   #define DEFAULT_LIST_INITIAL_SIZE         10

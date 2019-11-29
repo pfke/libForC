@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
-project(libForC VERSION 1.0.0 DESCRIPTION "c libraries")
+project(libForC VERSION 1.5.0 DESCRIPTION "c libraries")
 
 set(CMAKE_C_COMPILER "gcc")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -fno-pie -no-pie -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast --save-temps")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -fno-pie -no-pie -g -ggdb -Wall -Werror -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast")
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast")
 
 set(SOURCE_FILES
         src/main/clib/lfcTimerfd.h
@@ -228,7 +226,6 @@ set(SOURCE_FILES_unitTests
         src/test/net/lfcSocket/spec_lfcSocket_write_async.c
         src/test/net/lfcSocket/spec_lfcSocket_write_realWorld_01.c
         src/test/net/lfcSocket/spec_lfcSocket_write_realWorld_02.c
-        src/test/net/lfcSocketHandler/spec_lfcSocketHandler_crashDetection.c
         src/test/net/lfcSocketHandler/spec_lfcSocketHandler_ctor.c
         src/test/net/lfcSocketHandler/spec_lfcSocketHandler_read.c
         src/test/net/lfcSocketHandler/spec_lfcSocketHandler_write.c

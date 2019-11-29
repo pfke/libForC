@@ -1,7 +1,7 @@
 #ifndef LIBFORC_CORE_LFCCORE_H
 #define LIBFORC_CORE_LFCCORE_H
 
-#include <stdint.h>
+    #include <stdint.h>
 
     #define lfcMIN(a,b)    (((int64_t)a < (int64_t)b) ? a : b)
     #define lfcMAX(a,b)    (((int64_t)a > (int64_t)b) ? a : b)

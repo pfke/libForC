@@ -1,7 +1,8 @@
 #include "lfcMemPool.h"
 
 #include <stdlib.h>
-#include <asm/errno.h>
+//#include <asm/errno.h>
+#include <errno.h>
 #include <stdbool.h>
 
 /******************************************************************************************/
@@ -79,9 +80,7 @@ static memPool_headr_t *private_lfcMemPool_get_last_block(
     lfcMemPool_t *self
 ) {
     void *current = NULL, *prev = NULL;
-    memPool_headr_t *cr_hdr __attribute__((unused));
 
-    memPool_headr_t *pr_hdr __attribute__((unused));
     while (NULL != (current = private_lfcMemPool_nextAll_nolock(self, current))) {
         prev = current;
     }
@@ -270,10 +269,12 @@ static lfcMemPool_t *public_lfcMemPool_ctor(
     self->usable_size = va_arg(*app, size_t);
     self->mode = va_arg(*app, memPool_mode_e);
 
-    if (!self->mem_ptr)
+    if (!self->mem_ptr) {
         goto err;
-    if (!self->usable_size)
+    }
+    if (!self->usable_size) {
         goto err;
+    }
     // min. 1 Element muss reinpassen
     if (self->usable_size < (sizeof(memPool_headr_t) + __BIGGEST_ALIGNMENT__)) {
         goto err;
@@ -654,10 +655,14 @@ static uint8_t public_lfcMemPool_isValid(lfcMemPool_t *self, char **diagnostics)
         
         size_t length_of_old_string = strlen(*string);
         
-        char *new_string = malloc(length_of_old_string + length_of_data_to_append + 1);
-        strcpy(new_string, *string);
+        size_t length_of_new_string = length_of_old_string + length_of_data_to_append + 1;
+        char *new_string = calloc(1, length_of_new_string);
+        if (!new_string) {
+            return -ENOMEM;
+        }
+        strncpy(new_string, *string, length_of_new_string - 1);
         
-        result = vsprintf(new_string + length_of_old_string, format, varargs_second_call);
+        result = vsnprintf(new_string + length_of_old_string, length_of_new_string - length_of_old_string, format, varargs_second_call);
         if (result < 0) {
             return result;
         }

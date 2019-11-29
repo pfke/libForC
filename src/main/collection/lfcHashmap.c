@@ -354,7 +354,7 @@ static int public_lfcHashmap_puto (
         lfcHashmap_element_t *item = &self->table[i];
 
         fprintf(fp, "%d\n", __LINE__);
-        if ((item->in_use == MAP_IN_USE_MAGIC)) {
+        if (item->in_use == MAP_IN_USE_MAGIC) {
             memset(buf, 0, sizeof(buf));
 
             if (self->hash_fn == lfcHashmap_hash_int) {

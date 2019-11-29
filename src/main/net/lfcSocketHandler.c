@@ -194,6 +194,7 @@ static int priv_lfcSocketHandler_delJob(
 
     fd = job->fd;
     delete(job);
+
     return epoll_ctl(self->epoll_fd, epoll_op, fd, &epoll_change);
 }
 
@@ -426,10 +427,11 @@ static int priv_lfcSocketHandler_sendCmdPipe (
         return -EDEADLOCK;
     }
 
-    write(self->thread_cmd_pipe[LNSH_CMDPIPE_FROMUSER_NOTHREAD], &bufee, LNSH_CMDPIPE_MSG_SIZE);
+    // return 1 in case of an error, otherwise 0
+    ssize_t result = write(self->thread_cmd_pipe[LNSH_CMDPIPE_FROMUSER_NOTHREAD], &bufee, LNSH_CMDPIPE_MSG_SIZE) != LNSH_CMDPIPE_MSG_SIZE;
     pthread_mutex_unlock(&self->cmd_pipe_write_mutex);
 
-    return 0;
+    return result;
 }
 
 /**

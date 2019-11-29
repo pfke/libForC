@@ -185,7 +185,7 @@ static int public_lfcBitset_toggle(
 
             char *new_ptr = realloc(self->array, sizeof(char) * new_count);
 
-            if (self->array == new_ptr) {
+            if (NULL == new_ptr) {
                 pthread_mutex_unlock(&self->lock);
                 return -ENOMEM;
             }
