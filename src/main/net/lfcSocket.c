@@ -62,7 +62,7 @@ static void private_lfcSocket_onAcceptConn(
     // wir müssen die Verbindung annehmen, sonst ist sie für ewig pending
     int fd = accept(self->fd, &pin, &addrlen);
     if(fd == -1) {
-//        lfcLogger_log_ERR(
+//        lfcLogger_ERR(
 //            self->_.logger,
 //            "%s: accept lieferte einen Fehler zurück: %d / '%s'", __func__,
 //            errno, strerror(errno)
@@ -76,7 +76,7 @@ static void private_lfcSocket_onAcceptConn(
         callback(self, lfcSocket_ctor(self->socketHandler, fd), context);
     }
 
-//    lfcLogger_log_INFO(
+//    lfcLogger_INFO(
 //        self->_.logger,
 //        "%s: neue Verbindungsanfrage bekommen (endpoint-fd=%d) und als fd %d angenommen", __func__,
 //        self->endpoint_socket->fd, fd

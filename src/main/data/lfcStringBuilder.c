@@ -124,3 +124,4 @@ static char *public_lfcStringBuilder_result(
 lfcStringBuilder_t *lfcStringBuilder_ctor () {
     return (lfcStringBuilder_t *)new(lfcStringBuilder());
 }
+

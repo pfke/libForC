@@ -1,7 +1,6 @@
 #include "lfcMemPool.h"
 
 #include <stdlib.h>
-//#include <asm/errno.h>
 #include <errno.h>
 #include <stdbool.h>
 

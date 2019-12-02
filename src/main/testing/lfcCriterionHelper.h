@@ -152,8 +152,16 @@
         __USECONDS_T_TYPE interval_in_usec,
         bool *must_be_true_ptr
     );
-//    #define waitUntil_by_sec(timeout, interval, ptr)        lfcCriterionHelper_waitUntil_varIsTrue(timeout, interval, ptr)
-//    #define waitUntil_by_msec(timeout, interval, ptr)       waitUntil_by_sec(timeout * 1000, interval * 1000, ptr)
-//    #define waitUntil_by_usec(timeout, interval, ptr)       waitUntil_by_msec(timeout * 1000, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsSec(timeout, interval, ptr)           lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsMSec(timeout, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsMSec(timeout, interval, ptr)          lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsUSec(timeout, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsUSec(timeout, interval, ptr)          lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsMSsec_intervalAsUSec(timeout * 1000, interval, ptr)
+
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsMSsec_intervalAsSec(timeout, interval, ptr)         lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsMSsec_intervalAsMSec(timeout, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsMSsec_intervalAsMSec(timeout, interval, ptr)        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsMSsec_intervalAsUSec(timeout, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsMSsec_intervalAsUSec(timeout, interval, ptr)        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsUSsec_intervalAsUSec(timeout * 1000, interval, ptr)
+
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsUSsec_intervalAsSec(timeout, interval, ptr)         lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsUSsec_intervalAsMSec(timeout, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsUSsec_intervalAsMSec(timeout, interval, ptr)        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsUSsec_intervalAsUSec(timeout, interval * 1000, ptr)
+    #define lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsUSsec_intervalAsUSec(timeout, interval, ptr)        lfcCriterionHelper_waitUntil_varIsTrue(timeout, interval, ptr)
 
 #endif //LIBFORC_TESTING_LFCCRITERIONHELPER_H

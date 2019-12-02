@@ -31,7 +31,7 @@ lfcOOP_defineClass(lfcStringBuilder, lfcObject,
 /**
  * Erzeugt eine lfcStringBuilderger Instanz.
  */
-lfcStringBuilder_t *lfcStringBuilder_ctor ();
+lfcStringBuilder_t *lfcStringBuilder_ctor (void);
 
 
 #ifdef __cplusplus

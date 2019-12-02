@@ -31,8 +31,8 @@ Test(
     lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
     should_be_true_wText(
-        lfcCriterionHelper_waitUntil_varIsTrue(1 * 1000000, 10000, &read_wait_for),
-        "keine 10 Msg angekommen innerhalb von 1s"
+        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsMSec(2, 10, &read_wait_for),
+        "keine 10 Msg angekommen innerhalb von 2s"
     )
 
     delete(tto_system);
@@ -74,7 +74,7 @@ Test(
     lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
     should_be_true_wText(
-        lfcCriterionHelper_waitUntil_varIsTrue(1 * 1000000, 10000, &read_wait_for),
+        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsMSec(2, 10, &read_wait_for),
         "keine 10 Msg angekommen innerhalb von 1s"
     )
 

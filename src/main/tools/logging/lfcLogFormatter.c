@@ -62,7 +62,7 @@ char *lfcLogFormatter_formatAsString(
                 lfcStringBuilder_append(stringBuilder, lfcLogCommon_logLevel_to_ansiEscCode(lfcLog_getLogLevel((lfcLog_t *)log)));
                 break;
             case 'C':
-                lfcStringBuilder_append(stringBuilder, lfcLogCommon_logLevel_reset_ansiEscCode(lfcLog_getLogLevel((lfcLog_t *)log)));
+                lfcStringBuilder_append(stringBuilder, lfcLogCommon_logLevel_reset_ansiEscCode());
                 break;
 
             case 'm':

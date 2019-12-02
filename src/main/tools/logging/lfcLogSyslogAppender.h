@@ -42,6 +42,6 @@ lfcLogSyslogAppender_t *lfcLogSyslogAppender_ctor(
  *   2019-06-26 10:24:55 [II] dumi_13 --- [4160170752->libForC_runner] --- runner_fn:35 : debug 1
  *   2019-06-26 10:24:55 [DD] dumi_13 --- [4160170752->libForC_runner] --- runner_fn:36 : debug 2
  */
-lfcLogSyslogAppender_t *lfcLogSyslogAppender_ctor_stdFormat ();
+lfcLogSyslogAppender_t *lfcLogSyslogAppender_ctor_stdFormat (void);
 
 #endif //LIBFORC_TOOLS_LOGGING_LOGSYSLOGAPPENDER_H_
