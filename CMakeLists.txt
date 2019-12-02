@@ -292,4 +292,10 @@ set_target_properties(libForC_lib PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(libForC_lib PROPERTIES SOVERSION 1)
 set_target_properties(libForC_lib PROPERTIES OUTPUT_NAME "ForC")
 
+add_library(libForC_lib_static STATIC ${SOURCE_FILES})
+target_link_libraries(libForC_lib_static rt pthread mxml)
+set_target_properties(libForC_lib_static PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(libForC_lib_static PROPERTIES SOVERSION 1)
+set_target_properties(libForC_lib_static PROPERTIES OUTPUT_NAME "ForC")
+
 include_directories(src/main src/test/__needed_libs__)
