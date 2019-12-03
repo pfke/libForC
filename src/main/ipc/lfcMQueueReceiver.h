@@ -18,7 +18,7 @@
     struct lfcMQueueReceiver { const struct lfcObject _;
         const char *queue_name;
         int open_flags;
-        mode_t open_mode;
+        int open_mode;
 
         mqd_t our_mqueue;
         struct mq_attr our_mqueue_attr;
@@ -43,7 +43,7 @@
     lfcMQueueReceiver_t *lfcMQueueReceiver_ctor(
         const char *queue_name,
         int open_flags,
-        mode_t open_mode,
+        int open_mode,
         struct mq_attr *open_attr_ptr
     );
 

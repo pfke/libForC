@@ -49,7 +49,7 @@ lfcMQueueReceiver_t *public_lfcMQueueReceiver_ctor(
 #else // #ifdef O_CLOEXEC
     self->open_flags = va_arg(*app, int) | O_RDONLY | O_NONBLOCK | O_CREAT | O_EXCL;
 #endif // #else // #ifdef O_CLOEXEC
-    self->open_mode = va_arg(*app, mode_t);
+    self->open_mode = va_arg(*app, int);
     open_attr_ptr = va_arg(*app, struct mq_attr *);
     if (open_attr_ptr) {
         self->our_mqueue_attr = *open_attr_ptr;
@@ -183,7 +183,7 @@ CLASS_MAKE_METHODS_FUNC(lfcMQueueReceiver);
 lfcMQueueReceiver_t *lfcMQueueReceiver_ctor(
     const char *queue_name,
     int open_flags,
-    mode_t open_mode,
+    int open_mode,
     struct mq_attr *open_attr_ptr
 ) {
     return (lfcMQueueReceiver_t *)new(lfcMQueueReceiver(), queue_name, open_flags, open_mode, open_attr_ptr);
