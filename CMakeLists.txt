@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 project(libForC VERSION 1.5.0)
 
 #set(CMAKE_C_COMPILER "gcc")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast")
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast")
 
 set(SOURCE_FILES
         src/main/clib/lfcTimerfd.h
@@ -284,12 +284,12 @@ link_directories(
 add_executable(libForC_ut ${SOURCE_FILES} ${SOURCE_FILES_unitTests})
 target_link_libraries(libForC_ut criterion rt pthread mxml)
 target_compile_options(libForC_ut PUBLIC -m32)
-target_link_options(libForC_ut PUBLIC -m32)
+set_target_properties(libForC_ut PROPERTIES LINK_FLAGS "-m32")
 
 add_executable(libForC_runner ${SOURCE_FILES} ${SOURCE_FILES_runner})
 target_link_libraries(libForC_runner rt pthread mxml)
 target_compile_options(libForC_runner PUBLIC -m32)
-target_link_options(libForC_runner PUBLIC -m32)
+set_target_properties(libForC_runner PROPERTIES LINK_FLAGS "-m32")
 
 add_library(libForC_lib SHARED ${SOURCE_FILES})
 target_link_libraries(libForC_lib rt pthread mxml)

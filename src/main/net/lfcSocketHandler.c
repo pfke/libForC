@@ -262,7 +262,7 @@ static void priv_lfcSocketHandler_onCmdPipeReader_readComplete_cb (
 
         case LNSH_CMDPIPE_IDENT_IS_KILLFD:
         {
-            int fd_to_kill = (int)job_buf->job;
+            int fd_to_kill = (intptr_t)job_buf->job;
 
             priv_lfcSocketHandler_removeFd(self, fd_to_kill);
         }

@@ -659,7 +659,7 @@ static uint8_t public_lfcMemPool_isValid(lfcMemPool_t *self, char **diagnostics)
         if (!new_string) {
             return -ENOMEM;
         }
-        strncpy(new_string, *string, length_of_new_string - 1);
+        strncpy(new_string, *string, lfcMIN(length_of_new_string - 1, length_of_old_string));
         
         result = vsnprintf(new_string + length_of_old_string, length_of_new_string - length_of_old_string, format, varargs_second_call);
         if (result < 0) {
