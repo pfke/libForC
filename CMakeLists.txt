@@ -56,9 +56,6 @@ set(SOURCE_FILES
         src/main/net/lfcSocketJobReaderStream.h
         src/main/net/lfcSocketJobWriter.c
         src/main/net/lfcSocketJobWriter.h
-        src/main/testing/lfcCriterionHelper.h
-        src/main/testing/lfcCriterionHelper.c
-        src/main/testing/lfcCriterionObject.h
         src/main/threading/actor/lfcActor.c
         src/main/threading/actor/lfcActor.h
         src/main/threading/actor/lfcActorRef.c
@@ -100,6 +97,10 @@ set(SOURCE_FILES
         )
 
 set(SOURCE_FILES_unitTests
+        src/main/testing/lfcCriterionHelper.h
+        src/main/testing/lfcCriterionHelper.c
+        src/main/testing/lfcCriterionObject.h
+
         src/test/collection/lfcBitset/spec_lfcBitset_clear.c
         src/test/collection/lfcBitset/spec_lfcBitset_count.c
         src/test/collection/lfcBitset/spec_lfcBitset_ctor.c
@@ -282,9 +283,13 @@ link_directories(
 
 add_executable(libForC_ut ${SOURCE_FILES} ${SOURCE_FILES_unitTests})
 target_link_libraries(libForC_ut criterion rt pthread mxml)
+target_compile_options(libForC_ut PUBLIC -m32)
+target_link_options(libForC_ut PUBLIC -m32)
 
 add_executable(libForC_runner ${SOURCE_FILES} ${SOURCE_FILES_runner})
 target_link_libraries(libForC_runner rt pthread mxml)
+target_compile_options(libForC_runner PUBLIC -m32)
+target_link_options(libForC_runner PUBLIC -m32)
 
 add_library(libForC_lib SHARED ${SOURCE_FILES})
 target_link_libraries(libForC_lib rt pthread mxml)
