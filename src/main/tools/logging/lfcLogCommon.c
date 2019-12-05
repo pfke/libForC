@@ -62,8 +62,20 @@ lfcLogging_loglevel_e lfcLogCommon_longStr_to_loglevel (
     const char *in
 ) {
     bool isTheSame(lfcLogging_loglevel_e loglevel) {
-        if (strlen(lfcLogCommon_logLevel_to_longStr(loglevel)) != strlen(in)) { return false; }
-        if (0 != (strncmp(lfcLogCommon_logLevel_to_longStr(loglevel), in, strlen(lfcLogCommon_logLevel_to_longStr(loglevel))))) { return false; }
+        char buf[10];
+
+        // uppercase the input
+        memset(buf, 0, sizeof(buf));
+        strncpy(buf, in, lfcMIN(sizeof(buf) - 1, strlen(in)));
+        {
+            char *p = buf;
+            for (p = buf; *p; ++p) {
+                *p = toupper(*p);
+            }
+        }
+
+        if (strlen(lfcLogCommon_logLevel_to_longStr(loglevel)) != strlen(buf)) { return false; }
+        if (0 != (strncmp(lfcLogCommon_logLevel_to_longStr(loglevel), buf, strlen(lfcLogCommon_logLevel_to_longStr(loglevel))))) { return false; }
 
         return true;
     }
@@ -100,8 +112,20 @@ lfcLogging_loglevel_e lfcLogCommon_shortStr_to_loglevel (
     const char *in
 ) {
     bool isTheSame(lfcLogging_loglevel_e loglevel) {
-        if (strlen(lfcLogCommon_logLevel_to_shortStr(loglevel)) != strlen(in)) { return false; }
-        if (0 != (strncmp(lfcLogCommon_logLevel_to_shortStr(loglevel), in, strlen(lfcLogCommon_logLevel_to_shortStr(loglevel))))) { return false; }
+        char buf[10];
+
+        // uppercase the input
+        memset(buf, 0, sizeof(buf));
+        strncpy(buf, in, lfcMIN(sizeof(buf) - 1, strlen(in)));
+        {
+            char *p = buf;
+            for (p = buf; *p; ++p) {
+                *p = toupper(*p);
+            }
+        }
+
+        if (strlen(lfcLogCommon_logLevel_to_shortStr(loglevel)) != strlen(buf)) { return false; }
+        if (0 != (strncmp(lfcLogCommon_logLevel_to_shortStr(loglevel), buf, strlen(lfcLogCommon_logLevel_to_shortStr(loglevel))))) { return false; }
 
         return true;
     }

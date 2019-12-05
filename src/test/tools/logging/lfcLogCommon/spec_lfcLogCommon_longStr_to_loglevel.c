@@ -16,6 +16,12 @@ Test(
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("EMERGs"));
 }
+Test(
+    TEST_SUITE_NAME,
+    EMERG_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("EmErG"), LOGLEVEL_EMERG);
+}
 
 Test(
     TEST_SUITE_NAME,
@@ -28,6 +34,12 @@ Test(
     ALERT_more
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("ALERTs"));
+}
+Test(
+    TEST_SUITE_NAME,
+    ALERT_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("alert"), LOGLEVEL_ALERT);
 }
 
 Test(
@@ -42,6 +54,12 @@ Test(
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("CRITs"));
 }
+Test(
+    TEST_SUITE_NAME,
+    CRIT_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("crit"), LOGLEVEL_CRIT);
+}
 
 Test(
     TEST_SUITE_NAME,
@@ -54,6 +72,12 @@ Test(
     ERR_more
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("ERRs"));
+}
+Test(
+    TEST_SUITE_NAME,
+    ERR_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("erR"), LOGLEVEL_ERR);
 }
 
 Test(
@@ -68,6 +92,12 @@ Test(
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("WARNs"));
 }
+Test(
+    TEST_SUITE_NAME,
+    WARNING_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("warn"), LOGLEVEL_WARNING);
+}
 
 Test(
     TEST_SUITE_NAME,
@@ -80,6 +110,12 @@ Test(
     NOTICE_more
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("NOTEs"));
+}
+Test(
+    TEST_SUITE_NAME,
+    NOTICE_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("note"), LOGLEVEL_NOTICE);
 }
 
 Test(
@@ -94,6 +130,12 @@ Test(
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("INFOs"));
 }
+Test(
+    TEST_SUITE_NAME,
+    INFO_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("info"), LOGLEVEL_INFO);
+}
 
 Test(
     TEST_SUITE_NAME,
@@ -106,5 +148,11 @@ Test(
     DEBUG_more
 ) {
     should_be_same_int(LOGLEVEL_DEBUG, lfcLogCommon_longStr_to_loglevel("DEBUGs"));
+}
+Test(
+    TEST_SUITE_NAME,
+    DEBUG_lowerCase
+) {
+    should_be_same_int(lfcLogCommon_longStr_to_loglevel("debug"), LOGLEVEL_DEBUG);
 }
 
