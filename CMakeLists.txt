@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(libForC VERSION 1.5.0)
+project(libForC VERSION 1.5.1)
 
 #set(CMAKE_C_COMPILER "gcc")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast")
@@ -270,6 +270,8 @@ set(SOURCE_FILES_unitTests
         src/test/threading/actor/lfcActorSystemHandler/spec_lfcActorSystemHandler_ctor.c
         src/test/threading/actor/lfcActorSystemHandler/spec_lfcActorSystemHandler_getSocketHandler.c
 
+        src/test/tools/logging/lfcLogCommon/spec_lfcLogCommon_longStr_to_loglevel.c
+        src/test/tools/logging/lfcLogCommon/spec_lfcLogCommon_shortStr_to_loglevel.c
         src/test/tools/logging/lfcLogFormatter/spec_lfcLogFormatter_formatAsString.c
         )
 

@@ -29,6 +29,9 @@ const char *lfcLogCommon_logLevel_to_shortStr (lfcLogging_loglevel_e log_level);
 const char *lfcLogCommon_logLevel_to_ansiEscCode (lfcLogging_loglevel_e log_level);
 const char *lfcLogCommon_logLevel_reset_ansiEscCode (void);
 
+lfcLogging_loglevel_e lfcLogCommon_longStr_to_loglevel (const char *in);
+lfcLogging_loglevel_e lfcLogCommon_shortStr_to_loglevel (const char *in);
+
 typedef struct lfcLog lfcLog_t;
 
 

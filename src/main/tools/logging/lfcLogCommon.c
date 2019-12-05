@@ -1,5 +1,6 @@
 #include "lfcLogCommon.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 
 const char *lfcLogCommon_logLevel_to_longStr (
@@ -56,3 +57,80 @@ const char *lfcLogCommon_logLevel_to_ansiEscCode (
 const char *lfcLogCommon_logLevel_reset_ansiEscCode () {
     return ("\33[0m"); // Reset:
 }
+
+lfcLogging_loglevel_e lfcLogCommon_longStr_to_loglevel (
+    const char *in
+) {
+    bool isTheSame(lfcLogging_loglevel_e loglevel) {
+        if (strlen(lfcLogCommon_logLevel_to_longStr(loglevel)) != strlen(in)) { return false; }
+        if (0 != (strncmp(lfcLogCommon_logLevel_to_longStr(loglevel), in, strlen(lfcLogCommon_logLevel_to_longStr(loglevel))))) { return false; }
+
+        return true;
+    }
+
+    if (true == isTheSame(LOGLEVEL_EMERG)) {
+        return LOGLEVEL_EMERG;
+    }
+    if (true == isTheSame(LOGLEVEL_ALERT)) {
+        return LOGLEVEL_ALERT;
+    }
+    if (true == isTheSame(LOGLEVEL_CRIT)) {
+        return LOGLEVEL_CRIT;
+    }
+    if (true == isTheSame(LOGLEVEL_ERR)) {
+        return LOGLEVEL_ERR;
+    }
+    if (true == isTheSame(LOGLEVEL_WARNING)) {
+        return LOGLEVEL_WARNING;
+    }
+    if (true == isTheSame(LOGLEVEL_NOTICE)) {
+        return LOGLEVEL_NOTICE;
+    }
+    if (true == isTheSame(LOGLEVEL_INFO)) {
+        return LOGLEVEL_INFO;
+    }
+    if (true == isTheSame(LOGLEVEL_DEBUG)) {
+        return LOGLEVEL_DEBUG;
+    }
+
+    return LOGLEVEL_DEBUG;
+}
+
+lfcLogging_loglevel_e lfcLogCommon_shortStr_to_loglevel (
+    const char *in
+) {
+    bool isTheSame(lfcLogging_loglevel_e loglevel) {
+        if (strlen(lfcLogCommon_logLevel_to_shortStr(loglevel)) != strlen(in)) { return false; }
+        if (0 != (strncmp(lfcLogCommon_logLevel_to_shortStr(loglevel), in, strlen(lfcLogCommon_logLevel_to_shortStr(loglevel))))) { return false; }
+
+        return true;
+    }
+
+    if (true == isTheSame(LOGLEVEL_EMERG)) {
+        return LOGLEVEL_EMERG;
+    }
+    if (true == isTheSame(LOGLEVEL_ALERT)) {
+        return LOGLEVEL_ALERT;
+    }
+    if (true == isTheSame(LOGLEVEL_CRIT)) {
+        return LOGLEVEL_CRIT;
+    }
+    if (true == isTheSame(LOGLEVEL_ERR)) {
+        return LOGLEVEL_ERR;
+    }
+    if (true == isTheSame(LOGLEVEL_WARNING)) {
+        return LOGLEVEL_WARNING;
+    }
+    if (true == isTheSame(LOGLEVEL_NOTICE)) {
+        return LOGLEVEL_NOTICE;
+    }
+    if (true == isTheSame(LOGLEVEL_INFO)) {
+        return LOGLEVEL_INFO;
+    }
+    if (true == isTheSame(LOGLEVEL_DEBUG)) {
+        return LOGLEVEL_DEBUG;
+    }
+
+    return LOGLEVEL_DEBUG;
+}
+
