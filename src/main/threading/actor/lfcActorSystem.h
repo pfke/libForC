@@ -40,7 +40,7 @@ lfcOOP_defineClass(lfcActorSystem, lfcObject,
     /**
      * create an Actor.
      */
-    lfcActorRef_t *, create, (const char *name, receive_fn_cb receive_fn),
+    lfcActorRef_t *, createActor, (const char *name, receive_fn_cb receive_fn),
 
     /**
      * Get the actorsystem name.
@@ -48,19 +48,24 @@ lfcOOP_defineClass(lfcActorSystem, lfcObject,
     const char *, getName, (),
 
     /**
+     * Get the actorsystem name.
+     */
+    lfcThreadPool_t *, getThreadPool, (),
+
+    /**
      * Returns true, if the that actorsystem is equal to ours.
      */
-    bool, equals, (lfcActorSystem_t *that),
+    bool, equals, (const lfcActorSystem_t *that),
     /**
      * Returns true, if the that actorsystem is equal to ours.
      * Get system from passed actor.
      */
-    bool, equals_byActor, (lfcActor_t *that),
+    bool, equals_byActor, (const lfcActor_t *that),
     /**
      * Returns true, if the that actorsystem is equal to ours
      * Get system from passed actorref.
      */
-    bool, equals_byActorRef, (lfcActorRef_t *that),
+    bool, equals_byActorRef, (const lfcActorRef_t *that),
 
     /**
      * Send a message from sender to recipient.

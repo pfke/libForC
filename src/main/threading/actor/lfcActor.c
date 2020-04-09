@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <asm/errno.h>
 #include "lfcActor.h"
+#include "../../threading/lfcThreadMisc.h"
 
 
 /******************************************************************************************/
@@ -15,10 +16,81 @@ static lfcActor_methods_t _lfcActor_methods;
 /* PROTOTYPES                                                                             */
 /******************************************************************************************/
 
+static int private_lfcActor_triggerReceiveFn(lfcActor_t *self);
+
 
 /******************************************************************************************/
 /* PRIVATE METHODS                                                                        */
 /******************************************************************************************/
+
+/**
+ *
+ */
+static void private_lfcActor_callReceiveFn(
+    void *msg
+) {
+    if (!msg) { return; }
+
+    lfcActorMessage_t *actorMessage = asInstanceOf(lfcActorMessage(), msg);
+    if (!actorMessage) { return; }
+
+    lfcActor_t *self = asInstanceOf(lfcActor(), actorMessage->recipient);
+    if (!self) { return; }
+
+    self->receive_fn(self, actorMessage);
+
+    delete(msg);
+
+    set_int32_wLocking(&self->receive_fn_is_running, &self->receive_fn_is_running__mutex, LFC_ACTOR_RECEIVE_IS_NOT_RUNNING);
+    private_lfcActor_triggerReceiveFn(self);
+}
+
+/**
+ * This method checks, if a message is in the queue and can be processed.
+ */
+static int private_lfcActor_triggerReceiveFn(
+    lfcActor_t *self
+) {
+    lfcActorMessage_t *msg;
+
+    pthread_mutex_lock(&self->trigger_receive__mutex);
+    {
+        if (set_int32_wLocking(&self->receive_fn_is_running, &self->receive_fn_is_running__mutex, LFC_ACTOR_RECEIVE_IS_RUNNING)) {
+            // receive-fn is already running
+            pthread_mutex_unlock(&self->trigger_receive__mutex);
+            return 0;
+        }
+
+next_msg:
+        // get new message in queue
+        msg = lfcQueue_dequeue(self->mailbox);
+        if (!msg) {
+            set_int32_wLocking(&self->receive_fn_is_running, &self->receive_fn_is_running__mutex, LFC_ACTOR_RECEIVE_IS_NOT_RUNNING);
+            pthread_mutex_unlock(&self->trigger_receive__mutex);
+
+            return 1;
+        }
+
+        // same system?
+        if(!lfcActorSystem_equals_byActorRef(self->actorSystem, msg->recipient)) {
+            // drop msg, should be filtered on an earlier state already
+            delete(msg);
+
+            goto next_msg;
+        }
+
+        pthread_mutex_unlock(&self->trigger_receive__mutex);
+    }
+
+    lfcThreadPool_addWorker(
+        lfcActorSystem_getThreadPool(self->actorSystem),
+        private_lfcActor_callReceiveFn,
+        msg,
+        0
+    );
+
+    return 0;
+}
 
 
 /******************************************************************************************/
@@ -49,9 +121,16 @@ lfcActor_t *public_lfcActor_ctor(
     self->name = strdup(name);
     if (!self->name) { goto err; }
 
+    self->receive_fn_is_running = LFC_ACTOR_RECEIVE_IS_NOT_RUNNING;
+    pthread_mutex_init(&self->receive_fn_is_running__mutex, NULL);
+
+    self->mailbox = lfcQueue_ctorWithSize(5, 1);
+    if (!self->mailbox) { goto err; }
+
     return self;
 err:
     if (self->name) { free(self->name); }
+    if (self->mailbox) { delete(self->mailbox); }
     free(self);
 
     return NULL;
@@ -64,8 +143,29 @@ static lfcActor_t *public_lfcActor_dtor(
     lfcActor_t *self
 ) {
     if (self->name) { free(self->name); }
+    if (self->mailbox) { delete(self->mailbox); }
+
+    pthread_mutex_destroy(&self->receive_fn_is_running__mutex);
 
     return self;
+}
+
+/**
+ * Add a message to the actor mailbox.
+ * This is an internal method and should only be used by lfcActor*-classes.
+ *
+ * This function first enqueues the message and then check, if there is currently
+ * a message processed by the actor. If not, the receive func will be called.
+ */
+static int public_lfcActor_addMessageToMailbox(
+    lfcActor_t *self,
+    lfcActorMessage_t *msg
+) {
+    if (!msg) { return -EINVAL; }
+
+    lfcQueue_enqueue(self->mailbox, msg);
+
+    return private_lfcActor_triggerReceiveFn(self);
 }
 
 /**
@@ -137,6 +237,7 @@ static int impl_lfcActor__ActorRef__tell(
  * @return die Instanz selbst
  */
 CLASS_CTOR__START(lfcActor)
+        OVERRIDE_METHOD(lfcActor, addMessageToMailbox)
         OVERRIDE_METHOD(lfcActor, getActorSystem)
         OVERRIDE_METHOD(lfcActor, getName)
         OVERRIDE_METHOD(lfcActor, getReceiveFn)
@@ -167,6 +268,7 @@ const lfcActor_t *lfcActor() {
             lfcObject_ctor, "ctor", public_lfcActor_ctor,
             lfcObject_dtor, "dtor", public_lfcActor_dtor,
 
+            lfcActor_addMessageToMailbox, "addMessageToMailbox", public_lfcActor_addMessageToMailbox,
             lfcActor_getActorSystem, "getActorSystem", public_lfcActor_getActorSystem,
             lfcActor_getName, "getName", public_lfcActor_getName,
             lfcActor_getReceiveFn, "getReceiveFn", public_lfcActor_getReceiveFn,
@@ -196,6 +298,7 @@ lfcActor_t *lfcActor_ctor(
     return (lfcActor_t *)new(lfcActor(), name, actorSystem, receive_fn);
 }
 
+lfcOOP_accessor(lfcActor, addMessageToMailbox, int, lfcActorMessage_t *)
 lfcOOP_accessor(lfcActor, getActorSystem, lfcActorSystem_t *)
 lfcOOP_accessor(lfcActor, getName, const char *)
 lfcOOP_accessor(lfcActor, getReceiveFn, receive_fn_cb)

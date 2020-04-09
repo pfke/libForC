@@ -24,8 +24,8 @@ Test(
     }
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb_actor01);
-    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "actor_02", my_receive_fn_cb_actor02);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_createActor(tto_system, "actor_01", my_receive_fn_cb_actor01);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_createActor(tto_system, "actor_02", my_receive_fn_cb_actor02);
 
     const char *msg ="ping";
     lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
@@ -58,8 +58,8 @@ Test(
     }
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb_actor01);
-    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "actor_02", my_receive_fn_cb_actor02);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_createActor(tto_system, "actor_01", my_receive_fn_cb_actor01);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_createActor(tto_system, "actor_02", my_receive_fn_cb_actor02);
 
     const char *msg ="ping";
     lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
@@ -74,8 +74,8 @@ Test(
     lfcActorRef_tell(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
     should_be_true_wText(
-        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsMSec(2, 10, &read_wait_for),
-        "keine 10 Msg angekommen innerhalb von 1s"
+        lfcCriterionHelper_waitUntil_varIsTrue_timeoutAsSec_intervalAsMSec(3, 10, &read_wait_for),
+        "keine 10 Msg angekommen innerhalb von 3s"
     )
 
     delete(tto_system);

@@ -8,7 +8,7 @@ Test(
     passing_all_null
 ) {
     lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto = lfcActorSystem_create(system, NULL, NULL);
+    lfcActorRef_t *tto = lfcActorSystem_createActor(system, NULL, NULL);
 
     should_be_null(tto);
 
@@ -20,7 +20,7 @@ Test(
     passing_1st_null
 ) {
     lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto = lfcActorSystem_create(system, "actor_01", NULL);
+    lfcActorRef_t *tto = lfcActorSystem_createActor(system, "actor_01", NULL);
 
     should_be_null(tto);
 
@@ -34,7 +34,7 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto = lfcActorSystem_create(system, "actor_01", my_receive_fn_cb);
+    lfcActorRef_t *tto = lfcActorSystem_createActor(system, "actor_01", my_receive_fn_cb);
 
     should_not_be_null(tto);
 
@@ -48,7 +48,7 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor = lfcActorSystem_createActor(tto_system, "actor_01", my_receive_fn_cb);
 
     should_not_be_null(tto_actor);
     should_be_same_int(lfcIIterable_count(tto_system->actorList), 1);
@@ -64,7 +64,7 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actorRef = lfcActorSystem_create(tto_system, "actor_01", my_receive_fn_cb);
+    lfcActorRef_t *tto_actorRef = lfcActorSystem_createActor(tto_system, "actor_01", my_receive_fn_cb);
     lfcActor_t *tto_actor = asInstanceOf(lfcActor(), tto_actorRef);
 
     should_not_be_null(tto_actor);

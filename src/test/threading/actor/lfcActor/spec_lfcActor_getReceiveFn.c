@@ -18,7 +18,7 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_ref = lfcActorSystem_create(system, "actor_01", my_receive_fn_cb);
+    lfcActorRef_t *tto_ref = lfcActorSystem_createActor(system, "actor_01", my_receive_fn_cb);
     lfcActor_t *tto = asInstanceOf(lfcActor(), tto_ref);
 
     should_be_same_ptr(lfcActor_getReceiveFn(tto), my_receive_fn_cb);

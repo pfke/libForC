@@ -34,16 +34,26 @@ extern "C" {
  * Make a setter function with locking:
  *
  * input:  MAKE_FN_SETTER(int8)
- * output: static inline void set_int8_wLocking(int8_t *var, pthread_mutex_t *mutex, int8_t value) {
+ * output: static inline int set_int8_wLocking(int8_t *var, pthread_mutex_t *mutex, int8_t value) {
+ *             int result = 0;
  *             pthread_mutex_lock(mutex);
+ *             result = *var == value;
  *             *var = value;
  *             pthread_mutex_unlock(mutex);
+ *             return result;
  *         }
+ *
+ * @return 
+ *      0 .. var was changed to the given value
+ *      1 .. var is already changed
  */
-#define MAKE_FN_SETTER(x) static inline void set_##x##_wLocking (x##_t *var, pthread_mutex_t *mutex, x##_t value) { \
+#define MAKE_FN_SETTER(x) static inline int set_##x##_wLocking (x##_t *var, pthread_mutex_t *mutex, x##_t value) { \
+                                  int result = 0;                                                                       \
                                   pthread_mutex_lock(mutex);                                                            \
+                                  result = *var == value;                                                               \
                                   *var = value;                                                                         \
                                   pthread_mutex_unlock(mutex);                                                          \
+                                  return result;                                                                        \
                               }
 
 /**

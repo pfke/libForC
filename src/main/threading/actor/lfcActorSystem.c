@@ -29,22 +29,6 @@ static int private_lfcActorSystem_tell(lfcActorSystem_t *self, lfcActorMessage_t
 /* PRIVATE METHODS                                                                        */
 /******************************************************************************************/
 
-static void private_lfcActorSystem_dispatchMsg(
-    void *msg
-) {
-    if (!msg) { return; }
-
-    lfcActorMessage_t *actorMessage = asInstanceOf(lfcActorMessage(), msg);
-    if (!actorMessage) { return; }
-
-    lfcActor_t *actor = asInstanceOf(lfcActor(), actorMessage->recipient);
-    if (!actor) { return; }
-
-    actor->receive_fn(actor, actorMessage);
-
-    delete(msg);
-}
-
 /**
  * Send a message to an actor.
  */
@@ -54,16 +38,13 @@ static int private_lfcActorSystem_tell(
 ) {
     if (!self) { return -EINVAL; }
     if (!msg) { return -EINVAL; }
+    lfcActor_t *actor = asInstanceOf(lfcActor(), msg->recipient);
+    if (!actor) { return -EINVAL; }
 
     // todo: evtl ein remote -System?
 
-    if (!msg->sender || lfcActorSystem_equals_byActorRef(self, (lfcActorRef_t *)msg->recipient)) {
-        lfcThreadPool_addWorker(
-            self->threadPool,
-            private_lfcActorSystem_dispatchMsg,
-            msg,
-            0
-        );
+    if (lfcActorSystem_equals_byActorRef(self, (lfcActorRef_t *)msg->recipient)) {
+        lfcActor_addMessageToMailbox(actor, msg);
     } else {
         lfcActorSystem_tell_byMsg(
             lfcActor_getActorSystem(asInstanceOf(lfcActor(), msg->recipient)),
@@ -146,7 +127,7 @@ static lfcActorSystem_t *public_lfcActorSystem_dtor(
 /**
  * create an Actor.
  */
-static lfcActorRef_t *public_lfcActorSystem_create(
+static lfcActorRef_t *public_lfcActorSystem_createActor(
     lfcActorSystem_t *self,
     const char *name,
     receive_fn_cb receive_fn
@@ -169,6 +150,15 @@ static const char *public_lfcActorSystem_getName(
     return self->name;
 }
 
+/**
+ * Return the threadpool.
+ */
+static lfcThreadPool_t *public_lfcActorSystem_getThreadPool(
+    lfcActorSystem_t *self
+) {
+    return self->threadPool;
+}
+
 static bool public_lfcActorSystem_equals(
     lfcActorSystem_t *self,
     const lfcActorSystem_t *that
@@ -181,14 +171,14 @@ static bool public_lfcActorSystem_equals(
 
 static bool public_lfcActorSystem_equals_byActor(
     lfcActorSystem_t *self,
-    lfcActor_t *that
+    const lfcActor_t *that
 ) {
-    return public_lfcActorSystem_equals(self, lfcActor_getActorSystem(that));
+    return public_lfcActorSystem_equals(self, lfcActor_getActorSystem((lfcActor_t *)that));
 }
 
 static bool public_lfcActorSystem_equals_byActorRef(
     lfcActorSystem_t *self,
-    lfcActorRef_t *that
+    const lfcActorRef_t *that
 ) {
     return public_lfcActorSystem_equals_byActor(self, asInstanceOf(lfcActor(), that));
 }
@@ -240,8 +230,10 @@ static int public_lfcActorSystem_tell_noSender(
  * @return die Instanz selbst
  */
 CLASS_CTOR__START(lfcActorSystem)
-        OVERRIDE_METHOD(lfcActorSystem, create)
+        OVERRIDE_METHOD(lfcActorSystem, createActor)
+
         OVERRIDE_METHOD(lfcActorSystem, getName)
+        OVERRIDE_METHOD(lfcActorSystem, getThreadPool)
 
         OVERRIDE_METHOD(lfcActorSystem, equals)
         OVERRIDE_METHOD(lfcActorSystem, equals_byActor)
@@ -276,8 +268,10 @@ const lfcActorSystem_t *lfcActorSystem() {
             lfcObject_ctor, "ctor", public_lfcActorSystem_ctor,
             lfcObject_dtor, "dtor", public_lfcActorSystem_dtor,
 
-            lfcActorSystem_create, "create", public_lfcActorSystem_create,
+            lfcActorSystem_createActor, "createActor", public_lfcActorSystem_createActor,
+
             lfcActorSystem_getName, "getName", public_lfcActorSystem_getName,
+            lfcActorSystem_getThreadPool, "getThreadPool", public_lfcActorSystem_getThreadPool,
 
             lfcActorSystem_equals, "equals", public_lfcActorSystem_equals,
             lfcActorSystem_equals_byActor, "equals_byActor", public_lfcActorSystem_equals_byActor,
@@ -298,12 +292,14 @@ CLASS_MAKE_METHODS_FUNC(lfcActorSystem);
 /* ACCESSOR METHODS                                                                       */
 /******************************************************************************************/
 
-lfcOOP_accessor(lfcActorSystem, create, lfcActorRef_t *, const char *, receive_fn_cb)
-lfcOOP_accessor(lfcActorSystem, getName, const char *)
+lfcOOP_accessor(lfcActorSystem, createActor, lfcActorRef_t *, const char *, receive_fn_cb)
 
-lfcOOP_accessor(lfcActorSystem, equals, bool, lfcActorSystem_t *);
-lfcOOP_accessor(lfcActorSystem, equals_byActor, bool, lfcActor_t *);
-lfcOOP_accessor(lfcActorSystem, equals_byActorRef, bool, lfcActorRef_t *);
+lfcOOP_accessor(lfcActorSystem, getName, const char *)
+lfcOOP_accessor(lfcActorSystem, getThreadPool, lfcThreadPool_t *)
+
+lfcOOP_accessor(lfcActorSystem, equals, bool, const lfcActorSystem_t *);
+lfcOOP_accessor(lfcActorSystem, equals_byActor, bool, const lfcActor_t *);
+lfcOOP_accessor(lfcActorSystem, equals_byActorRef, bool, const lfcActorRef_t *);
 lfcOOP_accessor(lfcActorSystem, tell, int, const lfcActorRef_t *, const lfcActorRef_t *, const char *, size_t)
 lfcOOP_accessor(lfcActorSystem, tell_byMsg, int, lfcActorMessage_t *)
 lfcOOP_accessor(lfcActorSystem, tell_noSender, int, const lfcActorRef_t *, const char *, size_t)

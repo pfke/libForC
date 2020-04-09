@@ -21,7 +21,7 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_createActor(tto_system, "sumsi", my_receive_fn_cb);
     lfcActorMessage_t *tto = lfcActorMessage_ctor(tto_actor_01, NULL, NULL, 0);
 
     should_be_null(tto);
@@ -38,8 +38,8 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi_01", my_receive_fn_cb);
-    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "sumsi_02", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_createActor(tto_system, "sumsi_01", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_createActor(tto_system, "sumsi_02", my_receive_fn_cb);
     lfcActorMessage_t *tto = lfcActorMessage_ctor(tto_actor_01, tto_actor_02, NULL, 0);
 
     should_be_null(tto);
@@ -57,8 +57,8 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi_01", my_receive_fn_cb);
-    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "sumsi_02", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_createActor(tto_system, "sumsi_01", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_createActor(tto_system, "sumsi_02", my_receive_fn_cb);
     const char *msg = ";lköklö";
     lfcActorMessage_t *tto = lfcActorMessage_ctor(tto_actor_01, tto_actor_02, msg, 0);
 
@@ -77,8 +77,8 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_01 = lfcActorSystem_create(tto_system, "sumsi_01", my_receive_fn_cb);
-    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "sumsi_02", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_01 = lfcActorSystem_createActor(tto_system, "sumsi_01", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_createActor(tto_system, "sumsi_02", my_receive_fn_cb);
     const char *msg = ";lköklö";
     lfcActorMessage_t *tto = lfcActorMessage_ctor(tto_actor_01, tto_actor_02, msg, strlen(msg));
 
@@ -97,7 +97,7 @@ Test(
     void my_receive_fn_cb(lfcActor_t *self isAnUnused_param, lfcActorMessage_t *msg isAnUnused_param) {}
 
     lfcActorSystem_t *tto_system = lfcActorSystem_ctor("jkljkl");
-    lfcActorRef_t *tto_actor_02 = lfcActorSystem_create(tto_system, "sumsi_02", my_receive_fn_cb);
+    lfcActorRef_t *tto_actor_02 = lfcActorSystem_createActor(tto_system, "sumsi_02", my_receive_fn_cb);
     const char *msg = ";lköklö";
     lfcActorMessage_t *tto = lfcActorMessage_ctor(NULL, tto_actor_02, msg, strlen(msg));
 
