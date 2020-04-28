@@ -23,6 +23,7 @@ set(SOURCE_FILES
         src/main/collection/lfcTuple.c
         src/main/core/lfcClosure.h
         src/main/core/lfcCore.h
+        src/main/core/lfcCore.c
         src/main/core/lfcIface.h
         src/main/core/lfcObject.h
         src/main/core/lfcObject.c
