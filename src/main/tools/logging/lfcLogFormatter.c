@@ -69,7 +69,28 @@ char *lfcLogFormatter_formatAsString(
                 lfcStringBuilder_append(stringBuilder, lfcLog_getMessage((lfcLog_t *)log));
                 break;
 
-            case 'p':
+            case 'p': {
+                const char *last_seg = lfcLog_getLoggerPrefix((lfcLog_t *)log);
+                const char *next_seg;
+
+                do {
+                    // add new segments 1st char
+                    lfcStringBuilder_appendChar(stringBuilder, last_seg[0]);
+
+                    if (NULL == (next_seg = strchr(last_seg, '.'))) {
+                        // copy rest und fertsch
+                        lfcStringBuilder_append(stringBuilder, &last_seg[1]);
+                    } else {
+                        lfcStringBuilder_appendChar(stringBuilder, '.');
+                    }
+
+                    // set to 1st char of the next segment
+                    last_seg = next_seg + 1;
+                } while (NULL != next_seg);
+                break;
+            }
+
+            case 'P':
                 lfcStringBuilder_append(stringBuilder, lfcLog_getLoggerPrefix((lfcLog_t *)log));
                 break;
 

@@ -22,7 +22,8 @@ extern "C" {
  *   thread          %t - short term
  *   thread          %T - long term (thread name)
  *
- *   loggerPrefix    %p
+ *   loggerPrefix    %p - short term (s.a.e)
+ *                   %P - long term (stage1.anders.ende)
  *
  *   method          %F
  *   methodLine      %f

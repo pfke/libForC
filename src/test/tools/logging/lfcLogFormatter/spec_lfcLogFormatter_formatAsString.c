@@ -135,7 +135,57 @@ Test(
 
 Test(
     TEST_SUITE_NAME,
-    pattern_loggerPrefix
+    pattern_loggerPrefix_long
+) {
+    lfcLog_t *log = lfcLog_ctor(
+        123456789,
+        LOGLEVEL_ALERT,
+        "myLogger",
+        "method1",
+        13,
+        1325,
+        "simple message"
+    );
+
+    char *result = lfcLogFormatter_formatAsString(
+        "{%P}",
+        log
+    );
+
+    should_be_same_str("{myLogger}", result);
+
+    free(result);
+    delete(log);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    pattern_loggerPrefix_long_isAChild
+) {
+    lfcLog_t *log = lfcLog_ctor(
+        123456789,
+        LOGLEVEL_ALERT,
+        "myLogger.stage2.andso",
+        "method1",
+        13,
+        1325,
+        "simple message"
+    );
+
+    char *result = lfcLogFormatter_formatAsString(
+        "{%P}",
+        log
+    );
+
+    should_be_same_str("{myLogger.stage2.andso}", result);
+
+    free(result);
+    delete(log);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    pattern_loggerPrefix_short
 ) {
     lfcLog_t *log = lfcLog_ctor(
         123456789,
@@ -158,6 +208,55 @@ Test(
     delete(log);
 }
 
+Test(
+    TEST_SUITE_NAME,
+    pattern_loggerPrefix_short_isAChild
+) {
+    lfcLog_t *log = lfcLog_ctor(
+        123456789,
+        LOGLEVEL_ALERT,
+        "myLogger.stage2.andso",
+        "method1",
+        13,
+        1325,
+        "simple message"
+    );
+
+    char *result = lfcLogFormatter_formatAsString(
+        "{%p}",
+        log
+    );
+
+    should_be_same_str("{m.s.andso}", result);
+
+    free(result);
+    delete(log);
+}
+
+Test(
+    TEST_SUITE_NAME,
+    pattern_loggerPrefix_short_isAChild_dotAtEnd
+) {
+    lfcLog_t *log = lfcLog_ctor(
+        123456789,
+        LOGLEVEL_ALERT,
+        "myLogger.stage2.andso.",
+        "method1",
+        13,
+        1325,
+        "simple message"
+    );
+
+    char *result = lfcLogFormatter_formatAsString(
+        "{%p}",
+        log
+    );
+
+    should_be_same_str("{m.s.a.}", result);
+
+    free(result);
+    delete(log);
+}
 Test(
     TEST_SUITE_NAME,
     pattern_method
