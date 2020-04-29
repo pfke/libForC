@@ -9,9 +9,10 @@
 /******************************************************************************************/
 
 lfcOOP_implementClass(lfcLogHandler, lfcObject,
-    int, addAppender, (lfcLogAppender_t *),
-    int, log,         (lfcLog_t *),
-    int, setLogLevel, (lfcLogging_loglevel_e)
+    int,                   addAppender, (lfcLogAppender_t *),
+    int,                   log,         (lfcLog_t *),
+    lfcLogging_loglevel_e, getLogLevel, (),
+    int,                   setLogLevel, (lfcLogging_loglevel_e)
 )
 
 
@@ -123,6 +124,12 @@ static int public_lfcLogHandler_log (
     }
 
     return private_lfcLogHandler_log(self, log);
+}
+
+static lfcLogging_loglevel_e public_lfcLogHandler_getLogLevel (
+    lfcLogHandler_t *self
+) {
+    return self->current_log_level;
 }
 
 static int public_lfcLogHandler_setLogLevel (

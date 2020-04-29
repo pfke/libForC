@@ -42,7 +42,8 @@ lfcOOP_defineClass(lfcLogHandler, lfcObject,
     int, redirectToStderr, (),
     int, redirectToSyslog, (),
 
-    int, setLogLevel,      (lfcLogging_loglevel_e level)
+    lfcLogging_loglevel_e, getLogLevel, (),
+    int,                   setLogLevel, (lfcLogging_loglevel_e level)
 )
 
 /**
