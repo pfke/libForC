@@ -11,6 +11,7 @@
 
 lfcOOP_implementClass(lfcStringBuilder, lfcObject,
     int,    append, (const char *),
+    int,    appendChar, (char),
     int,    append_itsYourMemNow, (char *),
     char *, result, ()
 )
@@ -81,6 +82,21 @@ static int public_lfcStringBuilder_append(
     if (!in) { return -EINVAL; }
 
     lfcList_add(self->stringList, strdup(in));
+
+    return 0;
+}
+
+static int public_lfcStringBuilder_appendChar(
+    lfcStringBuilder_t *self,
+    char in
+) {
+    if (!in) { return -EINVAL; }
+
+    char *buf = calloc(1, 2);
+    if (!buf) { return -ENOMEM; }
+    snprintf(buf, 2, "%c", in);
+
+    lfcList_add(self->stringList, buf);
 
     return 0;
 }

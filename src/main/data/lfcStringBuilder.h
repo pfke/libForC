@@ -23,6 +23,7 @@ lfcOOP_defineClass(lfcStringBuilder, lfcObject,
     // PUBLIC METHOD
     //-----------------------------------------------------------------------------
     int, append, (const char *in),
+    int, appendChar, (char in),
     int, append_itsYourMemNow, (char *in),
 
     char *, result, ()
