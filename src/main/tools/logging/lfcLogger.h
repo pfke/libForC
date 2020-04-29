@@ -23,6 +23,8 @@ lfcOOP_defineClass(lfcLogger, lfcObject,
     //-----------------------------------------------------------------------------
     // PUBLIC METHOD
     //-----------------------------------------------------------------------------
+    lfcLogger_t *, createChild, (const char *prefix),
+
     const char *, getPrefix, (),
 
     int, log_va,         (lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args),

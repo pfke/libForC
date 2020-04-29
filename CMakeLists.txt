@@ -274,6 +274,7 @@ set(SOURCE_FILES_unitTests
         src/test/tools/logging/lfcLogCommon/spec_lfcLogCommon_longStr_to_loglevel.c
         src/test/tools/logging/lfcLogCommon/spec_lfcLogCommon_shortStr_to_loglevel.c
         src/test/tools/logging/lfcLogFormatter/spec_lfcLogFormatter_formatAsString.c
+        src/test/tools/logging/lfcLogger/spec_lfcLogger_createChild.c
         )
 
 set(SOURCE_FILES_runner
