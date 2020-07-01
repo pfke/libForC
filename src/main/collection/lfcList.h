@@ -30,6 +30,7 @@
     method_t indexOf;
     method_t insertAt;
     method_t mergeList;
+    method_t mkString;
     method_t remove;
     method_t removeAt;
 
@@ -46,6 +47,7 @@
     size_t  (*indexOf  )(lfcList_t *_self, const void *);
     int     (*insertAt )(lfcList_t *_self, size_t idx, void *toAdd);
     int     (*mergeList)(lfcList_t *_self, lfcList_t *toAdd);
+    char   *(*mkString )(lfcList_t *_self, char *separator);
     int     (*remove   )(lfcList_t *_self, const void *toRemove);
     int     (*removeAt )(lfcList_t *_self, size_t idx);
 
@@ -68,9 +70,11 @@
   size_t  lfcList_indexOf  (lfcList_t *_self, const void *);
   int     lfcList_insertAt (lfcList_t *_self, size_t idx, void *toAdd);
   int     lfcList_mergeList(lfcList_t *_self, lfcList_t *toAdd);
+  char   *lfcList_mkString (lfcList_t *_self, char *separator);
   int     lfcList_remove   (lfcList_t *_self, const void *toRemove);
   int     lfcList_removeAt (lfcList_t *_self, size_t idx);
 
   int     lfcList_bubbleSort(lfcList_t *self, lfcList_compare_fn compare_fn);
 
 #endif //LIBFORC_COLLECTION_LFCLIST_H
+

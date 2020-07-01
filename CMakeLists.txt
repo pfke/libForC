@@ -178,6 +178,7 @@ set(SOURCE_FILES_unitTests
         src/test/collection/lfcList/spec_lfcList_indexOf.c
         src/test/collection/lfcList/spec_lfcList_insertAt.c
         src/test/collection/lfcList/spec_lfcList_methods.c
+        src/test/collection/lfcList/spec_lfcList_mkString.c
         src/test/collection/lfcList/spec_lfcList_remove.c
         src/test/collection/lfcList/spec_lfcList_removeAt.c
 

@@ -332,6 +332,42 @@ static int public_lfcList_mergeList(
 }
 
 /**
+ * Put elements together into a string.
+ */
+static char *public_lfcList_mkString(
+    lfcList_t *self,
+    char *separator
+) {
+    if (NULL == separator) {
+        return NULL;
+    }
+    if (lfcIIterable_isEmpty((lfcIIterable_t *)self)) {
+        return strdup(separator);
+    }
+
+    size_t total_length = 0;
+
+    lfcIIterable_foreach(
+        self,
+        lambda_void((void *item) {
+            total_length += strlen(item);
+        }));
+    total_length += (strlen(separator) * lfcIIterable_count(self) - 1);
+
+    char *result = calloc(1, total_length + 1);
+    lfcIIterable_foreach(
+        self,
+        lambda_void((void *item) {
+            if (strlen(result) > 0) {
+                strncat(result, separator, total_length - strlen(result) - 1);
+            }
+            strncat(result, item, total_length - strlen(result) - 1);
+        }));
+
+    return result;
+}
+
+/**
  * Diese Methode entfernt das angegebene Element von der Liste.
  *
  * @param _self die Instanz der Liste selbst
@@ -650,6 +686,7 @@ CLASS_CTOR__START(lfcList)
         OVERRIDE_METHOD(lfcList, indexOf)
         OVERRIDE_METHOD(lfcList, insertAt)
         OVERRIDE_METHOD(lfcList, mergeList)
+        OVERRIDE_METHOD(lfcList, mkString)
         OVERRIDE_METHOD(lfcList, remove)
         OVERRIDE_METHOD(lfcList, removeAt)
 
@@ -691,6 +728,7 @@ const lfcList_t *lfcList() {
             lfcList_indexOf, "indexOf", public_lfcList_indexOf,
             lfcList_insertAt, "insertAt", public_lfcList_insertAt,
             lfcList_mergeList, "mergeList", public_lfcList_mergeList,
+            lfcList_mkString, "mkString", public_lfcList_mkString,
             lfcList_remove, "remove", public_lfcList_remove,
             lfcList_removeAt, "removeAt", public_lfcList_removeAt,
 
@@ -751,5 +789,7 @@ lfcOOP_accessor(lfcList, getAt, void *, size_t)
 lfcOOP_accessor(lfcList, indexOf, size_t, const void *)
 lfcOOP_accessor(lfcList, insertAt, int, size_t, void *)
 lfcOOP_accessor(lfcList, mergeList, int, lfcList_t *)
+lfcOOP_accessor(lfcList, mkString, char *, char *)
 lfcOOP_accessor(lfcList, remove, int, const void *)
 lfcOOP_accessor(lfcList, removeAt, int, size_t)
+
