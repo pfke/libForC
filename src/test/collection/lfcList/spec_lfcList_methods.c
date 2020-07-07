@@ -1,4 +1,4 @@
-#include "collection/lfcList.h"
+#include "collection/lfcQueue.h"
 #include "testing/lfcCriterionHelper.h"
 #include "testing/lfcCriterionObject.h"
 

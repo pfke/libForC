@@ -91,7 +91,7 @@ static lfcQueue_t *public_lfcQueue_dtor(
 static int public_lfcQueue_clear(
     lfcQueue_t *self
 ) {
-    return lfcList_methods()->clear(self->table);
+    return lfcList_clear(self->table);
 }
 
 /**
@@ -106,7 +106,7 @@ static int public_lfcQueue_enqueue(
     lfcQueue_t *self,
     void *toAdd
 ) {
-    return lfcList_methods()->add(self->table, toAdd);
+    return lfcList_add(self->table, toAdd);
 }
 
 /**
@@ -121,8 +121,8 @@ static void *public_lfcQueue_dequeue(
     void *result = NULL;
 
     if(0 == pthread_mutex_lock(&self->lock)) {
-        result = lfcList_methods()->getAt(self->table, 0);
-        lfcList_methods()->removeAt(self->table, 0);
+        result = lfcList_getAt(self->table, 0);
+        lfcList_removeAt(self->table, 0);
 
         pthread_mutex_unlock(&self->lock);
     }
@@ -142,7 +142,7 @@ static size_t impl_lfcQueue__IIterable__count(
     if (!self) return 0;
 
 
-    return lfcList_methods()->lfcIIterable->count(self->table);
+    return lfcIIterable_count(self->table);
 }
 
 /**
@@ -161,7 +161,7 @@ static int impl_lfcQueue__IIterable__exists(
     lfcQueue_t *self = asInstanceOf(lfcQueue(), _self);
     if (!self) return 0;
 
-    return lfcList_methods()->lfcIIterable->exists(self->table, toCheck);
+    return lfcIIterable_exists(self->table, toCheck);
 }
 
 /**
@@ -178,7 +178,7 @@ static lfcQueue_t *impl_lfcQueue__IIterable__filter(
     lfcQueue_t *result = lfcQueue_ctor();
     if (!result) return 0;
 
-    lfcList_methods()->lfcIIterable->foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
+    lfcIIterable_foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
         if (fn(iter)) {
         public_lfcQueue_enqueue(result, iter);
     }}));
@@ -212,7 +212,7 @@ static void *impl_lfcQueue__IIterable__find(
 
     void *result = NULL;
 
-    lfcList_methods()->lfcIIterable->foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
+    lfcIIterable_foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
         if (result == NULL && fn(iter)) {
         result = iter;
     }}));
@@ -230,7 +230,7 @@ static void impl_lfcQueue__IIterable__foreach(
     lfcQueue_t *self = asInstanceOf(lfcQueue(), _self);
     if (!self) return;
 
-    lfcList_methods()->lfcIIterable->foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
+    lfcIIterable_foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
         fn(iter);
     }));
 }
@@ -246,7 +246,7 @@ static int impl_lfcQueue__IIterable__isEmpty(
     lfcQueue_t *self = asInstanceOf(lfcQueue(), _self);
     if (!self) return 0;
 
-    return lfcList_methods()->lfcIIterable->isEmpty(self->table);
+    return lfcIIterable_isEmpty(self->table);
 }
 
 /**
@@ -291,7 +291,7 @@ static lfcQueue_t *impl_lfcQueue__IIterable__map(
 
     lfcQueue_t *result = lfcQueue_ctor();
 
-    lfcList_methods()->lfcIIterable->foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
+    lfcIIterable_foreach(self->table, lambda(void, (void *iter isAnIncognito_param) {
         if (fn(iter)) {
         public_lfcQueue_enqueue(result, fn(iter));
     }}));

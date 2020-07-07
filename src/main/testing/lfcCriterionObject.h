@@ -22,7 +22,7 @@
 
   #define TEST_CLASS_IFACE_METHODS(CLZ, IFACE)                                                                          \
       Test(                                                                                                             \
-        TEST_SUITE_NAME,                                                                                                \
+        TEST_SUITE_NAME##CLZ,                                                                                                \
         check_iface_method_##IFACE                                                                                      \
       ) {                                                                                                               \
         should_be_same_ptr_wText(CLZ##_methods()->IFACE, IFACE##_methods(), "method '" STRINGIZE(CLZ) "_methods()->" STRINGIZE(IFACE) "' not set");\
