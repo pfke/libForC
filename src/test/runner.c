@@ -37,6 +37,12 @@ void runner_fn () {
 
     fprintf(stdout, "%s:%d '%s'\n", __func__, __LINE__, result);
 
+    lfcList_t *list = lfcList_ctor();
+    lfcQueue_t *queue = lfcQueue_ctor();
+
+    lfcIIterable_count(list);
+    lfcIIterable_count(queue);
+
 
     free(result);
     delete(log);
