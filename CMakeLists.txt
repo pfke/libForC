@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.5)
-project(libForC VERSION 1.5.2)
+
+include( cmake/MunkeiVersionFromGit.cmake )
+# Use it
+version_from_git(
+  LOG       ON
+  TIMESTAMP "%Y%m%d%H%M%S"
+)
+
+project(libForC VERSION ${VERSION})
 
 #set(CMAKE_C_COMPILER "gcc")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast")
