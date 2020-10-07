@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(libForC VERSION 1.5.5)
+project(libForC VERSION 1.5.6)
 
 #set(CMAKE_C_COMPILER "gcc")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -ggdb -Wall -Wno-int-to-pointer-cast -Wunused-parameter -Wno-pointer-to-int-cast")
