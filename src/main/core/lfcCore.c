@@ -7,6 +7,9 @@
 #include <string.h>
 #include <ucontext.h>
 #include <unistd.h>
+#ifdef ENABLE_BACKTRACING
+  #include <execinfo.h>
+#endif // #ifdef ENABLE_BACKTRACING
 
 /* This structure mirrors the one found in /usr/include/asm/ucontext.h */
 typedef struct _sig_ucontext {
@@ -17,6 +20,7 @@ typedef struct _sig_ucontext {
  sigset_t          uc_sigmask;
 } sig_ucontext_t;
 
+#ifdef ENABLE_BACKTRACING
 void crit_err_hdlr(int sig_num, siginfo_t * info, void * ucontext)
 {
     void *             array[50];
@@ -63,6 +67,13 @@ void crit_err_hdlr(int sig_num, siginfo_t * info, void * ucontext)
 
     exit(EXIT_FAILURE);
 }
+#else // #ifdef ENABLE_BACKTRACING
+void crit_err_hdlr(
+    int sig_num __attribute__((unused)),
+    siginfo_t * info __attribute__((unused)),
+    void * ucontext __attribute__((unused))
+) { }
+#endif // #ifdef ENABLE_BACKTRACING
 
 int lfcCore_install_sigsegv_handler() {
     struct sigaction sigact;
