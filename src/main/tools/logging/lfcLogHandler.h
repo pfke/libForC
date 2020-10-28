@@ -16,10 +16,9 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcLogHandler, lfcObject,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
+DEFINE_CLASS(lfcLogHandler)
+
+struct lfcLogHandler { const struct lfcObject _;
     lfcLogging_loglevel_e current_log_level;
     lfcList_t *appenders;
 
@@ -27,24 +26,41 @@ lfcOOP_defineClass(lfcLogHandler, lfcObject,
      * Wird genutzt die read-Funktion so lange zu blocken, bis alles geschrieben werden konnte.
      */
     pthread_mutex_t write_mutex;
+};
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
-    int, addAppender, (lfcLogAppender_t *logAppender),
+struct lfcLogHandler_class { const struct lfcObject_class _;
+    method_t addAppender;
 
     /**
      * Log zeuch to appenders.
      */
-    int, log, (lfcLog_t *log),
+    method_t log;
 
-    int, redirectToStderr, (),
-    int, redirectToSyslog, (),
+    method_t redirectToStderr;
+    method_t redirectToSyslog;
 
-    lfcLogging_loglevel_e, getLogLevel, (),
-    int,                   setLogLevel, (lfcLogging_loglevel_e level)
-)
+    method_t getLogLevel;
+    method_t setLogLevel;
+};
+
+struct lfcLogHandler_methods {
+    int (*addAppender) (lfcLogHandler_t *self, lfcLogAppender_t *logAppender);
+
+    /**
+     * Log zeuch to appenders.
+     */
+    int (*log) (lfcLogHandler_t *self, lfcLog_t *log);
+
+    int (*redirectToStderr) (lfcLogHandler_t *self);
+    int (*redirectToSyslog) (lfcLogHandler_t *self);
+
+    lfcLogging_loglevel_e (*getLogLevel) (lfcLogHandler_t *self);
+    int (*setLogLevel) (lfcLogHandler_t *self, lfcLogging_loglevel_e level);
+
+    // super
+    const lfcObject_methods_t *base;
+};
+
 
 /**
  * Gibt eine lfcLogHandler Instanz zurueck.
@@ -52,6 +68,18 @@ lfcOOP_defineClass(lfcLogHandler, lfcObject,
 lfcLogHandler_t *lfcLogHandler_ctor(void);
 lfcLogHandler_t *lfcLogHandler_singleton(void);
 
+int lfcLogHandler_addAppender (lfcLogHandler_t *self, lfcLogAppender_t *logAppender);
+
+/**
+ * Log zeuch to appenders.
+ */
+int lfcLogHandler_log (lfcLogHandler_t *self, lfcLog_t *log);
+
+int lfcLogHandler_redirectToStderr (lfcLogHandler_t *self);
+int lfcLogHandler_redirectToSyslog (lfcLogHandler_t *self);
+
+lfcLogging_loglevel_e lfcLogHandler_getLogLevel (lfcLogHandler_t *self);
+int lfcLogHandler_setLogLevel (lfcLogHandler_t *self, lfcLogging_loglevel_e level);
 
 #ifdef __cplusplus
 }

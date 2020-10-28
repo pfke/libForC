@@ -7,18 +7,22 @@
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcLogConsoleAppender, lfcLogAppender,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
-    char *fmt;
+DEFINE_CLASS(lfcLogConsoleAppender)
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
-    int, getFmt, ()
-)
+struct lfcLogConsoleAppender { const struct lfcLogAppender _;
+    char *fmt;
+};
+
+struct lfcLogConsoleAppender_class { const struct lfcLogAppender_class _;
+    method_t getFmt;
+};
+
+struct lfcLogConsoleAppender_methods {
+    int (*getFmt)(lfcLogConsoleAppender_t *self);
+
+    // super
+    const lfcLogAppender_methods_t *base;
+};
 
 /**
  * Erstellung einer Instanz und Uebergabe des Formattes, welches folgenden Aufbau haben kann:
@@ -43,5 +47,7 @@ lfcLogConsoleAppender_t *lfcLogConsoleAppender_ctor(
  *   2019-06-26 10:24:55 [DD] dumi_13 --- [4160170752->libForC_runner] --- runner_fn:36 : debug 2
  */
 lfcLogConsoleAppender_t *lfcLogConsoleAppender_ctor_stdFormat (void);
+
+int lfcLogConsoleAppender_getFmt(lfcLogConsoleAppender_t *self);
 
 #endif //LIBFORC_TOOLS_LOGGING_LOGCONSOLEAPPENDER_H_

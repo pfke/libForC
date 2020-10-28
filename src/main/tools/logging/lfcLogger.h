@@ -6,45 +6,65 @@ extern "C" {
 #endif
 
 #include "lfcLogHandler.h"
+#include "lfcLogCommon.h"
 #include "../../core/lfcObject.h"
 
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcLogger, lfcObject,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
+DEFINE_CLASS(lfcLogger)
+
+struct lfcLogger { const struct lfcObject _;
     lfcLogHandler_t *logHandler;
     lfcLogging_loglevel_e logLevel;
     char *prefix;
+};
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
-    lfcLogger_t *, createChild, (const char *prefix),
+struct lfcLogger_class { const struct lfcObject_class _;
+    method_t createChild;
 
-    const char *, getPrefix, (),
+    method_t getPrefix;
 
-    int, log_va,         (lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args),
+    method_t log_va;
 
-    int, log_EMERG_va,   (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_ALERT_va,   (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_CRIT_va,    (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_ERR_va,     (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_WARNING_va, (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_NOTICE_va,  (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_INFO_va,    (const char* method, int methodLine, const char *format, va_list *args),
-    int, log_DEBUG_va,   (const char* method, int methodLine, const char *format, va_list *args),
+    method_t log_EMERG_va;
+    method_t log_ALERT_va;
+    method_t log_CRIT_va;
+    method_t log_ERR_va;
+    method_t log_WARNING_va;
+    method_t log_NOTICE_va;
+    method_t log_INFO_va;
+    method_t log_DEBUG_va;
+
+    method_t setLogLevel;
+};
+
+struct lfcLogger_methods {
+    lfcLogger_t * (*createChild) (lfcLogger_t *self, const char *prefix);
+
+    const char * (*getPrefix) (lfcLogger_t *self);
+
+    int (*log_va) (lfcLogger_t *self, lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args);
+
+    int (*log_EMERG_va)  (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_ALERT_va)  (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_CRIT_va)   (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_ERR_va)    (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_WARNING_va)(lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_NOTICE_va) (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_INFO_va)   (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+    int (*log_DEBUG_va)  (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
 
     /**
      * Diese Methode setzt das persönliche Loglevel des Loggers.
      * Das im LogHandler bestimmt das globale Level, und mit diesem hier kann man
      * freingranularer steuern.
      */
-    int, setLogLevel, (lfcLogging_loglevel_e logLevel)
-    )
+    int (*setLogLevel) (lfcLogger_t *self, lfcLogging_loglevel_e logLevel);
+
+    // super
+    const lfcObject_methods_t *base;
+};
 
 /**
  * Erzeugt eine lfcLogger Instanz.
@@ -54,6 +74,28 @@ lfcLogger_t *lfcLogger_ctor(
     const char *prefix,
     ...
 );
+
+lfcLogger_t * lfcLogger_createChild (lfcLogger_t *self, const char *prefix);
+
+const char * lfcLogger_getPrefix (lfcLogger_t *self);
+
+int lfcLogger_log_va (lfcLogger_t *self, lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args);
+
+int lfcLogger_log_EMERG_va  (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_ALERT_va  (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_CRIT_va   (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_ERR_va    (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_WARNING_va(lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_NOTICE_va (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_INFO_va   (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+int lfcLogger_log_DEBUG_va  (lfcLogger_t *self, const char* method, int methodLine, const char *format, va_list *args);
+
+/**
+ * Diese Methode setzt das persönliche Loglevel des Loggers.
+ * Das im LogHandler bestimmt das globale Level, und mit diesem hier kann man
+ * freingranularer steuern.
+ */
+int lfcLogger_setLogLevel (lfcLogger_t *self, lfcLogging_loglevel_e logLevel);
 
 /**
  * Erzeugt eine lfcLogger Instanz.

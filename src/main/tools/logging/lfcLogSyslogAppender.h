@@ -7,18 +7,22 @@
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcLogSyslogAppender, lfcLogAppender,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
-    char *fmt;
+DEFINE_CLASS(lfcLogSyslogAppender)
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
-    int, getFmt, ()
-)
+struct lfcLogSyslogAppender { const struct lfcLogAppender _;
+    char *fmt;
+};
+
+struct lfcLogSyslogAppender_class { const struct lfcLogAppender_class _;
+    method_t getFmt;
+};
+
+struct lfcLogSyslogAppender_methods {
+    int (*getFmt)(lfcLogSyslogAppender_t *self);
+
+    // super
+    const lfcLogAppender_methods_t *base;
+};
 
 /**
  * Erstellung einer Instanz und Uebergabe des Formattes, welches folgenden Aufbau haben kann:
@@ -43,5 +47,7 @@ lfcLogSyslogAppender_t *lfcLogSyslogAppender_ctor(
  *   2019-06-26 10:24:55 [DD] dumi_13 --- [4160170752->libForC_runner] --- runner_fn:36 : debug 2
  */
 lfcLogSyslogAppender_t *lfcLogSyslogAppender_ctor_stdFormat (void);
+
+int lfcLogSyslogAppender_getFmt(lfcLogSyslogAppender_t *self);
 
 #endif //LIBFORC_TOOLS_LOGGING_LOGSYSLOGAPPENDER_H_

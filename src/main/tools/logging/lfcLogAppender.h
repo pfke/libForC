@@ -7,17 +7,22 @@
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcLogAppender, lfcObject,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
+DEFINE_CLASS(lfcLogAppender)
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
-    int, print, (lfcLog_t *log)
-)
+struct lfcLogAppender { const struct lfcObject _;
+};
 
+struct lfcLogAppender_class { const struct lfcObject_class _;
+    method_t print;
+};
+
+struct lfcLogAppender_methods {
+    int (*print)(lfcLogAppender_t *self, lfcLog_t *log);
+
+    // super
+    const lfcObject_methods_t *base;
+};
+
+int lfcLogAppender_print(lfcLogAppender_t *self, lfcLog_t *log);
 
 #endif //LIBFORC_TOOLS_LOGGING_LOGAPPENDER_H_
