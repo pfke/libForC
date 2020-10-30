@@ -16,20 +16,22 @@ extern "C" {
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcActorSystemRemoteConnector, lfcObject,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
-    lfcSocket_t *socket;
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
+DEFINE_CLASS(lfcActorSystemRemoteConnector)
 
-    /**
-     */
-    const lfcSocket_t *, getSocket, ()
-    )
+struct lfcActorSystemRemoteConnector { const struct lfcObject _;
+    lfcSocket_t *socket;
+};
+
+struct lfcActorSystemRemoteConnector_class { const struct lfcObject_class _;
+    method_t getSocket;
+};
+
+struct lfcActorSystemRemoteConnector_methods {
+    const lfcSocket_t * (*getSocket)(lfcActorSystemRemoteConnector_t *self);
+
+    // super
+    const lfcObject_methods_t *base;
+};
 
 /**
  * Erzeugt eine lfcActorSystemRemoteConnector Instanz.
@@ -45,6 +47,8 @@ lfcOOP_defineClass(lfcActorSystemRemoteConnector, lfcObject,
 lfcActorSystemRemoteConnector_t *lfcActorSystemRemoteConnector_ctor(
     lfcSocket_t *socket
 );
+
+const lfcSocket_t * lfcActorSystemRemoteConnector_getSocket(lfcActorSystemRemoteConnector_t *self);
 
 
 #ifdef __cplusplus

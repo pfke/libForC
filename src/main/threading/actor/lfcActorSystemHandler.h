@@ -19,10 +19,9 @@ extern "C" {
 \*--------------------------------------------------------------------------------------*/
 typedef struct lfcActorSystem lfcActorSystem_t ;
 
-lfcOOP_defineClass(lfcActorSystemHandler, lfcObject,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
+DEFINE_CLASS(lfcActorSystemHandler)
+
+struct lfcActorSystemHandler { const struct lfcObject _;
     pthread_mutex_t lock;
     lfcList_t *registeredActorSystems;
 
@@ -34,24 +33,25 @@ lfcOOP_defineClass(lfcActorSystemHandler, lfcObject,
      */
     lfcSocketHandler_t *socketHandler;
     bool destroySocketHandler_onExit;
+};
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
+struct lfcActorSystemHandler_class { const struct lfcObject_class _;
+    method_t getRegisteredActorSystems;
+    method_t getSocketHandler;
+    method_t registerActorSystem;
+    method_t unregisterActorSystem;
+};
 
-    /**
-     */
-    lfcList_t *, getRegisteredActorSystems, (),
+struct lfcActorSystemHandler_methods {
+    lfcList_t * (*getRegisteredActorSystems)(lfcActorSystemHandler_t *self);
+    lfcSocketHandler_t * (*getSocketHandler)(lfcActorSystemHandler_t *self);
+    int (*registerActorSystem)(lfcActorSystemHandler_t *self, lfcActorSystem_t *actorSystem);
+    int (*unregisterActorSystem)(lfcActorSystemHandler_t *self, lfcActorSystem_t *actorSystem);
 
-    /**
-     * Jeder AcotrSystemHandler besitzt einen Sockethandler über den die RemoteActorSystems kommunizieren.
-     */
-    lfcSocketHandler_t *, getSocketHandler, (),
+    // super
+    const lfcObject_methods_t *base;
+};
 
-    int, registerActorSystem, (lfcActorSystem_t *actorSystem),
-    int, unregisterActorSystem, (lfcActorSystem_t *actorSystem)
-    )
 
 /**
  * Erzeugt eine lfcActorSystemHandler Instanz.
@@ -65,6 +65,18 @@ lfcActorSystemHandler_t *lfcActorSystemHandler_ctor();
 lfcActorSystemHandler_t *lfcActorSystemHandler_ctor_wSocketHandler(
     const lfcSocketHandler_t *socketHandler
 );
+
+/**
+ */
+lfcList_t * lfcActorSystemHandler_getRegisteredActorSystems(lfcActorSystemHandler_t *self);
+
+/**
+ * Jeder AcotrSystemHandler besitzt einen Sockethandler über den die RemoteActorSystems kommunizieren.
+ */
+lfcSocketHandler_t * lfcActorSystemHandler_getSocketHandler(lfcActorSystemHandler_t *self);
+
+int lfcActorSystemHandler_registerActorSystem(lfcActorSystemHandler_t *self, lfcActorSystem_t *actorSystem);
+int lfcActorSystemHandler_unregisterActorSystem(lfcActorSystemHandler_t *self, lfcActorSystem_t *actorSystem);
 
 /**
  * Return singleton instance.

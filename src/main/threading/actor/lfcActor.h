@@ -43,10 +43,7 @@ typedef void (*receive_fn_cb)(lfcActor_t *, lfcActorMessage_t *);
 
 /*--------------------------------------------------------------------------------------*\
 \*--------------------------------------------------------------------------------------*/
-lfcOOP_defineClass(lfcActor, lfcActorRef,
-    //-----------------------------------------------------------------------------
-    // FIELDS
-    //-----------------------------------------------------------------------------
+struct lfcActor { const struct lfcActorRef _;
     lfcActorSystem_t *actorSystem;
 
     lfcQueue_t *mailbox;
@@ -63,38 +60,28 @@ lfcOOP_defineClass(lfcActor, lfcActorRef,
 
     char *name;
     receive_fn_cb receive_fn;
+};
 
-    ,
-    //-----------------------------------------------------------------------------
-    // PUBLIC METHOD
-    //-----------------------------------------------------------------------------
+struct lfcActor_class { const struct lfcActorRef_class _;
+    method_t addMessageToMailbox;
 
-    /**
-     * Add a message to the actor mailbox.
-     * This is an internal method and should only be used by lfcActor*-classes.
-     */
-    int, addMessageToMailbox, (lfcActorMessage_t *msg),
+    method_t getActorSystem;
 
-    /**
-     * Return the Actor's actorsystem.
-     */
-    lfcActorSystem_t *, getActorSystem, (),
+    method_t getName;
+    method_t getReceiveFn;
+    method_t getRef;
+};
 
-    /**
-     * Return the Actor's name.
-     */
-    const char *, getName, (),
+struct lfcActor_methods {
+    int (*addMessageToMailbox)(lfcActor_t *self, lfcActorMessage_t *msg);
+    lfcActorSystem_t * (*getActorSystem)(lfcActor_t *self);
+    const char * (*getName)(lfcActor_t *self);
+    receive_fn_cb (*getReceiveFn)(lfcActor_t *self);
+    lfcActorRef_t * (*getRef)(lfcActor_t *self);
 
-    /**
-     * Return the Actor's receive func.
-     */
-    receive_fn_cb, getReceiveFn, (),
-
-    /**
-     * Return the actor reference
-     */
-    lfcActorRef_t *, getRef, ()
-    )
+    // super
+    const lfcActorRef_methods_t *base;
+};
 
 /**
  * Erzeugt eine lfcActor Instanz.
@@ -105,6 +92,32 @@ lfcActor_t *lfcActor_ctor(
     lfcActorSystem_t *actorSystem,
     receive_fn_cb receive_fn
 );
+
+/**
+ * Add a message to the actor mailbox.
+ * This is an internal method and should only be used by lfcActor*-classes.
+ */
+int lfcActor_addMessageToMailbox(lfcActor_t *self, lfcActorMessage_t *msg);
+
+/**
+ * Return the Actor's actorsystem.
+ */
+lfcActorSystem_t * lfcActor_getActorSystem(lfcActor_t *self);
+
+/**
+ * Return the Actor's name.
+ */
+const char * lfcActor_getName(lfcActor_t *self);
+
+/**
+ * Return the Actor's receive func.
+ */
+receive_fn_cb lfcActor_getReceiveFn(lfcActor_t *self);
+
+/**
+ * Return the actor reference
+ */
+lfcActorRef_t * lfcActor_getRef(lfcActor_t *self);
 
 
 #ifdef __cplusplus
