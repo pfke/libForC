@@ -1,6 +1,6 @@
 #include "lfcMXMLParser.h"
 
-#include "collection/lfcHashmap.h"
+#include "../collection/lfcHashmap.h"
 
 #include <errno.h>
 #include <mxml.h>

@@ -22,7 +22,6 @@ lfcActorSystem_static_regex_t *lfcActorSystem_static_regex = NULL;
 /******************************************************************************************/
 /* PROTOTYPES                                                                             */
 /******************************************************************************************/
-static void private_lfcActorSystem_dispatchMsg(void *msg);
 static int private_lfcActorSystem_tell(lfcActorSystem_t *self, lfcActorMessage_t *msg);
 
 /******************************************************************************************/
