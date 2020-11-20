@@ -11,8 +11,6 @@
 /******************************************************************************************/
 
 lfcOOP_implementClass(lfcLogger, lfcObject,
-    lfcLogger_t *, createChild, (const char *),
-
     const char *, getPrefix, (),
 
     int, log_va,         (lfcLogging_loglevel_e, const char *, int, const char *, va_list *),
@@ -92,13 +90,6 @@ static lfcLogger_t *public_lfcLogger_dtor (
     return lfcObject_super_dtor(lfcLogger(), self);
 }
 
-static lfcLogger_t *public_lfcLogger_createChild  (
-    lfcLogger_t *self,
-    const char *prefix
-) {
-    return lfcLogger_ctor(self->logHandler, "%s.%s", lfcLogger_getPrefix(self), prefix);
-}
-
 static const char *public_lfcLogger_getPrefix  (
     lfcLogger_t *self
 ) {
@@ -161,6 +152,27 @@ lfcLogger_t *lfcLogger_ctor (
     va_end (args);
 
     return (lfcLogger_t *)new(lfcLogger(), logHandler, buf);
+}
+
+/**
+ * Erzeugt eine lfcLogger Instanz.
+ */
+lfcLogger_t *lfcLogger_ctor_fromParent (
+    lfcLogger_t *parent,
+    const char *prefix,
+    ...
+) {
+    if (!parent) { return NULL; }
+    if (!prefix) { return NULL; }
+
+    char buf[100];
+    va_list args;
+
+    va_start (args, prefix);
+    vsnprintf(buf, sizeof(buf), prefix, args);
+    va_end (args);
+
+    return lfcLogger_ctor(parent->logHandler, "%s.%s", lfcLogger_getPrefix(parent), buf);
 }
 
 /**

@@ -21,8 +21,6 @@ struct lfcLogger { const struct lfcObject _;
 };
 
 struct lfcLogger_class { const struct lfcObject_class _;
-    method_t createChild;
-
     method_t getPrefix;
 
     method_t log_va;
@@ -40,8 +38,6 @@ struct lfcLogger_class { const struct lfcObject_class _;
 };
 
 struct lfcLogger_methods {
-    lfcLogger_t * (*createChild) (lfcLogger_t *self, const char *prefix);
-
     const char * (*getPrefix) (lfcLogger_t *self);
 
     int (*log_va) (lfcLogger_t *self, lfcLogging_loglevel_e logLevel, const char* method, int methodLine, const char *format, va_list *args);
@@ -74,8 +70,14 @@ lfcLogger_t *lfcLogger_ctor(
     const char *prefix,
     ...
 );
-
-lfcLogger_t * lfcLogger_createChild (lfcLogger_t *self, const char *prefix);
+/**
+ * Erzeugt eine lfcLogger Instanz.
+ */
+lfcLogger_t *lfcLogger_ctor_fromParent(
+    lfcLogger_t *parent,
+    const char *prefix,
+    ...
+);
 
 const char * lfcLogger_getPrefix (lfcLogger_t *self);
 
